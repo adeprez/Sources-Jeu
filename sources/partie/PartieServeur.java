@@ -1,0 +1,104 @@
+package partie;
+
+import io.IO;
+
+import java.util.List;
+import java.util.Map;
+
+import map.elements.Spawn;
+import map.objets.Objet;
+import partie.modeJeu.Jeu;
+import perso.Perso;
+import reseau.objets.InfoServeur;
+import reseau.paquets.Paquet;
+import reseau.paquets.TypePaquet;
+import reseau.paquets.jeu.PaquetPosition;
+import reseau.ressources.RessourcePerso;
+import reseau.serveur.Serveur;
+import divers.Outil;
+
+public class PartieServeur extends Partie {
+    private final Serveur serveur;
+    private final Jeu jeu;
+    private Map<Integer, List<Spawn>> spawns;
+    private boolean run;
+
+
+    public PartieServeur(Serveur serveur) {
+	super(serveur.getRessources());
+	jeu = serveur.getRessources().getJeu();
+	this.serveur = serveur;
+    }
+
+    public void spawn(int id) {
+	spawn(serveur.getRessources().getPerso(id));
+    }
+
+    public void spawn(RessourcePerso rp) {
+	Perso p = rp.getPerso();
+	p.setVie(p.getVitalite());
+	int tentatives = 0;
+	while(tentatives < 10) try {
+	    p.setPos(getSpawn(p.getEquipe()));
+	    serveur.envoyerTous(new PaquetPosition(rp));
+	    tentatives = 10;
+	} catch(Exception e) {
+	    tentatives++;
+	    if(tentatives > 10)
+		System.err.println("Impossible de placer " + p);
+	}
+    }
+
+    public Spawn getSpawn(int equipe) {
+	if(spawns == null || !spawns.containsKey(equipe))
+	    spawns = Spawn.creerSpawns(getMap(), 3, getRessources().getIDEquipes());
+	List<Spawn> l = spawns.get(equipe);
+	return l.get(Outil.r().nextInt(l.size()));
+    }
+
+    @Override
+    public void add(RessourcePerso r) {
+	Perso p = r.getPerso();
+	p.setEquipe(jeu.nextIDEquipe(r));
+	p.setServeur(serveur, r.getID());
+	p.setVivantListener(jeu);
+	super.add(r);
+    }
+
+    @Override
+    public boolean estLancee() {
+	return run;
+    }
+
+    @Override
+    public boolean lancer() {
+	if(run)
+	    return false;
+	run = true;
+	serveur.getInfosServeur().setEtat(InfoServeur.ETAT_JEU);
+	serveur.envoyerTous(new Paquet(TypePaquet.ETAT_PARTIE, serveur.getInfosServeur().getEtat(), jeu.getType().getID()));
+	serveur.envoyerTous(new Paquet(TypePaquet.TEMPS, new IO().addShort(serveur.getInfosServeur().getTemps())));
+	for(final List<Objet> lo : getMap().getObjets())
+	    for(final Objet o : lo)
+		o.setServeur(serveur);
+	getMap().lancer();
+	return true;
+    }
+
+    @Override
+    public boolean fermer() {
+	if(run) {
+	    serveur.getInfosServeur().setEtat(InfoServeur.ETAT_OFF);
+	    serveur.envoyerTous(new Paquet(TypePaquet.ETAT_PARTIE, serveur.getInfosServeur().getEtat()));
+	    getMap().fermer();
+	    return true;
+	}
+	return false;
+    }
+
+    @Override
+    public boolean estServeur() {
+	return true;
+    }
+
+}
