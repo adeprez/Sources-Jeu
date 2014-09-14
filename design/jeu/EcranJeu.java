@@ -3,7 +3,9 @@ package jeu;
 import interfaces.Actualisable;
 import interfaces.Localise;
 
+import java.awt.Color;
 import java.awt.Container;
+import java.awt.Graphics;
 import java.awt.Rectangle;
 
 import javax.swing.JLabel;
@@ -18,6 +20,7 @@ import reseau.paquets.Paquet;
 import reseau.paquets.TypePaquet;
 import reseau.paquets.session.PaquetPing;
 import ressources.Proprietes;
+import statique.Style;
 import temps.EvenementTempsPeriodique;
 import temps.Evenementiel;
 import temps.GestionnaireEvenements;
@@ -76,6 +79,17 @@ public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evene
 
     public VisionJeu getVision() {
 	return vision;
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+	long t = System.currentTimeMillis();
+	super.paintComponent(g);
+	int fps = (int) (1000/Math.max(1, System.currentTimeMillis() - t));
+	g.setColor(Color.ORANGE);
+	g.setFont(Style.POLICE);
+	g.drawString("fps:" + fps, getWidth() - 50, 25);
+	g.fillRect(getWidth() - 1000/fps, 0, 1000/fps, 10);
     }
 
     @Override

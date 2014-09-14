@@ -34,26 +34,25 @@ import exceptions.HorsLimiteException;
 
 public abstract class MapDessinable<E extends LocaliseDessinable> extends Listenable
 implements Dessineur, Fermable, StyleListe, ChangePersoListener, AjoutPersoListener, RemovePersoListener, DessineurElementMap<E> {
+    public static final boolean HD = false;
     private final List<LocaliseDessinable> dessinables;
-    private final VolatileImage predessin, dessin, surdessin;
-    private final Graphics2D gPredessin, gDessin, gSurdessin;
+    private final VolatileImage dessin, surdessin;
+    private final Graphics2D gDessin, gSurdessin;
+    private Graphics2D gPredessin;
     private DessineurElementMap<E> dessineur;
 
 
     public MapDessinable() {
 	dessinables = new ArrayList<LocaliseDessinable>();
 	Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-	predessin = getVolatileImage(d.width, d.height);
 	dessin = getVolatileImage(d.width, d.height);
 	surdessin = getVolatileImage(d.width, d.height);
-	gPredessin = predessin.createGraphics();
 	gDessin = dessin.createGraphics();
 	gSurdessin = surdessin.createGraphics();
 	Color c = new Color(0, 0, 0, 0);
-	gPredessin.setBackground(c);
 	gDessin.setBackground(c);
 	gSurdessin.setBackground(c);
-	setHauteQualite(false);
+	setHauteQualite(HD);
 	dessineur = this;
     }
 
@@ -75,7 +74,7 @@ implements Dessineur, Fermable, StyleListe, ChangePersoListener, AjoutPersoListe
 	    r2 = RenderingHints.VALUE_COLOR_RENDER_SPEED;
 	    r3 = RenderingHints.VALUE_RENDER_SPEED;
 	}
-	for(final Graphics2D g : new Graphics2D[]{gPredessin, gDessin, gSurdessin}) {
+	for(final Graphics2D g : new Graphics2D[]{gDessin, gSurdessin}) {
 	    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, r1);
 	    g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, r2);
 	    g.setRenderingHint(RenderingHints.KEY_RENDERING, r3);
@@ -84,10 +83,6 @@ implements Dessineur, Fermable, StyleListe, ChangePersoListener, AjoutPersoListe
 
     public void setDessineur(DessineurElementMap<E> dessineur) {
 	this.dessineur = dessineur;
-    }
-
-    public VolatileImage getPredessin() {
-	return predessin;
     }
 
     public VolatileImage getDessin() {
@@ -110,10 +105,6 @@ implements Dessineur, Fermable, StyleListe, ChangePersoListener, AjoutPersoListe
 	return gSurdessin;
     }
 
-    public void setCouleurFond(Color c) {
-	gPredessin.setBackground(c);
-    }
-
     public void setMasqueFond(Color c) {
 	gDessin.setBackground(c);
     }
@@ -127,6 +118,7 @@ implements Dessineur, Fermable, StyleListe, ChangePersoListener, AjoutPersoListe
     }
 
     public void dessiner(Graphics g, Camera c) {
+	gPredessin = (Graphics2D) g;
 	effaceTampons(c.getEcran());
 	try {
 	    c.nouvelleFrame();
@@ -135,7 +127,7 @@ implements Dessineur, Fermable, StyleListe, ChangePersoListener, AjoutPersoListe
 	} catch(Exception e) {
 	    e.printStackTrace();
 	}
-	dessineTampons(g);
+	dessineTampons();
     }
 
     public void dessineDessinables(Camera c) {
@@ -158,10 +150,9 @@ implements Dessineur, Fermable, StyleListe, ChangePersoListener, AjoutPersoListe
 	gSurdessin.clearRect(0, 0, c.getWidth(), c.getHeight());
     }
 
-    public void dessineTampons(Graphics g) {
-	g.drawImage(predessin, 0, 0, null);
-	g.drawImage(dessin, 0, 0, null);
-	g.drawImage(surdessin, 0, 0, null);
+    public void dessineTampons() {
+	gPredessin.drawImage(dessin, 0, 0, null);
+	gPredessin.drawImage(surdessin, 0, 0, null);
     }
 
     public void dessineMap(Camera c) throws HorsLimiteException {

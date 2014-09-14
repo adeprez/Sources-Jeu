@@ -62,6 +62,14 @@ public abstract class Forme implements Sauvegardable, LocaliseEquipe, Forme3D {
 	return zone.y + zone.height;
     }
 
+    public boolean estMarque() {
+	return decalage != null;
+    }
+
+    public void setMarque(boolean marque) {
+	decalage = marque ? new Dimension() : null;
+    }
+
     public void purgerDecalage() {
 	decalage = null;
     }

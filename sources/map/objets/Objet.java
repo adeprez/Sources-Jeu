@@ -115,10 +115,6 @@ public abstract class Objet extends Visible implements Localise3D {
 	return images.getImageOp(fond);
     }
 
-    public ContaineurImageOp getContaineurImagePremierPlan() {
-	return aFond() ? getContaineurImageFond() : getContaineurImage();
-    }
-
     public void addRemoveListener(RemoveObjetListener listener) {
 	addListener(RemoveObjetListener.class, listener);
     }
@@ -184,6 +180,7 @@ public abstract class Objet extends Visible implements Localise3D {
 	    int equipe = c.getSource().getEquipe();
 	    Forme f = getForme();
 	    Rectangle arr, av, m1, m2;
+	    ContaineurImageOp img;
 	    if(estVide()) {
 		m1 = c.getZoneFond(this, PLAN_ARR_AV);
 		m2 = c.getZoneFond(this, PLAN_AV_ARR);
@@ -194,13 +191,21 @@ public abstract class Objet extends Visible implements Localise3D {
 	    if(aFond()) {
 		arr = c.getZoneFond(this, PLAN_ARR_ARR);
 		av = c.getZoneFond(this, PLAN_AV_AV);
+		img = getContaineurImageFond();
+		if(!estVide()) {
+		    Rectangle r = c.getZoneFond(this, PLAN_ARR_AV);
+		    Extrusion3D.dessine(g1, img, f, r, arr);
+		    predessiner(g1, r, equipe);
+		} else {
+		    Extrusion3D.dessine(g1, img, f, m1, arr);
+		    predessiner(g1, m1, equipe);
+		}
 	    } else {
 		arr = c.getZone(this, PLAN_ARR_ARR);
 		av = c.getZone(this, PLAN_AV_AV);
+		img = getContaineurImage();
+		Extrusion3D.dessine(g1, img, f, m1, arr);
 	    }
-	    Extrusion3D.dessine(g1, aFond() ? getContaineurImageFond() : getContaineurImage(), f, m1, arr);
-	    if(aFond())
-		predessiner(g1, m1, equipe);
 	    if(!estVide()) {
 		Extrusion3D.dessine(g2, getContaineurImage(), getForme(), m2, m1);
 		if(opacite < 100)
@@ -209,7 +214,9 @@ public abstract class Objet extends Visible implements Localise3D {
 	    Composite tmp1 = g2.getComposite(), tmp2 = g3.getComposite();
 	    opaciteSurdessin(g2);
 	    opaciteSurdessin(g3);
-	    Extrusion3D.dessine(g2, getContaineurImagePremierPlan(), f, av, m2);
+	    if(aFond() && !estVide())
+		Extrusion3D.dessine(g2, img, f, av, c.getZoneFond(this, PLAN_AV_ARR));
+	    else Extrusion3D.dessine(g2, img, f, av, m2);
 	    surdessiner(g3, av);
 	    g2.setComposite(tmp1);
 	    g3.setComposite(tmp2);

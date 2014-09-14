@@ -22,7 +22,6 @@ public abstract class AbstractMap<E extends LocaliseDessinable> extends MapDessi
 
 
     public AbstractMap(List<List<E>> objets) {
-	setCouleurFond(new Color(75, 110, 155));
 	setMasqueFond(new Color(0, 0, 0, 10));
 	this.objets = objets;
 	maxObjets = -1;
