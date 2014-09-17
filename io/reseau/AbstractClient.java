@@ -109,6 +109,8 @@ implements StyleListe, ClientServeurIdentifiable, FiltreEnvoi, ChangeRessourceLi
 
     public boolean faireAction(int id, TypeAction action, boolean debut, IO io) {
 	Perso p = getPerso(id);
+	if(!p.estVivant())
+	    return false;
 	p.setAngle(io.next());
 	p.setDroite(io.nextBoolean());
 	switch(action) {
@@ -144,7 +146,7 @@ implements StyleListe, ClientServeurIdentifiable, FiltreEnvoi, ChangeRessourceLi
 
     public <K extends Vivant> boolean faireAction(Action<K> action) {
 	AbstractAction<?> a = action.getSource().getAction();
-	if(a != null && !a.peutArret() && (a.estCompetence() || ((Action<?>) a).getType() != action.getType())) {
+	if(a != null && !a.peutArret() && (!a.estAction() || ((Action<?>) a).getType() != action.getType())) {
 	    action.getSource().getAction().setSuivante(action);
 	    return true;
 	}

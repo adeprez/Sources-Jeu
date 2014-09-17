@@ -14,8 +14,8 @@ import exceptions.AnnulationException;
 public abstract class Animation extends AbstractMembre {
     public static final int PAS_ETAPE = 1000;
     private int dX, dY, vitesse, cumulVitesse, etapePrecendente;
+    private boolean inverse, toOrigine;
     private Sequence sequence;
-    private boolean inverse;
 
 
     public Animation() {
@@ -45,14 +45,18 @@ public abstract class Animation extends AbstractMembre {
 
     public void terminer() {
 	if(sequence != null)
-	    setSequence(sequence.getSuivante());
+	    setSequence(sequence.getSuivante(), sequence == null || sequence.retourOrigine());
     }
 
     public void setSequence(Sequence sequence) {
+	setSequence(sequence, sequence == null || sequence.retourOrigine());
+    }
+
+    public void setSequence(Sequence sequence, boolean retourOrigine) {
 	etapePrecendente = -1;
 	cumulVitesse = 0;
 	this.sequence = sequence;
-	if(sequence == null)
+	if(this.toOrigine = sequence == null && retourOrigine)
 	    toOrigine();
     }
 
@@ -87,7 +91,7 @@ public abstract class Animation extends AbstractMembre {
 		    terminer();
 		}
 	    }
-	else {
+	else if(toOrigine) {
 	    if(dX != 0)
 		dX /= 2;
 	    if(dY != 0)

@@ -12,7 +12,7 @@ import perso.Perso;
 import reseau.objets.InfoServeur;
 import reseau.paquets.Paquet;
 import reseau.paquets.TypePaquet;
-import reseau.paquets.jeu.PaquetPosition;
+import reseau.paquets.jeu.PaquetSpawn;
 import reseau.ressources.RessourcePerso;
 import reseau.serveur.Serveur;
 import divers.Outil;
@@ -21,7 +21,6 @@ public class PartieServeur extends Partie {
     private final Serveur serveur;
     private final Jeu jeu;
     private Map<Integer, List<Spawn>> spawns;
-    private boolean run;
 
 
     public PartieServeur(Serveur serveur) {
@@ -40,7 +39,8 @@ public class PartieServeur extends Partie {
 	int tentatives = 0;
 	while(tentatives < 10) try {
 	    p.setPos(getSpawn(p.getEquipe()));
-	    serveur.envoyerTous(new PaquetPosition(rp));
+	    serveur.envoyerTous(new PaquetSpawn(rp));
+	    PaquetSpawn.effet(p);
 	    tentatives = 10;
 	} catch(Exception e) {
 	    tentatives++;
@@ -66,28 +66,22 @@ public class PartieServeur extends Partie {
     }
 
     @Override
-    public boolean estLancee() {
-	return run;
-    }
-
-    @Override
     public boolean lancer() {
-	if(run)
-	    return false;
-	run = true;
-	serveur.getInfosServeur().setEtat(InfoServeur.ETAT_JEU);
-	serveur.envoyerTous(new Paquet(TypePaquet.ETAT_PARTIE, serveur.getInfosServeur().getEtat(), jeu.getType().getID()));
-	serveur.envoyerTous(new Paquet(TypePaquet.TEMPS, new IO().addShort(serveur.getInfosServeur().getTemps())));
-	for(final List<Objet> lo : getMap().getObjets())
-	    for(final Objet o : lo)
-		o.setServeur(serveur);
-	getMap().lancer();
-	return true;
+	if(super.lancer()) {
+	    serveur.getInfosServeur().setEtat(InfoServeur.ETAT_JEU);
+	    serveur.envoyerTous(new Paquet(TypePaquet.ETAT_PARTIE, serveur.getInfosServeur().getEtat(), jeu.getType().getID()));
+	    serveur.envoyerTous(new Paquet(TypePaquet.TEMPS, new IO().addShort(serveur.getInfosServeur().getTemps())));
+	    for(final List<Objet> lo : getMap().getObjets())
+		for(final Objet o : lo)
+		    o.setServeur(serveur);
+	    return getMap().lancer();
+	}
+	return false;
     }
 
     @Override
     public boolean fermer() {
-	if(run) {
+	if(super.fermer()) {
 	    serveur.getInfosServeur().setEtat(InfoServeur.ETAT_OFF);
 	    serveur.envoyerTous(new Paquet(TypePaquet.ETAT_PARTIE, serveur.getInfosServeur().getEtat()));
 	    getMap().fermer();

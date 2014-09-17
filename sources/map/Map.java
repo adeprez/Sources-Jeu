@@ -139,12 +139,12 @@ public class Map extends MapIO<Objet> {
 	return persos;
     }
 
-    public Iterable<Perso> getEnnemis(int equipe) {
-	return new IterateurEquipe<Perso>(equipe, false, persos);
+    public Iterable<Perso> getEnnemis(int equipe, boolean avecMorts) {
+	return new IterateurEquipe<Perso>(equipe, false, avecMorts, persos);
     }
 
-    public Iterable<Perso> getAllies(int equipe) {
-	return new IterateurEquipe<Perso>(equipe, true, persos);
+    public Iterable<Perso> getAllies(int equipe, boolean avecMorts) {
+	return new IterateurEquipe<Perso>(equipe, true, avecMorts, persos);
     }
 
     public Objet getPremierObjetDessous(Localise l) throws HorsLimiteException {

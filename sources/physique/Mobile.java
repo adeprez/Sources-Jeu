@@ -156,7 +156,7 @@ public abstract class Mobile extends Listenable implements Sauvegardable, Locali
     }
 
     public int getHauteurEscaladable(int dx) {
-	return Math.abs(dx) * getHauteur()/100 + Math.abs(dx);
+	return Math.abs(dx) * getHauteur()/50 + Math.abs(dx);
     }
 
     public Collision deplace() throws HorsLimiteException {

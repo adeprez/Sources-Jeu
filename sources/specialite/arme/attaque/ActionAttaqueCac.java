@@ -40,7 +40,7 @@ public abstract class ActionAttaqueCac extends Action<AbstractPerso> implements 
 	Rect r = getFormeArme();
 	Objet o = getSource().getMap().getCollisionMap(r);
 	if(o == null) {
-	    for(final Perso p : getSource().getMap().getEnnemis(getSource().getEquipe()))
+	    for(final Perso p : getSource().getMap().getEnnemis(getSource().getEquipe(), false))
 		if(p.getForme().intersection(r)) {
 		    effet.faireEffet(p);
 		    aTouche = true;

@@ -24,7 +24,6 @@ import reseau.ressources.RessourcePerso;
 import reseau.ressources.RessourcesServeur;
 import reseau.ressources.TypeRessource;
 import temps.CompteARebours;
-import temps.Horloge;
 import base.IconeTaches;
 
 public class Serveur extends AbstractServeur<ClientServeur> implements FinChargementListener {
@@ -95,7 +94,7 @@ public class Serveur extends AbstractServeur<ClientServeur> implements FinCharge
 	return partie;
     }
 
-    public Horloge getHorloge() {
+    public CompteARebours getHorloge() {
 	return cpt;
     }
 

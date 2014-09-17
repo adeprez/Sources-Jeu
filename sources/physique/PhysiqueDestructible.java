@@ -35,12 +35,20 @@ public abstract class PhysiqueDestructible extends Physique implements LocaliseE
 	if(tmp != vie) {
 	    if(estServeur())
 		envoyerClients(getPaquetVie());
-	    if(vivant != null) {
+	    if(vivant != null)
 		vivant.vieChange(this);
-		if(vie == 0)
-		    vivant.meurt(this);
-	    }
+	    if(vie == 0)
+		meurt();
 	}
+    }
+
+    public void meurt() {
+	if(vivant != null)
+	    vivant.meurt(this);
+    }
+
+    public boolean estVivant() {
+	return vie > 0;
     }
 
     public void degats(int dmg) {
@@ -86,7 +94,7 @@ public abstract class PhysiqueDestructible extends Physique implements LocaliseE
 	if(c != null)
 	    return c;
 	if(doitTesterCollisionPersos())
-	    for(final Vivant p : getMap().getEnnemis(getEquipe()))
+	    for(final Vivant p : getMap().getEnnemis(getEquipe(), false))
 		if((c = getCollision(p)) != null)
 		    return c;
 	return null;

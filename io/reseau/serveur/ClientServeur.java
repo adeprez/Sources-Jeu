@@ -100,7 +100,7 @@ public class ClientServeur extends AbstractClient {
 	    TypeAction ta = TypeAction.get(io.nextPositif());
 	    faireAction(getID(), ta, !ta.aFin() || io.nextBoolean(), io);
 	    break;
-	case POSITION:
+	case SPAWN:
 	    serveur.getPartie().spawn(getID());
 	    break;
 	case FIN_CHARGEMENT:

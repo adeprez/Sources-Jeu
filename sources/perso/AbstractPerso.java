@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 import listeners.ChangeSpecialiteListener;
 import physique.Direction;
+import physique.actions.ActionMeurt;
 import physique.forme.CorpsPerso;
 import ressources.Images;
 import ressources.sprites.animation.AnimationPerso;
@@ -142,6 +143,12 @@ public abstract class AbstractPerso extends Vivant {
 	g.setColor(equipe == getEquipe() ? Color.LIGHT_GRAY : Color.RED);
 	g.fillRoundRect(x, y, w, h, w/5, h/3);
 	g.setComposite(tmp);
+    }
+
+    @Override
+    public void meurt() {
+	super.meurt();
+	forceAction(new ActionMeurt(this));
     }
 
     @Override

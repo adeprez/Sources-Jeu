@@ -5,5 +5,5 @@ import interfaces.Lancable;
 
 
 public interface Actionable extends Lancable, Fermable {
-	public boolean faireAction();
+    public boolean faireAction();
 }
