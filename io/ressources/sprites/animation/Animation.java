@@ -82,8 +82,8 @@ public abstract class Animation extends AbstractMembre {
 			e1.effetPuisFutur(sequence.getDetermineurAngle(), this, PAS_ETAPE/Math.max(1, vitesse), e2);
 		    else versAngle();
 		    int prct = cumulVitesse % PAS_ETAPE;
-		    dX = (e1.getdX() * (PAS_ETAPE - prct) + e2.getdX() * prct)/(PAS_ETAPE << 1);
-		    dY = (e1.getdY() * (PAS_ETAPE - prct) + e2.getdY() * prct)/(PAS_ETAPE << 1);
+		    dX = (e1.getdX() * (PAS_ETAPE - prct) + e2.getdX() * prct)/PAS_ETAPE;
+		    dY = (e1.getdY() * (PAS_ETAPE - prct) + e2.getdY() * prct)/PAS_ETAPE;
 		    etapePrecendente = getNumEtape();
 		    cumulVitesse = (cumulVitesse + vitesse) % (sequence.getModele().getNombreEtapes() * PAS_ETAPE);
 		} else {
