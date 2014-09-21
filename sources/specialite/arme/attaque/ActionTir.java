@@ -73,7 +73,7 @@ public abstract class ActionTir extends Action<AbstractPerso> implements Determi
 
     @Override
     public void faireEffet(Vivant e) {
-	e.degats(degats);
+	e.degats(degats, getSource());
     }
 
     public static int getX(float angle, int d) {

@@ -11,6 +11,7 @@ import exceptions.HorsLimiteException;
 public abstract class PhysiqueDestructible extends Physique implements LocaliseEquipe {
     private DestructibleListener vivant;
     private int equipe, vie;
+    private Vivant tueur;
 
 
     public PhysiqueDestructible(Forme forme) {
@@ -44,16 +45,18 @@ public abstract class PhysiqueDestructible extends Physique implements LocaliseE
 
     public void meurt() {
 	if(vivant != null)
-	    vivant.meurt(this);
+	    vivant.meurt(this, tueur);
     }
 
     public boolean estVivant() {
 	return vie > 0;
     }
 
-    public void degats(int dmg) {
-	if(estServeur() && dmg > 0)
+    public void degats(int dmg, Vivant tueur) {
+	if(estServeur() && dmg > 0) {
+	    this.tueur = tueur;
 	    setVie(vie - dmg);
+	}
     }
 
     public void soin(int soin) {
@@ -83,7 +86,7 @@ public abstract class PhysiqueDestructible extends Physique implements LocaliseE
 	try {
 	    return super.setPos(x, y);
 	} catch(HorsLimiteException out) {
-	    degats(getVie());
+	    degats(getVie(), null);
 	    throw out;
 	}
     }

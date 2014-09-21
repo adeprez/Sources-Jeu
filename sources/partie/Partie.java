@@ -2,7 +2,15 @@ package partie;
 
 import interfaces.Fermable;
 import interfaces.Lancable;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import listeners.ChangeScoreListener;
 import map.Map;
+import partie.modeJeu.TypeJeu;
+import partie.modeJeu.scorable.Scorable;
 import perso.Perso;
 import reseau.ClientServeurIdentifiable;
 import reseau.ressources.RessourcePerso;
@@ -16,11 +24,10 @@ import temps.EvenementPeriodique;
 import temps.EvenementTempsPeriodique;
 import temps.GestionnaireEvenements;
 
-public abstract class Partie extends PartieListenable
-implements Lancable, Fermable, RemoveRessourceListener, AddRessourceListener,
-ChangeRessourceListener<Perso>, ClientServeurIdentifiable {
-    private final RessourcesReseau ressources;
+public abstract class Partie extends PartieListenable implements Lancable, Fermable, RemoveRessourceListener, AddRessourceListener, ChangeRessourceListener<Perso>, ClientServeurIdentifiable {
+    private final HashMap<Integer, List<Scorable>> scorables;
     private final GestionnaireEvenements evenements;
+    private final RessourcesReseau ressources;
 
 
     public Partie(RessourcesReseau ressources) {
@@ -28,6 +35,37 @@ ChangeRessourceListener<Perso>, ClientServeurIdentifiable {
 	ressources.addAddRessourceListener(this);
 	ressources.addRemoveRessourceListener(this);
 	evenements = new GestionnaireEvenements();
+	scorables = new HashMap<Integer, List<Scorable>>();
+    }
+
+    public void addChangeScoreListener(ChangeScoreListener l) {
+	addListener(ChangeScoreListener.class, l);
+    }
+
+    public void removeChangeScoreListener(ChangeScoreListener l) {
+	removeListener(ChangeScoreListener.class, l);
+    }
+
+    public void addScorable(int id, Scorable scorable) {
+	scorables.get(id).add(scorable);
+	int score = getScore(id);
+	for(final ChangeScoreListener l : getListeners(ChangeScoreListener.class))
+	    l.changeScore(id, score, scorable);
+    }
+
+    public int getScore(int id) {
+	int score = 0;
+	for(final Scorable r : scorables.get(id))
+	    score += r.getValeur();
+	return score;
+    }
+
+    public HashMap<Integer, List<Scorable>> getReussites() {
+	return scorables;
+    }
+
+    public TypeJeu getTypeJeu() {
+	return ressources.getJeu(0).getInfos().getTypeJeu();
     }
 
     public boolean estLancee() {
@@ -56,12 +94,14 @@ ChangeRessourceListener<Perso>, ClientServeurIdentifiable {
 
     public void add(RessourcePerso r) {
 	getMap().ajout(r.getPerso());
+	scorables.put(r.getID(), new ArrayList<Scorable>());
 	r.addChangeRessourceListener(this);
 	notifyAjoutPersoListener(r.getPerso());
     }
 
     public void remove(RessourcePerso r) {
 	getMap().remove(r.getPerso());
+	scorables.remove(r.getID());
 	r.removeChangeRessourceListener(this);
 	notifyRemovePersoListener(r.getPerso());
     }

@@ -17,6 +17,7 @@ import listeners.ChangeSpecialiteListener;
 import listeners.DestructibleListener;
 import perso.AbstractPerso;
 import perso.Perso;
+import perso.Vivant;
 import physique.PhysiqueDestructible;
 import specialite.Specialite;
 import statique.Style;
@@ -88,7 +89,7 @@ public class BarreJeu extends JPanel implements Actualisable, ChangeSpecialiteLi
     }
 
     @Override
-    public void meurt(PhysiqueDestructible vivant) {
+    public void meurt(PhysiqueDestructible vivant, Vivant tueur) {
 	vie.setString("Mort");
     }
 

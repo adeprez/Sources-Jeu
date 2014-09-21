@@ -14,6 +14,7 @@ public class PartieClient extends Partie {
     public PartieClient(Client client) {
 	super(client.getRessources());
 	this.client = client;
+	client.setPartie(this);
 	perso = client.getRessources().getPerso(client.getID());
     }
 

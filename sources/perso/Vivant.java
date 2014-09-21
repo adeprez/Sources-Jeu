@@ -106,7 +106,7 @@ public abstract class Vivant extends Visible {
     public void contactHaut(int vitesse) {
 	super.contactHaut(vitesse);
 	if(vitesse > 20)
-	    degats(vitesse/5);
+	    degats(vitesse/5, null);
     }
 
     @Override
@@ -114,7 +114,7 @@ public abstract class Vivant extends Visible {
 	super.collisionSol();
 	int chute = lastY - getY();
 	if(chute > 200)
-	    degats(chute/20);
+	    degats(chute/20, null);
 	lastY = getY();
     }
 

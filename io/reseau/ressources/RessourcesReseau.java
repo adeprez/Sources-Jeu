@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import perso.Perso;
@@ -132,13 +131,6 @@ public class RessourcesReseau extends Listenable implements Sauvegardable, Conta
 
     public RessourceJeu getJeu(int id) {
 	return (RessourceJeu) get(TypeRessource.CONFIG_JEU).get(id);
-    }
-
-    public Map<Integer, Perso> getPersos() {
-	Map<Integer, Perso> map = new HashMap<Integer, Perso>();
-	for(Entry<Integer, RessourceReseau<?>> e : get(TypeRessource.PERSO).entrySet())
-	    map.put(e.getKey(), ((RessourcePerso) e.getValue()).getPerso());
-	return map;
     }
 
     public Map<Integer, List<Perso>> getEquipes() {

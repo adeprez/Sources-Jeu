@@ -19,53 +19,53 @@ import divers.Outil;
 public abstract class JeuEquipe extends Jeu {
 
 
-	public JeuEquipe(Serveur serveur) {
-		super(serveur);
-	}
+    public JeuEquipe(Serveur serveur) {
+	super(serveur);
+    }
 
-	public abstract int getNombreEquipes();
+    public abstract int getNombreEquipes();
 
-	public int getNombre(int equipe) {
-		List<Perso> e = getRessources().getEquipes().get(equipe);
-		return e == null ? 0 : e.size();
-	}
+    public int getNombre(int equipe) {
+	List<Perso> e = getRessources().getEquipes().get(equipe);
+	return e == null ? 0 : e.size();
+    }
 
-	@Override
-	public int nextIDEquipe(RessourcePerso r) {
-		Map<Integer, List<Perso>> equipes = getRessources().getEquipes();
-		int equipe = 1, n = getNombreEquipes();
-		if(equipes.size() <= n) {
-			while(equipes.containsKey(equipe))
-				equipe++;
-		} else {
-			int nn = Integer.MAX_VALUE;
-			for(final Entry<Integer, List<Perso>> e : equipes.entrySet())
-				if(e.getKey() > 0 && e.getValue().size() < nn) { 
-					equipe = e.getKey();
-					nn = e.getValue().size();
-				}
+    @Override
+    public int nextIDEquipe(RessourcePerso r) {
+	Map<Integer, List<Perso>> equipes = getRessources().getEquipes();
+	int equipe = 1, n = getNombreEquipes();
+	if(equipes.size() <= n)
+	    while(equipes.containsKey(equipe))
+		equipe++;
+	else {
+	    int nn = Integer.MAX_VALUE;
+	    for(final Entry<Integer, List<Perso>> e : equipes.entrySet())
+		if(e.getKey() > 0 && e.getValue().size() < nn) {
+		    equipe = e.getKey();
+		    nn = e.getValue().size();
 		}
-		return equipe;
 	}
+	return equipe;
+    }
 
-	@Override
-	public List<Component> getComposants(RessourcesServeur r) {
-		return creerComposants(r);
-	}
+    @Override
+    public List<Component> getComposants(RessourcesServeur r) {
+	return creerComposants(r);
+    }
 
-	public static List<Component> creerComposants(RessourcesReseau r) {
-		Map<Integer, List<Perso>> persos = r.getEquipes();
-		List<Component> l = new ArrayList<Component>();
-		for(final Entry<Integer, List<Perso>> equipe : persos.entrySet()) {
-			JPanel pl = new JPanel();
-			pl.setLayout(new BoxLayout(pl, BoxLayout.Y_AXIS));
-			pl.setOpaque(false);
-			pl.setBorder(Outil.getBordure("Equipe " + equipe.getKey()));
-			for(final Perso p : equipe.getValue())
-				pl.add(getInterface(p));
-			l.add(pl);
-		}
-		return l;
+    public static List<Component> creerComposants(RessourcesReseau r) {
+	Map<Integer, List<Perso>> persos = r.getEquipes();
+	List<Component> l = new ArrayList<Component>();
+	for(final Entry<Integer, List<Perso>> equipe : persos.entrySet()) {
+	    JPanel pl = new JPanel();
+	    pl.setLayout(new BoxLayout(pl, BoxLayout.Y_AXIS));
+	    pl.setOpaque(false);
+	    pl.setBorder(Outil.getBordure("Equipe " + equipe.getKey()));
+	    for(final Perso p : equipe.getValue())
+		pl.add(getInterface(p));
+	    l.add(pl);
 	}
+	return l;
+    }
 
 }

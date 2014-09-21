@@ -7,6 +7,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import partie.PartieClient;
+import partie.modeJeu.scorable.Scorable;
 import perso.Perso;
 import reseau.AbstractClient;
 import reseau.donnees.MessageServeur;
@@ -23,6 +25,7 @@ import exceptions.HorsLimiteException;
 public class Client extends AbstractClient {
     private final CompteARebours cpt;
     private final Compte compte;
+    private PartieClient partie;
 
 
     public Client(Compte compte, InetAddress adresse) throws IOException {
@@ -41,6 +44,10 @@ public class Client extends AbstractClient {
 	super(new Socket(adresse, port), new RessourcesReseau());
 	this.compte = compte;
 	cpt = new CompteARebours();
+    }
+
+    public void setPartie(PartieClient partie) {
+	this.partie = partie;
     }
 
     public CompteARebours getHorloge() {
@@ -106,6 +113,9 @@ public class Client extends AbstractClient {
 	    } catch(Exception e) {
 		e.printStackTrace();
 	    }
+	    break;
+	case SCORABLE:
+	    partie.addScorable(io.nextPositif(), Scorable.get(io));
 	    break;
 	default: return true;
 	}

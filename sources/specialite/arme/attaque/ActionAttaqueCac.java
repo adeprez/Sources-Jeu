@@ -48,13 +48,13 @@ public abstract class ActionAttaqueCac extends Action<AbstractPerso> implements 
 		}
 	} else {
 	    aTouche = true;
-	    o.degats(10);
+	    o.degats(10, getSource());
 	}
     }
 
     @Override
     public void faireEffet(Vivant e) {
-	e.degats(getSource().getSpecialite().getArme().getDegats());
+	e.degats(getSource().getSpecialite().getArme().getDegats(), getSource());
     }
 
     @Override

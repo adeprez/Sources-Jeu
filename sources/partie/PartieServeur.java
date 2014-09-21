@@ -8,6 +8,7 @@ import java.util.Map;
 import map.elements.Spawn;
 import map.objets.Objet;
 import partie.modeJeu.Jeu;
+import partie.modeJeu.scorable.Scorable;
 import perso.Perso;
 import reseau.objets.InfoServeur;
 import reseau.paquets.Paquet;
@@ -54,6 +55,12 @@ public class PartieServeur extends Partie {
 	    spawns = Spawn.creerSpawns(getMap(), 3, getRessources().getIDEquipes());
 	List<Spawn> l = spawns.get(equipe);
 	return l.get(Outil.r().nextInt(l.size()));
+    }
+
+    @Override
+    public void addScorable(int id, Scorable scorable) {
+	super.addScorable(id, scorable);
+	serveur.envoyerTous(new Paquet(TypePaquet.SCORABLE, scorable.sauvegarder(new IO().addBytePositif(id))));
     }
 
     @Override
