@@ -5,6 +5,7 @@ import java.awt.Composite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
 import listeners.ChangeSpecialiteListener;
@@ -38,6 +39,10 @@ public abstract class AbstractPerso extends Vivant {
 	this.xp = xp.length < TypeSpecialite.values().length ? Arrays.copyOf(xp, TypeSpecialite.values().length) : xp;
 	specialites = Specialite.getSpecialites(this);
 	specialite = -1;
+    }
+
+    public BufferedImage getIcone() {
+	return anim.getTetePerso().getImage();
     }
 
     public Specialite getSpecialite() {

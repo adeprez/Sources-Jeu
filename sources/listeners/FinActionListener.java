@@ -4,5 +4,5 @@ import physique.actions.AbstractAction;
 
 
 public interface FinActionListener {
-	public void finAction(AbstractAction<?> terminee, AbstractAction<?> nouvelle);
+    public void finAction(AbstractAction<?> terminee, AbstractAction<?> nouvelle);
 }

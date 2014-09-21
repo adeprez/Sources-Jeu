@@ -1,7 +1,7 @@
 package listeners;
 
-import controles.ControleListener;
+import controles.ControleActionListener;
 
-public interface ControleMapListener extends ControleListener {
+public interface ControleMapListener extends ControleActionListener {
 	public void setZoom(int zoom);
 }

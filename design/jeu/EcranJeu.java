@@ -5,6 +5,7 @@ import interfaces.Localise;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -41,6 +42,7 @@ public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evene
     private final HorlogeProgression horloge;
     private final PartieClient partie;
     private final ControlesClavier c;
+    private final EcranScores scores;
     private final VisionJeu vision;
     private final BarreJeu barre;
     private final JLabel ping;
@@ -60,15 +62,18 @@ public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evene
 
 	horloge = new HorlogeProgression(partie.getClient().getHorloge());
 	controle = new ControleOutReseau(getCamera(), partie.getClient());
+	scores = new EcranScores(partie);
 	barre = new BarreJeu(partie.getPerso(), controle);
 	c = new ControlesClavier("test");
-	c.addControleListener(controle);
+	c.addActionControleListener(controle);
 
 	add(ping = Outil.getTexte("", false));
+	add(scores);
 	add(horloge);
 	add(barre);
 
 	addMouseListener(controle);
+	c.addControleListener(scores);
 
 	partie.getClient().write(new PaquetPing());
 	partie.getClient().addActualiseListener(this);
@@ -123,6 +128,8 @@ public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evene
 	ping.setBounds(0, 30, 75, 30);
 	int h = barre.getPreferredSize().height;
 	barre.setBounds(0, getHeight() - h, getWidth(), h);
+	Dimension d = scores.getPreferredSize();
+	scores.setBounds(getWidth() - d.width, (getHeight() - d.height)/2, d.width, d.height);
     }
 
     public static int getAngle(Camera cam, Localise source, int x, int y, boolean droite) {

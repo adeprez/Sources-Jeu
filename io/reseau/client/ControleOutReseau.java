@@ -13,10 +13,10 @@ import perso.Perso;
 import reseau.paquets.jeu.PaquetAction;
 import specialite.Specialite;
 import vision.Camera;
-import controles.ControleListener;
+import controles.ControleActionListener;
 import controles.TypeAction;
 
-public class ControleOutReseau extends MouseAdapter implements ControleListener, ChangeSpecialiteListener {
+public class ControleOutReseau extends MouseAdapter implements ControleActionListener, ChangeSpecialiteListener {
 	private final Set<TypeAction> actifs;
 	private final Client client;
 	private final Camera cam;
