@@ -49,8 +49,10 @@ public class Fleche extends Projectile {
     public void impact(Physique p) {
 	if(p instanceof Vivant)
 	    impact((Vivant) p);
-	else if(p instanceof Objet)
+	else if(p instanceof Objet) {
+	    ((Objet) p).degats(1, null);;
 	    ((Objet) p).addRemoveListener(this);
+	}
     }
 
     @Override

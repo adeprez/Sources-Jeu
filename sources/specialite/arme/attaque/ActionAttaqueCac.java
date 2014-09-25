@@ -48,7 +48,7 @@ public abstract class ActionAttaqueCac extends Action<AbstractPerso> implements 
 		}
 	} else {
 	    aTouche = true;
-	    o.degats(10, getSource());
+	    o.degats(1, getSource());
 	}
     }
 

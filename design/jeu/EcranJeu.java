@@ -75,6 +75,7 @@ public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evene
 	addMouseListener(controle);
 	c.addControleListener(scores);
 
+	scores.setVisible(false);
 	partie.getClient().write(new PaquetPing());
 	partie.getClient().addActualiseListener(this);
 	partie.lancer();

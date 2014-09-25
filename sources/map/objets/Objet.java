@@ -152,10 +152,9 @@ public abstract class Objet extends Visible implements Localise3D {
     }
 
     @Override
-    public void setVie(int nouvelle) {
-	super.setVie(nouvelle);
-	if(nouvelle <= 0 && estDansMap())
-	    remove();
+    public void meurt() {
+	super.meurt();
+	remove();
     }
 
     @Override
