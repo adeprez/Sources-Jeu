@@ -4,6 +4,7 @@ import interfaces.Localise;
 import io.IO;
 import perso.Perso;
 import physique.Collision;
+import physique.actions.AbstractAction;
 import reseau.paquets.Paquet;
 import reseau.paquets.TypePaquet;
 import reseau.ressources.RessourcePerso;
@@ -23,6 +24,10 @@ public class PaquetSpawn extends Paquet {
     }
 
     public static void effet(Perso p) {
+	p.setActionContactSol(null);
+	AbstractAction<?> a = p.getAction();
+	if(a != null)
+	    a.setSuivante(null);
 	p.forceStopAction();
 	p.getAnimation().setSequence(null);
     }

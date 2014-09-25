@@ -6,44 +6,44 @@ import ressources.sprites.animation.sequence.Sequence;
 
 public class CompetenceTirArc extends Competence {
 
-	
-	public CompetenceTirArc(AbstractPerso source) {
-		super(source);
-	}
 
-	@Override
-	public Sequence getSequence() {
-		return null;
-	}
+    public CompetenceTirArc(AbstractPerso source) {
+	super(source);
+    }
 
-	@Override
-	public void tourAction() {
-		
-	}
+    @Override
+    public Sequence getSequence() {
+	return null;
+    }
 
-	@Override
-	public void commence() {
-		
-	}
+    @Override
+    public void tourAction() {
 
-	@Override
-	public void seTermine() {
-		
-	}
+    }
 
-	@Override
-	public boolean peutFaire(AbstractAction<?> courante) {
-		return true;
-	}
+    @Override
+    public void commence() {
 
-	@Override
-	public boolean peutArret() {
-		return true;
-	}
+    }
 
-	@Override
-	public String getNomIcone() {
-		return "tir arc";
-	}
+    @Override
+    public void seTermine() {
+
+    }
+
+    @Override
+    public boolean peutFaire(AbstractAction<?> courante) {
+	return true;
+    }
+
+    @Override
+    public boolean peutArret() {
+	return true;
+    }
+
+    @Override
+    public String getNomIcone() {
+	return "tir arc";
+    }
 
 }

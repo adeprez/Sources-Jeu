@@ -81,7 +81,7 @@ public class ActionSaut extends Action<Vivant> implements ContactListener {
 	    finie = aSaute;
 	    if(finie) {
 		Sequence s = Animations.getInstance().getSequence("stop saut", false);
-		s.setSuivante(tombe = Animations.getInstance().getSequence("tombe renverse", true));
+		s.setSuivante(tombe = Animations.getInstance().getSequence("tombe renverse", !getSource().estPose()));
 		getSource().getAnimation().setSequence(s);
 	    }
 	}

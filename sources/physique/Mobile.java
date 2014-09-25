@@ -62,6 +62,16 @@ public abstract class Mobile extends Listenable implements Sauvegardable, Locali
 	return tempsVol;
     }
 
+    public void clear() {
+	gravite = 0;
+	vitesseInstantanee = 0;
+	deplacement = 0;
+	tempsVol = 0;
+	forceX = 0;
+	forceY = 0;
+	deplace = false;
+    }
+
     public boolean estPose() {
 	return tempsVol <= 0;
     }

@@ -19,7 +19,7 @@ public abstract class Action<K extends Vivant> extends AbstractAction<K> {
 
     @Override
     public boolean peutFaire(AbstractAction<?> courante) {
-	return getSource().getTempsVol() < 5;
+	return getSource().estVivant() && getSource().getTempsVol() < 5;
     }
 
 

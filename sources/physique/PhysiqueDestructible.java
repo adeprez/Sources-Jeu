@@ -44,6 +44,7 @@ public abstract class PhysiqueDestructible extends Physique implements LocaliseE
     }
 
     public void meurt() {
+	clear();
 	if(vivant != null)
 	    vivant.meurt(this, tueur);
     }

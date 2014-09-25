@@ -3,17 +3,13 @@ package map.objets;
 import interfaces.ContaineurImagesOp;
 import io.IO;
 
-import java.awt.Color;
 import java.awt.Container;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
 
 import map.Map;
 import objets.InterfaceDestructible;
 import physique.forme.Forme;
 import reseau.paquets.Paquet;
 import reseau.paquets.TypePaquet;
-import statique.Style;
 import divers.Outil;
 
 public abstract class Destructible extends Objet {
@@ -51,14 +47,6 @@ public abstract class Destructible extends Objet {
     @Override
     public boolean estVide() {
 	return false;
-    }
-
-    @Override
-    public void surdessiner(Graphics2D g, Rectangle zone) {
-	super.surdessiner(g, zone);
-	g.setColor(Color.WHITE);
-	g.setFont(Style.POLICE);
-	g.drawString(getVie() + "/" + getVitalite(), zone.x, zone.y + 20);
     }
 
     @Override
