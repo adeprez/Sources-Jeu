@@ -10,6 +10,7 @@ import objets.InterfaceDestructible;
 import physique.forme.Forme;
 import reseau.paquets.Paquet;
 import reseau.paquets.TypePaquet;
+import reseau.serveur.Serveur;
 import divers.Outil;
 
 public abstract class Destructible extends Objet {
@@ -20,7 +21,12 @@ public abstract class Destructible extends Objet {
     public Destructible(Map map, ContaineurImagesOp images, int fond, Forme forme, int id, int resistance, int degats) {
 	super(map, images, id, fond, forme);
 	this.resistance = resistance == 0 ? VIE_DEFAUT : resistance;
-	setVie(this.resistance - degats);
+	setVie(Math.max(1, this.resistance - degats));
+    }
+
+    @Override
+    public void setServeur(Serveur serveur) {
+	super.setServeur(serveur);
     }
 
     public void setResistance(int resistance) {
