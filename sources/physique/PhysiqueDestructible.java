@@ -3,13 +3,16 @@ package physique;
 import interfaces.IOable;
 import interfaces.LocaliseEquipe;
 import listeners.DestructibleListener;
+import partie.modeJeu.Jeu;
 import perso.Vivant;
 import physique.forme.Forme;
 import divers.Outil;
 import exceptions.HorsLimiteException;
 
 public abstract class PhysiqueDestructible extends Physique implements LocaliseEquipe {
+    private static final int DELAI_INSENSIBLE_RESPAWN = Jeu.DELAI_RESPAWN + 1000;
     private DestructibleListener vivant;
+    private long derniereMort;
     private int equipe, vie;
     private Vivant tueur;
 
@@ -45,8 +48,13 @@ public abstract class PhysiqueDestructible extends Physique implements LocaliseE
 
     public void meurt() {
 	clear();
+	derniereMort = System.currentTimeMillis();
 	if(vivant != null)
 	    vivant.meurt(this, tueur);
+    }
+
+    public int getTempsDerniereMort() {
+	return derniereMort == 0 ? Integer.MAX_VALUE : (int) (System.currentTimeMillis() - derniereMort);
     }
 
     public boolean estVivant() {
@@ -54,7 +62,7 @@ public abstract class PhysiqueDestructible extends Physique implements LocaliseE
     }
 
     public void degats(int dmg, Vivant tueur) {
-	if(estServeur() && dmg > 0) {
+	if(estServeur() && dmg > 0 && getTempsDerniereMort() > DELAI_INSENSIBLE_RESPAWN) {
 	    this.tueur = tueur;
 	    setVie(vie - dmg);
 	}

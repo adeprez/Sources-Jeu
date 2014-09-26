@@ -24,6 +24,7 @@ import temps.GestionnaireEvenements;
 import divers.Listenable;
 
 public abstract class Jeu extends Listenable implements Lancable, Fermable, DestructibleListener {
+    public static final int DELAI_RESPAWN = 5000;
     private final Serveur serveur;
 
 
@@ -55,7 +56,7 @@ public abstract class Jeu extends Listenable implements Lancable, Fermable, Dest
 	if(idTueur != id)
 	    ps.addScorable(idTueur, new Kill(getValeur(TypeScorable.KILL), id));
 	ps.addScorable(id, new Mort(getValeur(TypeScorable.MORT), idTueur));
-	ps.addEvenement(new Evenement(5000, (EvenementTempsPeriodique e, GestionnaireEvenements g) -> ps.spawn(id)));
+	ps.addEvenement(new Evenement(DELAI_RESPAWN, (EvenementTempsPeriodique e, GestionnaireEvenements g) -> ps.spawn(id)));
     }
 
     public static Component getInterface(Perso p) {
