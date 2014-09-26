@@ -31,8 +31,7 @@ public abstract class Objet extends Visible implements Localise3D {
     public static final int SANS_FOND = 255, VITESSE_TRANSPARENCE = 5;
     private final ContaineurImagesOp images;
     private boolean opaque, actifMap;
-    private final int id, fond;
-    private int opacite;
+    private int id, fond, opacite;
 
 
     public Objet(Map map, ContaineurImagesOp images, int id, int fond, Forme forme) {
@@ -50,6 +49,14 @@ public abstract class Objet extends Visible implements Localise3D {
     public abstract Objet dupliquer();
 
     public abstract void construireInterface(Container c, boolean editable);
+
+    public void setFond(int fond) {
+	this.fond = fond;
+    }
+
+    public void setIDImage(int id) {
+	this.id = id;
+    }
 
     public void setOpaque(boolean opaque) {
 	this.opaque = opaque;
@@ -249,7 +256,7 @@ public abstract class Objet extends Visible implements Localise3D {
 
     @Override
     public String toString() {
-	return super.toString() + "[OBJET (id=" + getID() + ", type=" + getType().getNom() + ")]";
+	return super.toString() + "[OBJET (id=" + getID() + ", fond=" + fond + ", type=" + getType().getNom() + ")]";
     }
 
     @Override
