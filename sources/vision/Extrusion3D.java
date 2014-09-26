@@ -7,6 +7,7 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 import physique.forme.Forme;
 import physique.forme.Triangle;
@@ -17,20 +18,20 @@ public final class Extrusion3D {
 
     private Extrusion3D() {}
 
-    public static void dessine(Graphics2D g, ContaineurImageOp image, Forme f, Rectangle avant, Rectangle arriere) {
+    public static void dessine(Graphics2D g, ContaineurImageOp image, BufferedImage dessus, Forme f, Rectangle avant, Rectangle arriere) {
 	Shape tmp = g.getClip();
 	if(verticalGaucheVisible(f, avant, arriere))
-	    dessineVertical(g, image, getZoneVerticalGauche(f, avant, arriere), false, 0, 100);
+	    dessineVertical(g, image, dessus, getZoneVerticalGauche(f, avant, arriere), false, 0, 100);
 	else if(verticalDroiteVisible(f, avant, arriere))
-	    dessineVertical(g, image, getZoneVerticalDroite(f, avant, arriere), true, 0, 100);
+	    dessineVertical(g, image, dessus, getZoneVerticalDroite(f, avant, arriere), true, 0, 100);
 	if(horizontalBasVisible(f, avant, arriere))
-	    dessineHorizontal(g, image, getHorizontalBas(f, avant, arriere), false, 0, 125);
+	    dessineHorizontal(g, image, dessus, getHorizontalBas(f, avant, arriere), false, 0, 125);
 	if(horizontalHautVisible(f, avant, arriere))
-	    dessineHorizontal(g, image, getHorizontalHaut(f, avant, arriere), true, 255, 50);
+	    dessineHorizontal(g, image, dessus, getHorizontalHaut(f, avant, arriere), true, 255, 50);
 	g.setClip(tmp);
     }
 
-    public static void dessineHorizontal(Graphics2D g, ContaineurImageOp image, Polygon zone, boolean haut, int teinte, int opacite) {
+    public static void dessineHorizontal(Graphics2D g, ContaineurImageOp image, BufferedImage dessus, Polygon zone, boolean haut, int teinte, int opacite) {
 	int w, x, y, h, sy;
 	if(haut) {
 	    w = zone.xpoints[2] - zone.xpoints[3];
@@ -53,9 +54,11 @@ public final class Extrusion3D {
 	a.scale(1.5, 1.5);
 	g.setClip(zone);
 	g.drawImage(image.getImage(teinte, opacite), a, null);
+	if(dessus != null)
+	    g.drawImage(dessus, a, null);
     }
 
-    public static void dessineVertical(Graphics2D g, ContaineurImageOp image, Polygon zone, boolean droite, int teinte, int opacite) {
+    public static void dessineVertical(Graphics2D g, ContaineurImageOp image, BufferedImage dessus, Polygon zone, boolean droite, int teinte, int opacite) {
 	int w, h = zone.ypoints[3] - zone.ypoints[0], x, ds, y;
 	if(droite) {
 	    x = zone.xpoints[0];
@@ -74,6 +77,8 @@ public final class Extrusion3D {
 	a.scale(1.2, 1.2);
 	g.setClip(zone);
 	g.drawImage(image.getImage(teinte, opacite), a, null);
+	if(dessus != null)
+	    g.drawImage(dessus, a, null);
     }
 
     public static boolean horizontalHautVisible(Forme f, Rectangle avant, Rectangle arriere) {

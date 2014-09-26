@@ -21,8 +21,10 @@ import objets.InterfaceObjet;
 import physique.Collision;
 import physique.Visible;
 import physique.forme.Forme;
+import ressources.sprites.Sprites;
 import vision.Camera;
 import vision.Extrusion3D;
+import divers.Outil;
 import exceptions.AnnulationException;
 import exceptions.HorsLimiteException;
 import exceptions.ObjetNonExistantException;
@@ -32,6 +34,7 @@ public abstract class Objet extends Visible implements Localise3D {
     private final ContaineurImagesOp images;
     private boolean opaque, actifMap;
     private int id, fond, opacite;
+    private BufferedImage degats;
 
 
     public Objet(Map map, ContaineurImagesOp images, int id, int fond, Forme forme) {
@@ -112,6 +115,12 @@ public abstract class Objet extends Visible implements Localise3D {
     public void surdessiner(Graphics2D g, Rectangle zone) {
 	if(premierPlanVisible())
 	    dessiner(g, getImagePremierPlan(), zone, getForme(), !aFond() && getForme().estDecoupe());
+	if(degats != null) {
+	    Composite tmp = g.getComposite();
+	    g.setComposite(AlphaComposite.SrcAtop);
+	    g.drawImage(degats, zone.x, zone.y, zone.width, zone.height, null);
+	    g.setComposite(tmp);
+	}
     }
 
     public ContaineurImageOp getContaineurImage() {
@@ -148,6 +157,15 @@ public abstract class Objet extends Visible implements Localise3D {
 	getMap().remove(this);
 	for(final RemoveObjetListener l : getListeners(RemoveObjetListener.class))
 	    l.remove(this);
+    }
+
+    @Override
+    public void setVie(int nouvelle) {
+	super.setVie(nouvelle);
+	int prct = getPourcentVie();
+	if(prct > 89)
+	    degats = null;
+	else degats = Sprites.getSprite("fissures", true).getImage(Outil.entre(8 - prct/10, 0, 9));
     }
 
     @Override
@@ -200,20 +218,20 @@ public abstract class Objet extends Visible implements Localise3D {
 		img = getContaineurImageFond();
 		if(!estVide()) {
 		    Rectangle r = c.getZoneFond(this, PLAN_ARR_AV);
-		    Extrusion3D.dessine(g1, img, f, r, arr);
+		    Extrusion3D.dessine(g1, img, degats, f, r, arr);
 		    predessiner(g1, r, equipe);
 		} else {
-		    Extrusion3D.dessine(g1, img, f, m1, arr);
+		    Extrusion3D.dessine(g1, img, degats, f, m1, arr);
 		    predessiner(g1, m1, equipe);
 		}
 	    } else {
 		arr = c.getZone(this, PLAN_ARR_ARR);
 		av = c.getZone(this, PLAN_AV_AV);
 		img = getContaineurImage();
-		Extrusion3D.dessine(g1, img, f, m1, arr);
+		Extrusion3D.dessine(g1, img, null, f, m1, arr);
 	    }
 	    if(!estVide()) {
-		Extrusion3D.dessine(g2, getContaineurImage(), getForme(), m2, m1);
+		Extrusion3D.dessine(g2, getContaineurImage(), degats, getForme(), m2, m1);
 		if(opacite < 100)
 		    dessiner(g2, m2, equipe);
 	    }
@@ -221,8 +239,8 @@ public abstract class Objet extends Visible implements Localise3D {
 	    opaciteSurdessin(g2);
 	    opaciteSurdessin(g3);
 	    if(aFond() && !estVide())
-		Extrusion3D.dessine(g2, img, f, av, c.getZoneFond(this, PLAN_AV_ARR));
-	    else Extrusion3D.dessine(g2, img, f, av, m2);
+		Extrusion3D.dessine(g2, img, degats, f, av, c.getZoneFond(this, PLAN_AV_ARR));
+	    else Extrusion3D.dessine(g2, img, degats, f, av, m2);
 	    surdessiner(g3, av);
 	    g2.setComposite(tmp1);
 	    g3.setComposite(tmp2);
