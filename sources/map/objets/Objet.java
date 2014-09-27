@@ -18,6 +18,7 @@ import listeners.ChangeObjetListener;
 import listeners.RemoveListener;
 import map.Map;
 import objets.InterfaceObjet;
+import perso.Vivant;
 import physique.Collision;
 import physique.Visible;
 import physique.forme.Forme;
@@ -30,7 +31,7 @@ import exceptions.HorsLimiteException;
 import exceptions.ObjetNonExistantException;
 
 public abstract class Objet extends Visible implements Localise3D {
-    public static final int SANS_FOND = 255, VITESSE_TRANSPARENCE = 5;
+    public static final int SANS_FOND = 255, VITESSE_TRANSPARENCE = 5, DEGATS_COLLISION_VIVANT = 1000;
     private final ContaineurImagesOp images;
     private boolean opaque, actifMap;
     private int id, fond, opacite;
@@ -172,8 +173,16 @@ public abstract class Objet extends Visible implements Localise3D {
     public synchronized Collision setPos(int x, int y) throws HorsLimiteException {
 	Collision c = super.setPos(x, y);
 	if(c != null && actifMap)
-	    setActifMap(false);
+	    if(actifMap)
+		setActifMap(false);
 	return c;
+    }
+
+    @Override
+    public void collisionSol(Collision c) {
+	super.collisionSol(c);
+	if(c.getCible() instanceof Vivant)
+	    ((Vivant) c.getCible()).degats(DEGATS_COLLISION_VIVANT, null);
     }
 
     @Override

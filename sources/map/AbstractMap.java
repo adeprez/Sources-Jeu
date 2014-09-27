@@ -31,7 +31,7 @@ public abstract class AbstractMap<E extends LocaliseDessinable> extends MapDessi
 	this(new ArrayList<List<E>>());
     }
 
-    public abstract E creeObjetVide(E ancien);
+    public abstract E creeObjetVide();
     public abstract String stringObjet(E e);
     public abstract boolean estVide(List<E> colonne);
 
@@ -99,7 +99,7 @@ public abstract class AbstractMap<E extends LocaliseDessinable> extends MapDessi
 	synchronized(l) {
 	    if(y < l.size()) {
 		e = l.get(y);
-		E vide = creeObjetVide(e);
+		E vide = creeObjetVide();
 		vide.setPos(convertX(x), convertY(y));
 		notifyAjoutListener(vide);
 	    }
@@ -146,7 +146,7 @@ public abstract class AbstractMap<E extends LocaliseDessinable> extends MapDessi
 	checkAjoutObjet(y - l.size() + 1);
 	synchronized(l) {
 	    for(int i=l.size() ; i<y ; i++) {
-		E vide = creeObjetVide(null);
+		E vide = creeObjetVide();
 		notifyAjoutListener(vide);
 		vide.setPos(convertX(x), convertY(i));
 		g2 = true;

@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 
 import listeners.ChangeCaseListener;
 import map.objets.Objet;
+import physique.Collision;
 import physique.Physique;
 import physique.Visible;
 import physique.forme.Forme;
@@ -110,8 +111,8 @@ public abstract class Vivant extends Visible {
     }
 
     @Override
-    public void collisionSol() {
-	super.collisionSol();
+    public void collisionSol(Collision c) {
+	super.collisionSol(c);
 	int chute = lastY - getY();
 	if(chute > 200)
 	    degats(chute/20, null);

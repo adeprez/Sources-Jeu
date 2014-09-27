@@ -124,9 +124,7 @@ implements Dessineur, Fermable, StyleListe, ChangePersoListener, AjoutPersoListe
 	    c.nouvelleFrame();
 	    dessineMap(c);
 	    dessineDessinables(c);
-	} catch(Exception e) {
-	    e.printStackTrace();
-	}
+	} catch(Exception e) {}
 	dessineTampons();
     }
 

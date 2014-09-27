@@ -26,7 +26,7 @@ public abstract class Mobile extends Listenable implements Sauvegardable, Locali
 
     public abstract int getVitesse();
     public abstract int getMasse();
-    public abstract void collisionSol();
+    public abstract void collisionSol(Collision c);
     public abstract double getCoefReductionForceX();
     public abstract double getCoefReductionForceY();
 
@@ -222,7 +222,7 @@ public abstract class Mobile extends Listenable implements Sauvegardable, Locali
 	    tempsVol++;
 	else {
 	    if(tempsVol > 0)
-		collisionSol();
+		collisionSol(c);
 	    gravite = 0;
 	    tempsVol = 0;
 	}

@@ -206,10 +206,8 @@ public class Map extends MapIO<Objet> {
     }
 
     @Override
-    public ObjetVide creeObjetVide(Objet ancien) {
-	ObjetVide o = new ObjetVide(this, getImages(), ancien == null ? Objet.SANS_FOND : ancien.getFond());
-	if(ancien != null)
-	    o.setOrientation(ancien.getForme().getOrientation());
+    public ObjetVide creeObjetVide() {
+	ObjetVide o = new ObjetVide(this, getImages(), Objet.SANS_FOND);
 	setServeur(o);
 	return o;
     }

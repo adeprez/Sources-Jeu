@@ -108,7 +108,7 @@ public abstract class MobileActionable extends Mobile implements Actionable {
     }
 
     @Override
-    public void collisionSol() {
+    public void collisionSol(Collision c) {
 	int vol = getTempsVol();
 	if(vol > 0 && contact != null)
 	    contact.contactSol(vol);
@@ -126,7 +126,7 @@ public abstract class MobileActionable extends Mobile implements Actionable {
 	if(c != null)
 	    if(y > 0)
 		contactHaut((int) y);
-	    else collisionSol();
+	    else collisionSol(c);
 	return c;
     }
 
