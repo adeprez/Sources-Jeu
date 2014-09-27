@@ -17,12 +17,17 @@ import java.awt.image.BufferedImage;
 import listeners.ChangeObjetListener;
 import listeners.RemoveListener;
 import map.Map;
+import map.elements.AnimationDessinable;
+import map.elements.Localisation;
 import objets.InterfaceObjet;
 import perso.Vivant;
 import physique.Collision;
 import physique.Visible;
 import physique.forme.Forme;
 import ressources.sprites.Sprites;
+import temps.Evenement;
+import temps.EvenementTempsPeriodique;
+import temps.GestionnaireEvenements;
 import vision.Camera;
 import vision.Extrusion3D;
 import divers.Outil;
@@ -188,7 +193,10 @@ public abstract class Objet extends Visible implements Localise3D {
     @Override
     public void meurt() {
 	super.meurt();
-	remove();
+	getMap().getPartie().getEvenements().addEvenement(new Evenement(250,
+		(EvenementTempsPeriodique t, GestionnaireEvenements g) -> remove()));
+	getMap().ajoutDessinable(new AnimationDessinable(new Localisation(this, UNITE.width * 2, UNITE.height * 2, 0, -UNITE.height/5),
+		Sprites.getSprite("explosion", true), 1000, (AnimationDessinable a) -> getMap().removeDessinable(a)));
     }
 
     @Override

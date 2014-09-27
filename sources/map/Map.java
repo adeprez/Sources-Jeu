@@ -14,6 +14,7 @@ import map.objets.Bloc;
 import map.objets.Objet;
 import map.objets.ObjetVide;
 import map.objets.TypeObjet;
+import partie.Partie;
 import perso.IterateurEquipe;
 import perso.Perso;
 import physique.Collision;
@@ -29,6 +30,7 @@ import exceptions.ObjetNonExistantException;
 public class Map extends MapIO<Objet> {
     private final List<Perso> persos;
     private final Ciel ciel;
+    private Partie partie;
 
 
     public Map(int taille, Serveur serveur) {
@@ -47,6 +49,14 @@ public class Map extends MapIO<Objet> {
 	super(images, serveur, io);
 	persos = new ArrayList<Perso>();
 	ciel = new Ciel(getLargeur());
+    }
+
+    public void setPartie(Partie partie) {
+	this.partie = partie;
+    }
+
+    public Partie getPartie() {
+	return partie;
     }
 
     public Objet getObjetCollision(Forme forme, int dx, int dy) {

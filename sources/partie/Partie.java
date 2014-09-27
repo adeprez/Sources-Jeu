@@ -38,6 +38,10 @@ public abstract class Partie extends PartieListenable implements Lancable, Ferma
 	scorables = new HashMap<Integer, List<Scorable>>();
     }
 
+    public GestionnaireEvenements getEvenements() {
+	return evenements;
+    }
+
     public void addChangeScoreListener(ChangeScoreListener l) {
 	addListener(ChangeScoreListener.class, l);
     }
@@ -129,7 +133,11 @@ public abstract class Partie extends PartieListenable implements Lancable, Ferma
 
     @Override
     public boolean lancer() {
-	return evenements.lancer();
+	if(evenements.lancer()) {
+	    getMap().setPartie(this);
+	    return true;
+	}
+	return false;
     }
 
     @Override
