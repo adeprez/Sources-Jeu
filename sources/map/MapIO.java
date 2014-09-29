@@ -39,7 +39,7 @@ public abstract class MapIO<E extends Localise3D & Sauvegardable> extends MondeP
 
     public MapIO(ContaineurImagesOp images, Serveur serveur, IO io) {
 	this(images, serveur);
-	int taille = io.nextPositif();
+	int taille = io.nextShortInt();
 	agrandir(taille);
 	int id = CODE_COLONNE, x = 0;
 	while(x < taille) {
@@ -82,7 +82,7 @@ public abstract class MapIO<E extends Localise3D & Sauvegardable> extends MondeP
 
     @Override
     public IO sauvegarder(IO io) {
-	io.addBytePositif(getLargeur());
+	io.addShort(getLargeur());
 	for(final List<E> le : getObjets()) {
 	    for(final E e : le)
 		e.sauvegarder(io);

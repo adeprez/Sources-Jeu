@@ -35,18 +35,20 @@ public class PartieServeur extends Partie {
     }
 
     public void spawn(RessourcePerso rp) {
-	Perso p = rp.getPerso();
-	p.setVie(p.getVitalite());
-	int tentatives = 0;
-	while(tentatives < 10) try {
-	    p.setPos(getSpawn(p.getEquipe()));
-	    serveur.envoyerTous(new PaquetSpawn(rp));
-	    PaquetSpawn.effet(p);
-	    tentatives = 10;
-	} catch(Exception e) {
-	    tentatives++;
-	    if(tentatives > 10)
-		System.err.println("Impossible de placer " + p);
+	if(rp != null) {
+	    Perso p = rp.getPerso();
+	    p.setVie(p.getVitalite());
+	    int tentatives = 0;
+	    while(tentatives < 10) try {
+		p.setPos(getSpawn(p.getEquipe()));
+		serveur.envoyerTous(new PaquetSpawn(rp));
+		PaquetSpawn.effet(p);
+		tentatives = 10;
+	    } catch(Exception e) {
+		tentatives++;
+		if(tentatives > 10)
+		    System.err.println("Impossible de placer " + p);
+	    }
 	}
     }
 
