@@ -61,7 +61,7 @@ public abstract class Animation extends AbstractMembre {
     }
 
     public void setVitesse(int vitesse) {
-	this.vitesse = Math.max(1, vitesse);
+	this.vitesse = vitesse;
     }
 
     public int getRang(Membre membre) throws AnnulationException {

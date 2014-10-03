@@ -29,7 +29,7 @@ public class ActionGrimpeEchelle extends Action<Vivant> {
     public void tourAction() {
 	try {
 	    Vivant v = getSource();
-	    v.deplacement(0, 3);
+	    setVitesseAnim(v.deplacement(0, 3) == null ? 100 : 0);
 	    Collision c = v.deplacement(v.estDroite() ? 1 : -1, 0);
 	    if(c == null || !(c.getCible() instanceof Echelle)) {
 		setSuivante(new ActionRoulade(v));
@@ -42,12 +42,12 @@ public class ActionGrimpeEchelle extends Action<Vivant> {
 
     @Override
     public void commence() {
-	setVitesseAnim(100);
 	getSource().setIgnoreGravite(true);
     }
 
     @Override
     public void seTermine() {
+	setVitesseAnim(100);
 	getSource().getAnimation().setSequence(Animations.getInstance().getSequence("chute", false));
 	getSource().setIgnoreGravite(false);
     }

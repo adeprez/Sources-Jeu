@@ -38,7 +38,7 @@ public class ActionGrimpeCorde extends Action<Vivant> {
     public void tourAction() {
 	try {
 	    Vivant v = getSource();
-	    v.deplacement(0, 2);
+	    setVitesseAnim(v.deplacement(0, 2) == null ? 100 : 0);
 	    if(!estSurCorde()) {
 		setSuivante(new ActionRoulade(v));
 		stopAction();
@@ -60,12 +60,12 @@ public class ActionGrimpeCorde extends Action<Vivant> {
 	    Objet o = v.getMap().getObjet(v);
 	    v.setX(o.getXCentre() - v.getLargeur()/2);
 	} catch (HorsLimiteException e) {}
-	setVitesseAnim(100);
 	v.setIgnoreGravite(true);
     }
 
     @Override
     public void seTermine() {
+	setVitesseAnim(100);
 	getSource().getAnimation().setSequence(Animations.getInstance().getSequence("chute", false));
 	getSource().setIgnoreGravite(false);
     }
