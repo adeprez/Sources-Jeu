@@ -50,7 +50,7 @@ public class ActionGrimpeCorde extends Action<Vivant> {
 
     @Override
     public boolean peutFaire(AbstractAction<?> courante) {
-	return super.peutFaire(courante) && estSurCorde();
+	return getSource().estVivant() && estSurCorde();
     }
 
     @Override

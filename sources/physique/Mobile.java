@@ -37,6 +37,7 @@ public abstract class Mobile extends Listenable implements Sauvegardable, Locali
 
     public void setIgnoreGravite(boolean ignoreGravite) {
 	this.ignoreGravite = ignoreGravite;
+	gravite = 0;
     }
 
     public void setServeur(Serveur serveur) {
