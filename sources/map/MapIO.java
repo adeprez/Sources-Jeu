@@ -42,7 +42,7 @@ public abstract class MapIO<E extends Localise3D & Sauvegardable> extends MondeP
 	int taille = io.nextShortInt();
 	agrandir(taille);
 	int id = CODE_COLONNE, x = 0;
-	while(x < taille) {
+	while(x < taille) try {
 	    id = io.nextPositif();
 	    if(id == CODE_COLONNE)
 		x++;
@@ -51,6 +51,9 @@ public abstract class MapIO<E extends Localise3D & Sauvegardable> extends MondeP
 	    } catch(Exception err) {
 		err.printStackTrace();
 	    }
+	} catch(Exception err) {
+	    err.printStackTrace();
+	    break;
 	}
 	if(id != CODE_COLONNE)
 	    System.err.println("Une erreur est survenue lors de la lecture de la carte");

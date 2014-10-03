@@ -11,10 +11,12 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import listeners.ChangeCaseListener;
+import map.objets.Echelle;
 import map.objets.Objet;
 import physique.Collision;
 import physique.Physique;
 import physique.Visible;
+import physique.actions.ActionGrimpeEchelle;
 import physique.forme.Forme;
 import reseau.paquets.Paquet;
 import reseau.paquets.TypePaquet;
@@ -160,6 +162,16 @@ public abstract class Vivant extends Visible {
 	    err.printStackTrace();
 	}
 	return b;
+    }
+
+    @Override
+    public Collision deplace() throws HorsLimiteException {
+	Collision c = super.deplace();
+	if(c != null && c.getCible() instanceof Echelle) {
+	    setVitesseInstantanee(0);
+	    setAction(new ActionGrimpeEchelle(this));
+	}
+	return c;
     }
 
     @Override

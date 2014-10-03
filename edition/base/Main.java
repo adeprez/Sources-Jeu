@@ -16,8 +16,8 @@ public class Main {
 	//		} catch(IOException e) {
 	//			e.printStackTrace();
 	//		}
+	//new Map(10, null).enregistrer("comptes/test/territoire/lieux/test2");
 	//Fenetre.getInstance().changer(new EcranEditeurLieu(Compte.getComptes()[0], new Lieu("comptes/test/territoire/lieux/test2"))).setVisible(true);
-	//		Fenetre.getInstance().setVisible(true);
     }
 
     public static boolean apparence(String nom) {

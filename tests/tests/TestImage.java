@@ -10,7 +10,6 @@ import reseau.ressources.RessourceImage;
 import reseau.ressources.RessourcesReseau;
 
 
-@SuppressWarnings("static-method")
 public class TestImage {
 
 

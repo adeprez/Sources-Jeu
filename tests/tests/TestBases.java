@@ -20,7 +20,6 @@ import divers.Outil;
 import divers.Taille;
 
 
-@SuppressWarnings("static-method")
 public class TestBases implements EventListener {
 
     @Test

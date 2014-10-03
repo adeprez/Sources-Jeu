@@ -16,6 +16,7 @@ import perso.Vivant;
 import physique.actions.AbstractAction;
 import physique.actions.Action;
 import physique.actions.ActionChangeArme;
+import physique.actions.ActionGrimpeCorde;
 import physique.actions.ActionMarche;
 import physique.actions.ActionRoulade;
 import physique.actions.ActionSaut;
@@ -138,6 +139,8 @@ implements StyleListe, ClientServeurIdentifiable, FiltreEnvoi, ChangeRessourceLi
 	    return p.setAccroupi(debut, estServeur());
 	case ATTAQUER:
 	    return debut && faireAction(p.getSpecialite().getArme().getAction(p));
+	case ESCALADER:
+	    return faireAction(new ActionGrimpeCorde(p));
 	default:
 	    System.err.println(action + " non implementee (AbstractClient)");
 	    return false;

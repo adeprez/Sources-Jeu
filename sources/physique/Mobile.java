@@ -14,9 +14,9 @@ import exceptions.HorsLimiteException;
 public abstract class Mobile extends Listenable implements Sauvegardable, Localise {
     public static final int DEPLACEMENT_MAX = UNITE.width/10;
     private int gravite, vitesseInstantanee, deplacement, tempsVol;
+    private boolean deplace, ignoreGravite;
     private float forceX, forceY;
     private Serveur serveur;
-    private boolean deplace;
     private Forme forme;
 
 
@@ -29,6 +29,15 @@ public abstract class Mobile extends Listenable implements Sauvegardable, Locali
     public abstract void collisionSol(Collision c);
     public abstract double getCoefReductionForceX();
     public abstract double getCoefReductionForceY();
+
+
+    public boolean ignoreGravite() {
+	return ignoreGravite;
+    }
+
+    public void setIgnoreGravite(boolean ignoreGravite) {
+	this.ignoreGravite = ignoreGravite;
+    }
 
     public void setServeur(Serveur serveur) {
 	this.serveur = serveur;
@@ -215,6 +224,8 @@ public abstract class Mobile extends Listenable implements Sauvegardable, Locali
     }
 
     public Collision gravite() throws HorsLimiteException {
+	if(ignoreGravite)
+	    return null;
 	int masse = getMasse();
 	gravite = (int) Math.min(gravite + Math.max(1, Math.log10(masse)), 50);
 	Collision c = mouvement(0, -gravite);
@@ -332,7 +343,7 @@ public abstract class Mobile extends Listenable implements Sauvegardable, Locali
 
     @Override
     public IO sauvegarder(IO io) {
-	return forme.sauvegarder(io);
+	return getForme().sauvegarder(io);
     }
 
 }

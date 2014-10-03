@@ -85,9 +85,11 @@ public abstract class Animation extends AbstractMembre {
 		    dX = (e1.getdX() * (PAS_ETAPE - prct) + e2.getdX() * prct)/PAS_ETAPE;
 		    dY = (e1.getdY() * (PAS_ETAPE - prct) + e2.getdY() * prct)/PAS_ETAPE;
 		    etapePrecendente = getNumEtape();
-		    cumulVitesse = (cumulVitesse + vitesse) % (sequence.getModele().getNombreEtapes() * PAS_ETAPE);
+		    if(sequence != null)
+			cumulVitesse = (cumulVitesse + vitesse) % (sequence.getModele().getNombreEtapes() * PAS_ETAPE);
 		} else {
-		    e1.effet(sequence.getDetermineurAngle(), this);
+		    if(e1 != null)
+			e1.effet(sequence.getDetermineurAngle(), this);
 		    terminer();
 		}
 	    }

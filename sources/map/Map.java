@@ -88,11 +88,8 @@ public class Map extends MapIO<Objet> {
 	if((o = getObjetCollision(forme, 1, 1)) != null)
 	    return o;
 	//haut et bas
-	if((o = getObjetCollision(forme, 0, -1)) != null)
-	    return o;
-	if((o = getObjetCollision(forme, 0, 1)) != null)
-	    return o;
-	return null;
+	o = getObjetCollision(forme, 0, -1);
+	return o == null ? getObjetCollision(forme, 0, 1) : o;
     }
 
     public Collision getCollision(Physique p) {
@@ -119,11 +116,8 @@ public class Map extends MapIO<Objet> {
 	if((c = getCollision(p, pos, 1, 1)) != null)
 	    return c;
 	//haut et bas
-	if((c = getCollision(p, pos, 0, -1)) != null)
-	    return c;
-	if((c = getCollision(p, pos, 0, 1)) != null)
-	    return c;
-	return null;
+	c = getCollision(p, pos, 0, -1);
+	return c == null ? getCollision(p, pos, 0, 1) : c;
     }
 
     public Collision getCollision(Physique p, Localise pos, int dx, int dy) {

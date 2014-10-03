@@ -22,7 +22,6 @@ import divers.Outil;
 import exceptions.HorsLimiteException;
 
 
-@SuppressWarnings("static-method")
 public class TestIO {
 
 

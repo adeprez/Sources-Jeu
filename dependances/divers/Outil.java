@@ -214,4 +214,8 @@ public final class Outil {
 	return val < min ? min : val > max ? max : val;
     }
 
+    public static boolean estEntre(int val, int min, int max) {
+	return val >= min && val <= max;
+    }
+
 }

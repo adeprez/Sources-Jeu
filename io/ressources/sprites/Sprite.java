@@ -99,7 +99,11 @@ public class Sprite extends Listenable implements Dessinable, ContaineurImagesOp
 
     @Override
     public BufferedImage getImage(int index) {
-	return images[index];
+	try {
+	    return images[index];
+	} catch(IndexOutOfBoundsException err) {
+	    return new BufferedImage(1, 1, BufferedImage.TYPE_BYTE_BINARY);
+	}
     }
 
     @Override

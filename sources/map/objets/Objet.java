@@ -122,10 +122,8 @@ public abstract class Objet extends Visible implements Localise3D {
 	if(premierPlanVisible())
 	    dessiner(g, getImagePremierPlan(), zone, getForme(), !aFond() && getForme().estDecoupe());
 	if(degats != null) {
-	    Composite tmp = g.getComposite();
 	    g.setComposite(AlphaComposite.SrcAtop);
 	    g.drawImage(degats, zone.x, zone.y, zone.width, zone.height, null);
-	    g.setComposite(tmp);
 	}
     }
 
@@ -163,6 +161,14 @@ public abstract class Objet extends Visible implements Localise3D {
 	getMap().remove(this);
 	for(final RemoveObjetListener l : getListeners(RemoveObjetListener.class))
 	    l.remove(this);
+    }
+
+    public int getOpacite() {
+	return opacite;
+    }
+
+    public BufferedImage getImageDegats() {
+	return degats;
     }
 
     @Override
@@ -233,13 +239,13 @@ public abstract class Objet extends Visible implements Localise3D {
 		arr = c.getZoneFond(this, PLAN_ARR_ARR);
 		av = c.getZoneFond(this, PLAN_AV_AV);
 		img = getContaineurImageFond();
-		if(!estVide()) {
+		if(estVide()) {
+		    Extrusion3D.dessine(g1, img, degats, f, m1, arr);
+		    predessiner(g1, m1, equipe);
+		} else {
 		    Rectangle r = c.getZoneFond(this, PLAN_ARR_AV);
 		    Extrusion3D.dessine(g1, img, degats, f, r, arr);
 		    predessiner(g1, r, equipe);
-		} else {
-		    Extrusion3D.dessine(g1, img, degats, f, m1, arr);
-		    predessiner(g1, m1, equipe);
 		}
 	    } else {
 		arr = c.getZone(this, PLAN_ARR_ARR);
@@ -317,6 +323,12 @@ public abstract class Objet extends Visible implements Localise3D {
 	    break;
 	case BLOC:
 	    o = new Bloc(map, img, io);
+	    break;
+	case ECHELLE:
+	    o = new Echelle(map, img, io);
+	    break;
+	case CORDE:
+	    o = new Corde(map, img, io);
 	    break;
 	default: throw new IllegalArgumentException(type + " n'est pas un type valide");
 	}

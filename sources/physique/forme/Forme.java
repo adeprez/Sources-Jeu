@@ -200,7 +200,7 @@ public abstract class Forme implements Sauvegardable, LocaliseEquipe, Forme3D {
     @Override
     public IO sauvegarder(IO io) {
 	int no = getNoDefForme();
-	io.addBytePositif(getType().ordinal() * N + getNoDefForme());
+	io.addBytePositif(getType().ordinal() * N + no);
 	switch(no) {
 	case LH: return io.addBytePositif(getLargeur()).addBytePositif(getHauteur());
 	case XY: return io.addByte(getPosX()).addByte(getPosY());
@@ -211,12 +211,12 @@ public abstract class Forme implements Sauvegardable, LocaliseEquipe, Forme3D {
 
     public static Forme get(IO io) {
 	int i = io.nextPositif();
-	return get(TypeForme.values()[i/N], i%N, io);
+	return get(TypeForme.values()[i/N], i % N, io);
     }
 
     private static Forme get(TypeForme type, int forme, IO io) {
 	Dimension decalage = null;
-	Dimension taille = forme > XY ? new Dimension(io.nextPositif(), io.nextPositif()) : new Dimension(UNITE.width, UNITE.height);
+	Dimension taille = type == TypeForme.VIDE ? UNITE : forme > XY ? new Dimension(io.nextPositif(), io.nextPositif()) : new Dimension(UNITE.width, UNITE.height);
 	if(forme % 2 == 1)
 	    decalage = new Dimension(io.next(), io.next());
 	Forme f = get(type, io);

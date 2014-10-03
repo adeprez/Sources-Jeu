@@ -3,24 +3,30 @@ import static org.junit.Assert.assertEquals;
 import io.IO;
 import map.Map;
 import map.objets.Bloc;
+import map.objets.Corde;
 import map.objets.Destructible;
+import map.objets.Echelle;
 import map.objets.Objet;
+import map.objets.ObjetVide;
 
 import org.junit.Test;
 
+import physique.forme.FormeVide;
 import physique.forme.Rect;
 import ressources.SpriteObjets;
+import exceptions.HorsLimiteException;
 
 
-@SuppressWarnings("static-method")
 public class TestObjets {
-    private static int i;
 
 
     @Test
     public void testSauvegarde() {
-	//		test(new Bloc(null, SpriteObjets.getInstance(), 0, new Rect(), 1, 5, 0), 0, 0);
-	//		test(new ObjetVide(null, SpriteObjets.getInstance(), 1), 0, 0);
+	Map m = new Map(3, null);
+	test(new Bloc(m, SpriteObjets.getInstance(), 0, new Rect(), 1, 5, 0), false);
+	test(new ObjetVide(m, SpriteObjets.getInstance(), 1), false);
+	test(new Echelle(m, null, 1, new Rect(), 0, 5, 0, true), false);
+	test(new Corde(m, null, 1, new FormeVide(), 5), true);
     }
 
     @Test
@@ -28,16 +34,27 @@ public class TestObjets {
 	Rect r = new Rect();
 	r.setHauteur(200);
 	r.setX(88);
-	Bloc b = new Bloc(null, SpriteObjets.getInstance(), 0, r, 1, 3, 0);
-	test(b, 100, 100);
+	Bloc b = new Bloc(new Map(3, null), SpriteObjets.getInstance(), 0, r, 1, 3, 0);
+	try {
+	    b.setPos(88, 166);
+	} catch (HorsLimiteException e) {}
+	test(b, false);
     }
 
-    public void test(Objet o, int x, int y) {
-	i++;
-	Objet oo = Objet.getObjet(null, null, o.sauvegarder(new IO()));
-	oo.getForme().setPos(x, y);
-	System.out.println(">>>" + i + "=" + o.sauvegarder(new IO()) + "\t>>>" + o);
-	System.out.println(">>>" + i + "=" + oo.sauvegarder(new IO()) + "\t>>>" + oo);
+    public void test(Objet o, boolean echo) {
+	Objet oo = null;
+	try {
+	    oo = Objet.getObjet(o.getMap(), null, o.sauvegarder(new IO()));
+	} catch(Exception err) {
+	    System.out.println(o.sauvegarder(new IO()));
+	    return;
+	}
+	oo.getForme().setPos(o.getX(), o.getY());
+	if(echo) {
+	    IO io1 = o.sauvegarder(new IO()), io2 = oo.sauvegarder(new IO());
+	    System.out.println(io1 + "\t>>" + o);
+	    System.out.println(io2 + "\t>>" + oo);
+	}
 	assertEquals(o.getID(), oo.getID());
 	assertEquals(o.getForme().getOrientation(), oo.getForme().getOrientation());
 	assertEquals(o.getForme().getType(), oo.getForme().getType());
@@ -53,13 +70,5 @@ public class TestObjets {
 	}
     }
 
-    //	@Test
-    public void testMap() throws Exception {
-	Map map = new Map(5, null);
-	IO io = map.sauvegarder(new IO());
-	assertEquals(io.nextPositif(), 5);
-	Objet.getObjet(null, SpriteObjets.getInstance(), io);
-	new Map(SpriteObjets.getInstance(), null, map.sauvegarder(new IO()));
-    }
 
 }

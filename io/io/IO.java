@@ -511,7 +511,10 @@ public class IO implements IOable {
 
     @Override
     public String toString() {
-	return new String(getBytes());
+	String s = "";
+	for(final byte b : buffer)
+	    s += b + LIMITE_BYTE_MAX + 1 + " ";
+	return s;
     }
 
     private static void check(int valeur, int min, int max) {

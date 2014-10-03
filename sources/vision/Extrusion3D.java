@@ -2,6 +2,8 @@ package vision;
 
 import interfaces.ContaineurImageOp;
 
+import java.awt.AlphaComposite;
+import java.awt.Composite;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
@@ -54,8 +56,12 @@ public final class Extrusion3D {
 	a.scale(1.5, 1.5);
 	g.setClip(zone);
 	g.drawImage(image.getImage(teinte, opacite), a, null);
-	if(dessus != null)
+	if(dessus != null) {
+	    Composite tmp = g.getComposite();
+	    g.setComposite(AlphaComposite.SrcAtop);
 	    g.drawImage(dessus, a, null);
+	    g.setComposite(tmp);
+	}
     }
 
     public static void dessineVertical(Graphics2D g, ContaineurImageOp image, BufferedImage dessus, Polygon zone, boolean droite, int teinte, int opacite) {
@@ -77,8 +83,12 @@ public final class Extrusion3D {
 	a.scale(1.2, 1.2);
 	g.setClip(zone);
 	g.drawImage(image.getImage(teinte, opacite), a, null);
-	if(dessus != null)
+	if(dessus != null) {
+	    Composite tmp = g.getComposite();
+	    g.setComposite(AlphaComposite.SrcAtop);
 	    g.drawImage(dessus, a, null);
+	    g.setComposite(tmp);
+	}
     }
 
     public static boolean horizontalHautVisible(Forme f, Rectangle avant, Rectangle arriere) {

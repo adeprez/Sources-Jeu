@@ -1,7 +1,5 @@
 package physique.forme;
 
 public enum TypeForme {
-	VIDE, RECTANGLE, TRIANGLE, POINT;
-
-
+    VIDE, RECTANGLE, TRIANGLE, POINT;
 }
