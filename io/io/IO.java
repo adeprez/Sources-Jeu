@@ -88,7 +88,8 @@ public class IO implements IOable {
      * @see #nextStringLong()
      */
     public IO addLong(String str) {
-	return add(str.length()).addBytes(str.getBytes());
+	byte[] b = str.getBytes();
+	return add(b.length).addBytes(b);
     }
 
     /**
@@ -149,7 +150,8 @@ public class IO implements IOable {
      * @see #nextShortString()
      */
     public IO addShort(String str) {
-	return addBytePositif(str.length()).addBytes(str.getBytes());
+	byte[] b = str.getBytes();
+	return addBytePositif(b.length).addBytes(b);
     }
 
     /**
@@ -172,7 +174,8 @@ public class IO implements IOable {
      * @see #nextString()
      */
     public IO add(String str) {
-	return addShort(str.length()).addBytes(str.getBytes());
+	byte[] b = str.getBytes();
+	return addShort(b.length).addBytes(b);
     }
 
     /**
