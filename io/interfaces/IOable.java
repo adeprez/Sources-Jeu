@@ -5,8 +5,8 @@ package interfaces;
  * @author Alexis
  */
 public interface IOable {
-	/**
-	 * @return un tableau d'octets
-	 */
-	public byte[] getBytes();
+    /**
+     * @return un tableau d'octets
+     */
+    public byte[] getBytes();
 }

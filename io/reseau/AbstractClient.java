@@ -20,9 +20,8 @@ import physique.actions.ActionGrimpeCorde;
 import physique.actions.ActionMarche;
 import physique.actions.ActionRoulade;
 import physique.actions.ActionSaut;
-import reseau.donnees.MessageServeur;
 import reseau.listeners.DeconnexionListener;
-import reseau.paquets.PaquetMessageServeur;
+import reseau.paquets.PaquetMessage;
 import reseau.paquets.TypePaquet;
 import reseau.ressources.RessourcePerso;
 import reseau.ressources.RessourceReseau;
@@ -103,8 +102,8 @@ implements StyleListe, ClientServeurIdentifiable, FiltreEnvoi, ChangeRessourceLi
 	    l.deconnexion(this);
     }
 
-    public void fermer(MessageServeur message) {
-	write(new PaquetMessageServeur(message));
+    public void fermer(String message) {
+	write(new PaquetMessage(PaquetMessage.SERVEUR, message));
 	fermer();
     }
 

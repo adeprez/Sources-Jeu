@@ -139,7 +139,8 @@ public class Serveur extends AbstractServeur<ClientServeur> implements FinCharge
     public void deconnexion(AbstractClient client) {
 	super.deconnexion(client);
 	infos.setJoueurs(getClients().size());
-	ressources.removeRessource(TypeRessource.PERSO, client.getID());
+	if(ressources.aRessource(TypeRessource.PERSO, client.getID()))
+	    ressources.removeRessource(TypeRessource.PERSO, client.getID());
     }
 
     @Override

@@ -9,12 +9,14 @@ import perso.Perso;
 import physique.actions.ActionChangeArme;
 import reseau.AbstractClient;
 import reseau.paquets.Paquet;
+import reseau.paquets.PaquetMessage;
 import reseau.paquets.TypePaquet;
 import reseau.paquets.jeu.PaquetAction;
 import reseau.paquets.session.PaquetPing;
 import reseau.ressources.RessourcePerso;
 import reseau.ressources.RessourceReseau;
 import reseau.ressources.TypeRessource;
+import reseau.serveur.filtreEnvoi.FiltreEnvoiEquipe;
 import reseau.serveur.filtreEnvoi.FiltreEnvoiExclusionID;
 import controles.TypeAction;
 
@@ -32,6 +34,11 @@ public class ClientServeur extends AbstractClient {
 	switch(r.getType()) {
 	case PERSO:
 	    Perso p = ((RessourcePerso) r).getPerso();
+	    for(final RessourceReseau<?> rp : serveur.getRessources().get(TypeRessource.PERSO).values())
+		if(((RessourcePerso) rp).getPerso().getNom().equals(p.getNom())) {
+		    fermer("Un joueur utilise déjà le nom " + p.getNom() + " dans cette partie");
+		    return;
+		}
 	    p.setSpecialite(p.getSpecialitePrincipale());
 	    serveur.getRessources().putRessource(new RessourcePerso(getID(), p), new FiltreEnvoiExclusionID(getID()));
 	    break;
@@ -43,6 +50,24 @@ public class ClientServeur extends AbstractClient {
 
     public boolean estPret() {
 	return pret;
+    }
+
+    public void message(int type, String message, IO io) {
+	switch(type) {
+	case PaquetMessage.EQUIPE:
+	    serveur.envoyerFiltre(new PaquetMessage(PaquetMessage.EQUIPE, message, getID()), new FiltreEnvoiEquipe(serveur, getPerso().getEquipe()));
+	    break;
+	case PaquetMessage.PRIVE:
+	    ClientServeur c = serveur.getClient(io.nextPositif());
+	    Paquet p = new PaquetMessage(PaquetMessage.PRIVE, message, getID());
+	    if(c != null && c.write(p))
+		write(p.addBytePositif(c.getID()));
+	    else write(new PaquetMessage(PaquetMessage.SERVEUR, "Contact hors ligne"));
+	    break;
+	default:
+	    serveur.envoyerTous(new PaquetMessage(type, message, getID()));
+	    break;
+	}
     }
 
     @Override
@@ -106,6 +131,9 @@ public class ClientServeur extends AbstractClient {
 	case FIN_CHARGEMENT:
 	    pret = true;
 	    serveur.recalculeTempsLancement();
+	    break;
+	case MESSAGE:
+	    message(io.nextPositif(), io.nextShortString(), io);
 	    break;
 	default: return true;
 	}

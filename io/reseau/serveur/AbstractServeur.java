@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import reseau.AbstractClient;
-import reseau.donnees.MessageServeur;
 import reseau.listeners.ConnexionListener;
 import reseau.listeners.DeconnexionListener;
 import reseau.paquets.Paquet;
@@ -64,7 +63,7 @@ implements Runnable, Lancable, Fermable, DeconnexionListener<AbstractClient>, Jo
 	return clients.get(id);
     }
 
-    public void deconnecterClients(MessageServeur cause) {
+    public void deconnecterClients(String cause) {
 	for(final AbstractClient c : getClients())
 	    c.fermer(cause);
     }
@@ -146,7 +145,7 @@ implements Runnable, Lancable, Fermable, DeconnexionListener<AbstractClient>, Jo
 	    notifierConnexionListener(c);
 	    return true;
 	} catch(ServeurFullException e) {
-	    c.fermer(new MessageServeur(MessageServeur.ERREUR, e.getMessage()));
+	    c.fermer(e.getMessage());
 	    return false;
 	}
     }
@@ -163,7 +162,7 @@ implements Runnable, Lancable, Fermable, DeconnexionListener<AbstractClient>, Jo
     @Override
     public boolean fermer() {
 	try {
-	    deconnecterClients(new MessageServeur(MessageServeur.INFO, "Le serveur est hors ligne"));
+	    deconnecterClients("Le serveur est hors ligne");
 	    socket.close();
 	    return true;
 	} catch (IOException e) {

@@ -4,9 +4,12 @@ import java.awt.Color;
 import java.awt.Composite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
+
+import javax.swing.ImageIcon;
 
 import listeners.ChangeSpecialiteListener;
 import physique.Direction;
@@ -28,6 +31,7 @@ public abstract class AbstractPerso extends Vivant {
     private final int[] xp;
     private int specialite, spePrecedente;
     private boolean accroupi;
+    private ImageIcon icone;
 
 
     public AbstractPerso(CorpsPerso corps, int[] xp, Caracteristiques caract, InformationsPerso infos, AnimationPerso anim) {
@@ -43,6 +47,12 @@ public abstract class AbstractPerso extends Vivant {
 
     public BufferedImage getIcone() {
 	return anim.getTetePerso().getImage();
+    }
+
+    public ImageIcon getSmallIcone() {
+	if(icone == null)
+	    icone = new ImageIcon(anim.getTetePerso().getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT));
+	return icone;
     }
 
     public Specialite getSpecialite() {

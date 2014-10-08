@@ -11,7 +11,8 @@ import partie.PartieClient;
 import partie.modeJeu.scorable.Scorable;
 import perso.Perso;
 import reseau.AbstractClient;
-import reseau.donnees.MessageServeur;
+import reseau.listeners.MessageListener;
+import reseau.paquets.PaquetMessage;
 import reseau.paquets.TypePaquet;
 import reseau.paquets.jeu.PaquetSpawn;
 import reseau.ressources.RessourcesReseau;
@@ -20,6 +21,7 @@ import reseau.serveur.Serveur;
 import ressources.compte.Compte;
 import temps.CompteARebours;
 import controles.TypeAction;
+import divers.Outil;
 import exceptions.HorsLimiteException;
 
 public class Client extends AbstractClient {
@@ -46,6 +48,10 @@ public class Client extends AbstractClient {
 	cpt = new CompteARebours();
     }
 
+    public PartieClient getPartie() {
+	return partie;
+    }
+
     public void setPartie(PartieClient partie) {
 	this.partie = partie;
     }
@@ -56,6 +62,14 @@ public class Client extends AbstractClient {
 
     public Compte getCompte() {
 	return compte;
+    }
+
+    public void addMessageListener(MessageListener l) {
+	addListener(MessageListener.class, l);
+    }
+
+    public void removeMessageListener(MessageListener l) {
+	removeListener(MessageListener.class, l);
     }
 
     @Override
@@ -81,8 +95,19 @@ public class Client extends AbstractClient {
 	case PING:
 	    setPing(io.nextLong());
 	    break;
-	case MESSAGE_SERVEUR:
-	    new MessageServeur(io).afficher();
+	case MESSAGE:
+	    int msg = io.nextPositif();
+	    if(msg == PaquetMessage.SERVEUR)
+		Outil.message(io.nextShortString());
+	    else {
+		String m = io.nextShortString();
+		Perso expediteur = msg == PaquetMessage.INFO ? null : getPerso(io.nextPositif());
+		int index = io.getIndex();
+		for(final MessageListener l : getListeners(MessageListener.class)) {
+		    l.message(msg, m, expediteur, io);
+		    io.setIndex(index);
+		}
+	    }
 	    break;
 	case ADD_RESSOURCE:
 	    getRessources().putRessource(getRessources().lire(io));

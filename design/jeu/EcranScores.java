@@ -37,6 +37,8 @@ public class EcranScores extends Ecran implements ChangeScoreListener, AjoutPers
 
     @Override
     public void remove(Perso perso) {
+	//TODO: remove => perso non présent dans les ressources.
+	System.out.println("EcranScores:41 (TODO)");
 	remove(scores.remove(partie.getRessources().getIDPerso(perso)));
     }
 
