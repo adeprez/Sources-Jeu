@@ -2,6 +2,7 @@ package jeu;
 
 import interfaces.Actualisable;
 import interfaces.Localise;
+import io.IO;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -21,7 +22,9 @@ import layouts.PlaceurComposants;
 import map.DessineurElementsMap3D;
 import map.objets.Objet;
 import partie.PartieClient;
+import perso.Perso;
 import reseau.client.ControleOutReseau;
+import reseau.listeners.MessageListener;
 import reseau.paquets.Paquet;
 import reseau.paquets.TypePaquet;
 import reseau.paquets.session.PaquetPing;
@@ -43,7 +46,7 @@ import divers.Outil;
 import ecrans.ContainerMap;
 
 
-public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evenementiel, PlaceurComposants, ActionListener {
+public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evenementiel, PlaceurComposants, ActionListener, MessageListener {
     private static final Dimension TAILLE_MINI_CHAT = new Dimension(200, 60);
     private static final long serialVersionUID = 1L;
     private final ControleOutReseau controle;
@@ -92,6 +95,7 @@ public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evene
 
 	scores.setVisible(false);
 	partie.getClient().write(new PaquetPing());
+	partie.getClient().addMessageListener(this);
 	partie.getClient().addActualiseListener(this);
 	partie.lancer();
 	if(Proprietes.getInstance().est3D())
@@ -179,6 +183,12 @@ public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evene
 	    chat.setPreferredSize(TAILLE_MINI_CHAT);
 	    toggle.setText("+");
 	}
+    }
+
+    @Override
+    public void message(int type, String message, Perso expediteur, IO io) {
+	if(expediteur != null)
+	    expediteur.message(message);
     }
 
 }

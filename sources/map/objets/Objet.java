@@ -3,6 +3,7 @@ package map.objets;
 import interfaces.ContaineurImageOp;
 import interfaces.ContaineurImagesOp;
 import interfaces.Localise3D;
+import interfaces.LocaliseDessinable;
 import io.IO;
 
 import java.awt.AlphaComposite;
@@ -18,6 +19,7 @@ import listeners.ChangeObjetListener;
 import listeners.RemoveListener;
 import map.Map;
 import map.elements.AnimationDessinable;
+import map.elements.DessinableTemporaire;
 import map.elements.Localisation;
 import objets.InterfaceObjet;
 import perso.Vivant;
@@ -202,7 +204,7 @@ public abstract class Objet extends Visible implements Localise3D {
 	getMap().getPartie().getEvenements().addEvenement(new Evenement(250,
 		(EvenementTempsPeriodique t, GestionnaireEvenements g) -> remove()));
 	getMap().ajoutDessinable(new AnimationDessinable(new Localisation(this, UNITE.width * 2, UNITE.height * 2, 0, -UNITE.height/5),
-		Sprites.getSprite("explosion", true), 1000, (AnimationDessinable a) -> getMap().removeDessinable(a)));
+		Sprites.getSprite("explosion", true), 1000, (DessinableTemporaire a) -> getMap().removeDessinable(a)));
     }
 
     @Override
@@ -223,8 +225,8 @@ public abstract class Objet extends Visible implements Localise3D {
 
     @Override
     public void dessine3D(Graphics2D g1, Graphics2D g2, Graphics2D g3, Camera c) {
+	int equipe = c.getSource().getEquipe();
 	if(estVisible()) {
-	    int equipe = c.getSource().getEquipe();
 	    Forme f = getForme();
 	    Rectangle arr, av, m1, m2;
 	    ContaineurImageOp img;
@@ -268,6 +270,9 @@ public abstract class Objet extends Visible implements Localise3D {
 	    g2.setComposite(tmp1);
 	    g3.setComposite(tmp2);
 	}
+	if(getDessinables() != null)
+	    for(final LocaliseDessinable d : getDessinables())
+		d.dessiner(c, g1, g2, g3);
     }
 
     @Override

@@ -14,7 +14,11 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
+import map.elements.Bulle;
+import map.elements.DessinableTemporaire;
 import physique.forme.Forme;
 import ressources.Proprietes;
 import statique.Style;
@@ -22,6 +26,7 @@ import vision.Camera;
 
 
 public abstract class Visible extends PhysiqueDestructible implements LocaliseDessinable, Nomme, Masquable, ContaineurImage, Marquable {
+    private List<LocaliseDessinable> dessinables;
     private boolean visible, selectionne;
 
 
@@ -40,6 +45,29 @@ public abstract class Visible extends PhysiqueDestructible implements LocaliseDe
 
     public void setSelectionne(boolean selectionne) {
 	this.selectionne = selectionne;
+    }
+
+    public void ajoutDessinable(LocaliseDessinable dessinable) {
+	if(dessinables == null)
+	    dessinables = new ArrayList<LocaliseDessinable>();
+	dessinables.add(dessinable);
+    }
+
+    public void removeDessinable(LocaliseDessinable dessinable) {
+	if(dessinables != null) {
+	    dessinables.remove(dessinable);
+	    if(dessinables.isEmpty())
+		dessinables = null;
+	}
+    }
+
+    public List<LocaliseDessinable> getDessinables() {
+	return dessinables;
+    }
+
+    public void message(String message) {
+	ajoutDessinable(new DessinableTemporaire(this, new Bulle(message), message.length() * 150 + 1500,
+		(DessinableTemporaire d) -> removeDessinable(d)));
     }
 
     @Override
@@ -103,6 +131,9 @@ public abstract class Visible extends PhysiqueDestructible implements LocaliseDe
     public void dessiner(Camera c, Graphics2D gPredessin, Graphics2D gDessin, Graphics2D gSurdessin) {
 	Rectangle zone = c.getZone(this, 0);
 	int equipe = c.getSource().getEquipe();
+	if(dessinables != null)
+	    for(int i=0 ; dessinables != null && i<dessinables.size() ; i++)
+		dessinables.get(i).dessiner(c, gPredessin, gDessin, gSurdessin);
 	predessiner(gPredessin, zone, equipe);
 	dessiner(gDessin, zone, equipe);
 	surdessiner(gSurdessin, zone, equipe);

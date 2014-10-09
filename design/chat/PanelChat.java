@@ -18,7 +18,10 @@ import reseau.paquets.PaquetMessage;
 
 import composants.styles.ScrollPaneTransparent;
 
+import divers.Outil;
+
 public class PanelChat extends JPanel implements ActionListener, DocumentListener {
+    private static final int TAILLE_MESSAGE_MAX = 500;
     private static final long serialVersionUID = 1L;
     private final ScrollPaneTransparent scroll;
     private final AbstractClient client;
@@ -72,7 +75,7 @@ public class PanelChat extends JPanel implements ActionListener, DocumentListene
     }
 
     public IO getPaquet() {
-	return new PaquetMessage(type, texte.getText());
+	return new PaquetMessage(type, texte.getText().trim());
     }
 
     public void removeFocus() {
@@ -87,8 +90,10 @@ public class PanelChat extends JPanel implements ActionListener, DocumentListene
 
     @Override
     public void actionPerformed(ActionEvent e) {
-	if(texte.getText().isEmpty())
+	if(texte.getText().trim().isEmpty())
 	    removeFocus();
+	else if(texte.getText().trim().length() > TAILLE_MESSAGE_MAX)
+	    Outil.erreur("Les messages ne doivent pas dépasser " + TAILLE_MESSAGE_MAX + " caractères");
 	else {
 	    client.write(getPaquet());
 	    texte.setText("");

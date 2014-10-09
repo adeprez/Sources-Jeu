@@ -21,6 +21,14 @@ public class LocaliseDessinableDefaut implements LocaliseDessinable {
 	this.dessin = dessin;
     }
 
+    public Dessinable getDessin() {
+	return dessin;
+    }
+
+    public Localise getElement() {
+	return element;
+    }
+
     @Override
     public int getX() {
 	return element.getX();

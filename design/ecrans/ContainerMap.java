@@ -11,6 +11,7 @@ import java.awt.RenderingHints;
 import listeners.SourisListener;
 import listeners.ZoomListener;
 import map.MapDessinable;
+import statique.Style;
 import vision.Camera;
 import vision.ReticuleSelection;
 import base.Ecran;
@@ -93,6 +94,7 @@ public class ContainerMap<E extends LocaliseDessinable> extends Ecran {
 
     @Override
     public void paintComponent(Graphics g) {
+	g.setFont(Style.POLICE);
 	if(map != null) {
 	    if(MapDessinable.HD) {
 		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
