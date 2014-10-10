@@ -6,8 +6,8 @@ import physique.Collision;
 
 public class VisionJeu implements LocaliseEquipe {
     private static final int RETARD = 20;
-    private final Perso perso;
     private final Camera cam;
+    private Perso perso;
     private int x, y;
 
 
@@ -16,6 +16,10 @@ public class VisionJeu implements LocaliseEquipe {
 	this.perso = perso;
 	x = perso.getMap().getLargeur() * UNITE.width/2;
 	y = perso.getMap().getAltitudeMax() * UNITE.height;
+    }
+
+    public void setPerso(Perso perso) {
+	this.perso = perso;
     }
 
     public Camera getCamera() {

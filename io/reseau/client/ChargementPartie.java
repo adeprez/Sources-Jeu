@@ -14,82 +14,82 @@ import divers.Listenable;
 import divers.Outil;
 import exceptions.AnnulationException;
 
-public class ChargementPartie extends Listenable 
+public class ChargementPartie extends Listenable
 implements Nomme, TacheRunnable, ReceiveListener, Fermable, AddRessourceListener {
-	private final Client client;
-	private int nbr;
+    private final Client client;
+    private int nbr;
 
-	
-	public ChargementPartie(TentativeConnexion t) throws AnnulationException {
-		this(t.getClient());
-	}
 
-	public ChargementPartie(Client client) {
-		this.client = client;
-		client.getRessources().addAddRessourceListener(this);
-	}
+    public ChargementPartie(TentativeConnexion t) throws AnnulationException {
+	this(t.getClient());
+    }
 
-	public void addFinChargementListenerListener(FinChargementListener l) {
-		addListener(FinChargementListener.class, l);
-	}
+    public ChargementPartie(Client client) {
+	this.client = client;
+	client.getRessources().addAddRessourceListener(this);
+    }
 
-	public void removeFinChargementListenerListener(FinChargementListener l) {
-		removeListener(FinChargementListener.class, l);
-	}
+    public void addFinChargementListenerListener(FinChargementListener l) {
+	addListener(FinChargementListener.class, l);
+    }
 
-	public void notifyFinChargementListenerListener() {
-		for(final FinChargementListener l : getListeners(FinChargementListener.class))
-			l.finChargement();
-	}
-	
-	public Client getClient() {
-		return client;
-	}
+    public void removeFinChargementListenerListener(FinChargementListener l) {
+	removeListener(FinChargementListener.class, l);
+    }
 
-	@Override
-	public void executer() {
-		nbr = 0;
-		client.addReceiveListener(this);
-		client.write(new Paquet(TypePaquet.NOMBRE_RESSOURCES));
-	}
+    public void notifyFinChargementListenerListener() {
+	for(final FinChargementListener l : getListeners(FinChargementListener.class))
+	    l.finChargement();
+    }
 
-	@Override
-	public String getNom() {
-		return "Chargement... (" + client.getRessources().getNombreRessources() + "/" + nbr + ")";
-	}
+    public Client getClient() {
+	return client;
+    }
 
-	@Override
-	public void recu(TypePaquet type, IO io) {
-		switch(type) {
-		case NOMBRE_RESSOURCES:
-			nbr = io.nextShortInt();
-			notifyActualiseListener();
-			break;
-		case FIN_CHARGEMENT:
-			fermer();
-			break;
-		default:
-			break;
-		}
-	}
+    @Override
+    public void executer() {
+	nbr = 0;
+	client.addReceiveListener(this);
+	client.write(new Paquet(TypePaquet.NOMBRE_RESSOURCES));
+    }
 
-	@Override
-	public int getAvancement() {
-		return Outil.getPourcentage(client.getRessources().getNombreRessources(), nbr);
-	}
+    @Override
+    public String getNom() {
+	return "Chargement... (" + client.getRessources().getNombreRessources() + "/" + nbr + ")";
+    }
 
-	@Override
-	public boolean fermer() {
-		client.removeReceiveListener(this);
-		client.getRessources().removeAddRessourceListener(this);
-		client.getPerso().setPrincipal();
-		notifyFinChargementListenerListener();
-		return true;
+    @Override
+    public void recu(TypePaquet type, IO io) {
+	switch(type) {
+	case NOMBRE_RESSOURCES:
+	    nbr = io.nextShortInt();
+	    notifyActualiseListener();
+	    break;
+	case FIN_CHARGEMENT:
+	    fermer();
+	    break;
+	default:
+	    break;
 	}
+    }
 
-	@Override
-	public void add(RessourceReseau<?> r) {
-		notifyActualiseListener();
-	}
+    @Override
+    public int getAvancement() {
+	return Outil.getPourcentage(client.getRessources().getNombreRessources(), nbr);
+    }
+
+    @Override
+    public boolean fermer() {
+	client.removeReceiveListener(this);
+	client.getRessources().removeAddRessourceListener(this);
+	client.getPerso().setPrincipal();
+	notifyFinChargementListenerListener();
+	return true;
+    }
+
+    @Override
+    public void add(RessourceReseau<?> r) {
+	notifyActualiseListener();
+    }
 
 }

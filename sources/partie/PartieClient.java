@@ -1,5 +1,6 @@
 package partie;
 
+import io.IO;
 import perso.Perso;
 import reseau.client.Client;
 import reseau.ressources.RessourcePerso;
@@ -30,22 +31,26 @@ public class PartieClient extends Partie {
 	return perso;
     }
 
+    public void finPartie(IO io) {
+	finPartie(io.nextBoolean(), io.nextPositif());
+    }
+
     @Override
     public boolean lancer() {
 	if(super.lancer()) {
 	    for(final RessourceReseau<?> r : client.getRessources().get(TypeRessource.PERSO).values())
 		add((RessourcePerso) r);
-	    return getMap().lancer();
+	    return true;
 	}
 	return false;
     }
 
     @Override
     public boolean fermer() {
-	if(super.lancer()) {
+	if(super.fermer()) {
 	    client.getRessources().removeAddRessourceListener(this);
 	    client.getRessources().removeRemoveRessourceListener(this);
-	    return getMap().fermer();
+	    return true;
 	}
 	return false;
     }

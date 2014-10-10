@@ -25,17 +25,25 @@ import divers.Listenable;
 
 public abstract class Jeu extends Listenable implements Lancable, Fermable, DestructibleListener {
     public static final int DELAI_RESPAWN = 5000;
+    private final int scoreVictoire;
     private final Serveur serveur;
 
 
-    public Jeu(Serveur serveur) {
+    public Jeu(Serveur serveur, int scoreVictoire) {
 	this.serveur = serveur;
+	this.scoreVictoire = scoreVictoire;
     }
 
     public abstract TypeJeu getType();
     public abstract List<Component> getComposants(RessourcesServeur r);
     public abstract int nextIDEquipe(RessourcePerso r);
     public abstract int getValeur(TypeScorable type);
+    public abstract int getIDGagnant();
+    public abstract boolean enEquipe();
+
+    public int getScoreVictoire() {
+	return scoreVictoire;
+    }
 
     public RessourcesServeur getRessources() {
 	return serveur.getRessources();
@@ -63,11 +71,12 @@ public abstract class Jeu extends Listenable implements Lancable, Fermable, Dest
 	return new InterfacePerso(false, p);
     }
 
-    public static Jeu getJeu(TypeJeu type, Serveur serveur) {
+    public static Jeu getJeu(TypeJeu type, Serveur serveur, int scoreVictoire) {
 	switch(type) {
-	case DEATHMATCH: return new DeathMatch(serveur);
+	case DEATHMATCH_EN_EQUIPE: return new DeathMatchEquipe(serveur, scoreVictoire);
 	default: throw new IllegalArgumentException(type + " non implemente");
 	}
     }
+
 
 }

@@ -3,16 +3,16 @@ package partie.modeJeu;
 import partie.modeJeu.scorable.TypeScorable;
 import reseau.serveur.Serveur;
 
-public class DeathMatch extends JeuEquipe {
+public class DeathMatchEquipe extends JeuEquipe {
 
 
-    public DeathMatch(Serveur serveur) {
-	super(serveur);
+    public DeathMatchEquipe(Serveur serveur, int scoreVictoire) {
+	super(serveur, scoreVictoire);
     }
 
     @Override
     public TypeJeu getType() {
-	return TypeJeu.DEATHMATCH;
+	return TypeJeu.DEATHMATCH_EN_EQUIPE;
     }
 
     @Override

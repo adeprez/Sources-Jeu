@@ -4,13 +4,17 @@ import interfaces.Actualisable;
 import interfaces.Localise;
 import io.IO;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,8 +23,10 @@ import javax.swing.JLabel;
 
 import layouts.LayoutPerso;
 import layouts.PlaceurComposants;
+import listeners.PartieListener;
 import map.DessineurElementsMap3D;
 import map.objets.Objet;
+import partie.Partie;
 import partie.PartieClient;
 import perso.Perso;
 import reseau.client.ControleOutReseau;
@@ -46,7 +52,7 @@ import divers.Outil;
 import ecrans.ContainerMap;
 
 
-public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evenementiel, PlaceurComposants, ActionListener, MessageListener {
+public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evenementiel, PlaceurComposants, ActionListener, MessageListener, PartieListener {
     private static final Dimension TAILLE_MINI_CHAT = new Dimension(200, 60);
     private static final long serialVersionUID = 1L;
     private final ControleOutReseau controle;
@@ -60,6 +66,7 @@ public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evene
     private final JButton toggle;
     private final JLabel ping;
     private Dimension dChat;
+    private int cinematique;
 
 
     public EcranJeu(PartieClient partie) {
@@ -94,6 +101,7 @@ public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evene
 	c.addControleListener(scores);
 
 	scores.setVisible(false);
+	partie.addPartieListener(this);
 	partie.getClient().write(new PaquetPing());
 	partie.getClient().addMessageListener(this);
 	partie.getClient().addActualiseListener(this);
@@ -123,6 +131,29 @@ public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evene
 	g.setFont(Style.POLICE);
 	g.drawString("fps:" + fps, getWidth() - 50, 25);
 	g.fillRect(getWidth() - 1000/fps, 0, 1000/fps, 10);
+	if(cinematique > 0) {
+	    g.setColor(Color.BLACK);
+	    int h = getHeight() * Math.min(20, cinematique)/133;
+	    g.fillRect(0, 0, getWidth(), h);
+	    g.fillRect(0, getHeight() - h, getWidth(), h);
+	    if(cinematique > 20) {
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, Math.min(1, (cinematique - 20)/100f)));
+		String s = getName();
+		g.setFont(Style.TITRE.deriveFont(40f));
+		int w = g.getFontMetrics().stringWidth(s), w2 = (int) (w * 1.5 + 30);
+		h = g.getFontMetrics().getHeight() * 2;
+		g2.setPaint(new GradientPaint(getWidth()/2,  getHeight()/2, Color.BLACK,
+			getWidth()/2, getHeight()/2 + h, new Color(0, 0, 0, 0), true));
+		g.fillOval((getWidth() - w2)/2, getHeight()/2 - h/2, w2, h);
+		g.setColor(Color.WHITE);
+		g.drawString(s, (getWidth() - w)/2, getHeight()/2 + g.getFontMetrics().getHeight()/4);
+		if(cinematique > 200)
+		    stop();
+	    }
+	    cinematique++;
+	}
     }
 
     @Override
@@ -136,7 +167,7 @@ public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evene
     @Override
     public boolean fermer() {
 	getFenetre().removeKeyListener(c);
-	return partie.fermer() && super.fermer();
+	return super.fermer() && partie.fermer();
     }
 
     @Override
@@ -189,6 +220,19 @@ public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evene
     public void message(int type, String message, Perso expediteur, IO io) {
 	if(expediteur != null)
 	    expediteur.message(message);
+    }
+
+    @Override
+    public void finPartie(boolean equipe, int gagnant, Perso source) {
+	if(gagnant == Partie.EGALITE)
+	    setName("Egalité.");
+	else if(equipe ? partie.getPerso().getEquipe() == gagnant : partie.getClient().getID() == gagnant)
+	    setName("Victoire !");
+	else setName("Défaite. " + (equipe ? "L'équipe " + equipe : partie.getPerso(gagnant).getNom()) + " gagne.");
+	if(source != null)
+	    getCamera().setSource(new VisionJeu(getCamera(), source));
+	removeAll();
+	cinematique++;
     }
 
 }

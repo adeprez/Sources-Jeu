@@ -18,8 +18,13 @@ import reseau.serveur.Serveur;
 public abstract class JeuSolo extends Jeu {
 
 
-    public JeuSolo(Serveur serveur) {
-	super(serveur);
+    public JeuSolo(Serveur serveur, int scoreVictoire) {
+	super(serveur, scoreVictoire);
+    }
+
+    @Override
+    public boolean enEquipe() {
+	return false;
     }
 
     @Override
@@ -30,6 +35,14 @@ public abstract class JeuSolo extends Jeu {
     @Override
     public List<Component> getComposants(RessourcesServeur r) {
 	return creerComposants(r);
+    }
+
+    @Override
+    public int getIDGagnant() {
+	for(final Integer i : getRessources().get(TypeRessource.PERSO).keySet())
+	    if(getServeur().getPartie().getScore(i) == getScoreVictoire())
+		return i;
+	return -1;
     }
 
     public static List<Component> creerComposants(RessourcesReseau r) {

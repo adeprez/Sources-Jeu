@@ -1,6 +1,5 @@
 package map;
 
-import interfaces.Dessinable;
 import interfaces.Dessineur;
 import interfaces.Fermable;
 import interfaces.LocaliseDessinable;
@@ -206,15 +205,6 @@ implements Dessineur, Fermable, StyleListe, ChangePersoListener, AjoutPersoListe
     @Override
     public void removeDessinable(LocaliseDessinable dessinable) {
 	dessinables.remove(dessinable);
-    }
-
-    @Override
-    public boolean fermer() {
-	for(final Dessinable d : dessinables)
-	    if(d instanceof Fermable)
-		((Fermable) d).fermer();
-	dessinables.clear();
-	return true;
     }
 
     @Override

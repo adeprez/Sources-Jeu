@@ -12,6 +12,7 @@ import partie.modeJeu.scorable.Scorable;
 import perso.Perso;
 import reseau.AbstractClient;
 import reseau.listeners.MessageListener;
+import reseau.objets.InfoServeur;
 import reseau.paquets.PaquetMessage;
 import reseau.paquets.TypePaquet;
 import reseau.paquets.jeu.PaquetSpawn;
@@ -141,6 +142,10 @@ public class Client extends AbstractClient {
 	    break;
 	case SCORABLE:
 	    partie.addScorable(io.nextPositif(), Scorable.get(io));
+	    break;
+	case ETAT_PARTIE:
+	    if(io.nextPositif() == InfoServeur.ETAT_FINI)
+		getPartie().finPartie(io);
 	    break;
 	default: return true;
 	}

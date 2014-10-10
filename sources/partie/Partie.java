@@ -2,10 +2,12 @@ package partie;
 
 import interfaces.Fermable;
 import interfaces.Lancable;
+import io.IO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import listeners.ChangeScoreListener;
 import map.Map;
@@ -25,13 +27,16 @@ import temps.EvenementTempsPeriodique;
 import temps.GestionnaireEvenements;
 
 public abstract class Partie extends PartieListenable implements Lancable, Fermable, RemoveRessourceListener, AddRessourceListener, ChangeRessourceListener<Perso>, ClientServeurIdentifiable {
+    public static final int EGALITE = IO.LIMITE_BYTE_POSITIF;
     private final HashMap<Integer, List<Scorable>> scorables;
     private final GestionnaireEvenements evenements;
     private final RessourcesReseau ressources;
+    private int lastScoreur;
 
 
     public Partie(RessourcesReseau ressources) {
 	this.ressources = ressources;
+	lastScoreur = -1;
 	ressources.addAddRessourceListener(this);
 	ressources.addRemoveRessourceListener(this);
 	evenements = new GestionnaireEvenements();
@@ -51,6 +56,7 @@ public abstract class Partie extends PartieListenable implements Lancable, Ferma
     }
 
     public void addScorable(int id, Scorable scorable) {
+	lastScoreur = id;
 	scorables.get(id).add(scorable);
 	int score = getScore(id);
 	for(final ChangeScoreListener l : getListeners(ChangeScoreListener.class))
@@ -62,6 +68,17 @@ public abstract class Partie extends PartieListenable implements Lancable, Ferma
 	for(final Scorable r : scorables.get(id))
 	    score += r.getValeur();
 	return score;
+    }
+
+    public java.util.Map<Integer, Integer> getScoreEquipes() {
+	java.util.Map<Integer, Integer> scores = new HashMap<Integer, Integer>();
+	for(final Entry<Integer, RessourceReseau<?>> e : ressources.get(TypeRessource.PERSO).entrySet()) {
+	    int equipe = ((RessourcePerso) e.getValue()).getPerso().getEquipe();
+	    Integer score = scores.get(equipe);
+	    score = score == null ? 0 : score;
+	    scores.put(equipe, score + getScore(e.getKey()));
+	}
+	return scores;
     }
 
     public HashMap<Integer, List<Scorable>> getReussites() {
@@ -92,6 +109,10 @@ public abstract class Partie extends PartieListenable implements Lancable, Ferma
 	return ressources.getPerso(id).getPerso();
     }
 
+    public boolean persoExiste(int id) {
+	return ressources.aRessource(TypeRessource.PERSO, id);
+    }
+
     public RessourcesReseau getRessources() {
 	return ressources;
     }
@@ -108,6 +129,11 @@ public abstract class Partie extends PartieListenable implements Lancable, Ferma
 	scorables.remove(r.getID());
 	r.removeChangeRessourceListener(this);
 	notifyRemovePersoListener(r.getPerso());
+    }
+
+    public void finPartie(boolean equipe, int gagnant) {
+	fermer();
+	notifyFinPartie(equipe, gagnant, persoExiste(lastScoreur) ? getPerso(lastScoreur) : null);
     }
 
     @Override
@@ -134,15 +160,16 @@ public abstract class Partie extends PartieListenable implements Lancable, Ferma
     @Override
     public boolean lancer() {
 	if(evenements.lancer()) {
-	    getMap().setPartie(this);
-	    return true;
+	    Map m = getMap();
+	    m.setPartie(this);
+	    return m.lancer();
 	}
 	return false;
     }
 
     @Override
     public boolean fermer() {
-	return evenements.fermer();
+	return evenements.fermer() && getMap().fermer();
     }
 
 

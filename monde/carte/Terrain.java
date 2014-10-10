@@ -105,4 +105,9 @@ public class Terrain extends MapDessinable<CaseTerritoire> implements Sauvegarda
 	removeDessinable(perso);
     }
 
+    @Override
+    public boolean fermer() {
+	return true;
+    }
+
 }

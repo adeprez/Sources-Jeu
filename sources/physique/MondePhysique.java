@@ -57,7 +57,7 @@ public abstract class MondePhysique<E extends Localise3D> extends AbstractMap<E>
 
     @Override
     public boolean fermer() {
-	return super.fermer() && actions.fermer();
+	return actions.fermer();
     }
 
 

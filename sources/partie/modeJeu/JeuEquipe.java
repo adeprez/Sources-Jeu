@@ -19,8 +19,8 @@ import divers.Outil;
 public abstract class JeuEquipe extends Jeu {
 
 
-    public JeuEquipe(Serveur serveur) {
-	super(serveur);
+    public JeuEquipe(Serveur serveur, int scoreVictoire) {
+	super(serveur, scoreVictoire);
     }
 
     public abstract int getNombreEquipes();
@@ -28,6 +28,19 @@ public abstract class JeuEquipe extends Jeu {
     public int getNombre(int equipe) {
 	List<Perso> e = getRessources().getEquipes().get(equipe);
 	return e == null ? 0 : e.size();
+    }
+
+    @Override
+    public int getIDGagnant() {
+	for(final Entry<Integer, Integer> i : getServeur().getPartie().getScoreEquipes().entrySet())
+	    if(i.getValue() >= getScoreVictoire())
+		return i.getKey();
+	return -1;
+    }
+
+    @Override
+    public boolean enEquipe() {
+	return true;
     }
 
     @Override

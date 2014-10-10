@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 
 import jeu.EcranJeu;
 import partie.PartieClient;
-import partie.modeJeu.DeathMatch;
+import partie.modeJeu.DeathMatchEquipe;
 import reseau.client.Client;
 import reseau.listeners.ReceiveListener;
 import reseau.objets.InfoServeur;
@@ -95,7 +95,7 @@ public class EcranAttentePartie extends Ecran implements ReceiveListener, Actual
 	@Override
 	public void actualise() {
 		c.removeAll();
-		for(final Component cc : DeathMatch.creerComposants(client.getRessources()))
+		for(final Component cc : DeathMatchEquipe.creerComposants(client.getRessources()))
 			c.add(cc);
 		validate();
 		repaint();

@@ -31,8 +31,7 @@ public class ClientServeur extends AbstractClient {
     }
 
     public void traiter(RessourceReseau<?> r) {
-	switch(r.getType()) {
-	case PERSO:
+	if(r.getType() == TypeRessource.PERSO) {
 	    Perso p = ((RessourcePerso) r).getPerso();
 	    for(final RessourceReseau<?> rp : serveur.getRessources().get(TypeRessource.PERSO).values())
 		if(((RessourcePerso) rp).getPerso().getNom().equals(p.getNom())) {
@@ -41,11 +40,8 @@ public class ClientServeur extends AbstractClient {
 		}
 	    p.setSpecialite(p.getSpecialitePrincipale());
 	    serveur.getRessources().putRessource(new RessourcePerso(getID(), p), new FiltreEnvoiExclusionID(getID()));
-	    break;
-	default:
-	    serveur.getRessources().putRessource(r);
-	    break;
 	}
+	else serveur.getRessources().putRessource(r);
     }
 
     public boolean estPret() {
@@ -72,7 +68,7 @@ public class ClientServeur extends AbstractClient {
 
     @Override
     public boolean faireAction(int id, TypeAction action, boolean debut, IO io) {
-	if(super.faireAction(id, action, debut, io)) {
+	if(serveur.getPartie().estLancee() && super.faireAction(id, action, debut, io)) {
 	    Perso perso = getPerso(id);
 	    PaquetAction p = new PaquetAction(id, perso, action, debut);
 	    if(action == TypeAction.CHANGER_ARME) {

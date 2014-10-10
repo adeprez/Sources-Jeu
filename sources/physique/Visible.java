@@ -32,7 +32,7 @@ public abstract class Visible extends PhysiqueDestructible implements LocaliseDe
 
     public Visible(Forme forme) {
 	super(forme);
-	setVisible(true);
+	visible = true;
     }
 
     public abstract Color getCouleur();

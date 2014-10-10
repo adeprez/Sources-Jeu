@@ -25,6 +25,7 @@ public class ContainerMap<E extends LocaliseDessinable> extends Ecran {
     private MapDessinable<E> map;
     private ReticuleSelection r;
     private SourisListener l;
+    private boolean stop;
 
 
     public ContainerMap(MapDessinable<E> map, Camera cam) {
@@ -92,6 +93,10 @@ public class ContainerMap<E extends LocaliseDessinable> extends Ecran {
 	    map.removeDessinable(r);
     }
 
+    public void stop() {
+	stop = true;
+    }
+
     @Override
     public void paintComponent(Graphics g) {
 	g.setFont(Style.POLICE);
@@ -106,7 +111,8 @@ public class ContainerMap<E extends LocaliseDessinable> extends Ecran {
 	    } catch(Exception err) {
 		err.printStackTrace();
 	    }
-	    repaint();
+	    if(!stop)
+		repaint();
 	}
     }
 

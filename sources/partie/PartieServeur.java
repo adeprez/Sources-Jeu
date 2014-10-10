@@ -59,10 +59,25 @@ public class PartieServeur extends Partie {
 	return l.get(Outil.r().nextInt(l.size()));
     }
 
+    public void finPartie() {
+	finPartie(jeu.enEquipe(), jeu.getIDGagnant());
+    }
+
+    @Override
+    public void finPartie(boolean equipe, int gagnant) {
+	super.finPartie(equipe, gagnant);
+	serveur.getInfosServeur().setEtat(InfoServeur.ETAT_FINI);
+	serveur.envoyerTous(new Paquet(TypePaquet.ETAT_PARTIE, serveur.getInfosServeur().getEtat()).add(equipe)
+		.addBytePositif(gagnant == -1 ? EGALITE : gagnant));
+    }
+
     @Override
     public void addScorable(int id, Scorable scorable) {
 	super.addScorable(id, scorable);
 	serveur.envoyerTous(new Paquet(TypePaquet.SCORABLE, scorable.sauvegarder(new IO().addBytePositif(id))));
+	int gagnant = jeu.getIDGagnant();
+	if(gagnant != -1)
+	    finPartie(jeu.enEquipe(), gagnant);
     }
 
     @Override
@@ -83,17 +98,6 @@ public class PartieServeur extends Partie {
 	    for(final List<Objet> lo : getMap().getObjets())
 		for(final Objet o : lo)
 		    o.setServeur(serveur);
-	    return getMap().lancer();
-	}
-	return false;
-    }
-
-    @Override
-    public boolean fermer() {
-	if(super.fermer()) {
-	    serveur.getInfosServeur().setEtat(InfoServeur.ETAT_OFF);
-	    serveur.envoyerTous(new Paquet(TypePaquet.ETAT_PARTIE, serveur.getInfosServeur().getEtat()));
-	    getMap().fermer();
 	    return true;
 	}
 	return false;

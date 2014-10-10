@@ -2,6 +2,7 @@ package partie;
 
 import listeners.AjoutPersoListener;
 import listeners.ChangePersoListener;
+import listeners.PartieListener;
 import listeners.RemovePersoListener;
 import perso.Perso;
 import divers.Listenable;
@@ -41,6 +42,19 @@ public class PartieListenable extends Listenable {
 
     public void removeChangePersoListener(ChangePersoListener l) {
 	removeListener(ChangePersoListener.class, l);
+    }
+
+    public void addPartieListener(PartieListener l) {
+	addListener(PartieListener.class, l);
+    }
+
+    public void removePartieListener(PartieListener l) {
+	removeListener(PartieListener.class, l);
+    }
+
+    public void notifyFinPartie(boolean equipe, int gagnant, Perso source) {
+	for(final PartieListener l : getListeners(PartieListener.class))
+	    l.finPartie(equipe, gagnant, source);
     }
 
     public void notifyChangePersoListener(Perso ancien, Perso nouveau) {
