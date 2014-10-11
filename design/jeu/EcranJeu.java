@@ -1,6 +1,5 @@
 package jeu;
 
-import interfaces.Actualisable;
 import interfaces.Localise;
 import io.IO;
 
@@ -19,7 +18,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 
 import layouts.LayoutPerso;
 import layouts.PlaceurComposants;
@@ -31,14 +29,9 @@ import partie.PartieClient;
 import perso.Perso;
 import reseau.client.ControleOutReseau;
 import reseau.listeners.MessageListener;
-import reseau.paquets.Paquet;
-import reseau.paquets.TypePaquet;
 import reseau.paquets.session.PaquetPing;
 import ressources.Proprietes;
 import statique.Style;
-import temps.EvenementTempsPeriodique;
-import temps.Evenementiel;
-import temps.GestionnaireEvenements;
 import vision.Camera;
 import vision.VisionJeu;
 import base.Fenetre;
@@ -52,7 +45,7 @@ import divers.Outil;
 import ecrans.ContainerMap;
 
 
-public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evenementiel, PlaceurComposants, ActionListener, MessageListener, PartieListener {
+public class EcranJeu extends ContainerMap<Objet> implements PlaceurComposants, ActionListener, MessageListener, PartieListener {
     private static final Dimension TAILLE_MINI_CHAT = new Dimension(200, 60);
     private static final long serialVersionUID = 1L;
     private final ControleOutReseau controle;
@@ -64,7 +57,6 @@ public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evene
     private final VisionJeu vision;
     private final BarreJeu barre;
     private final JButton toggle;
-    private final JLabel ping;
     private Dimension dChat;
     private int cinematique;
 
@@ -80,7 +72,7 @@ public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evene
 	setIgnoreRepaint(true);
 	setMap(partie.getClient().getRessources().getMap());
 
-	horloge = new HorlogeProgression(partie.getClient().getHorloge());
+	horloge = new HorlogeProgression();
 	controle = new ControleOutReseau(getCamera(), partie.getClient());
 	scores = new EcranScores(partie);
 	barre = new BarreJeu(partie.getPerso(), controle);
@@ -90,7 +82,6 @@ public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evene
 	c.addActionControleListener(controle);
 	chat = new Redimensionneur(ec);
 
-	add(ping = Outil.getTexte("", false));
 	add(scores);
 	add(horloge);
 	add(barre);
@@ -104,7 +95,7 @@ public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evene
 	partie.addPartieListener(this);
 	partie.getClient().write(new PaquetPing());
 	partie.getClient().addMessageListener(this);
-	partie.getClient().addActualiseListener(this);
+	partie.getClient().getHorloge().addHorlogeListener(horloge);
 	partie.lancer();
 	if(Proprietes.getInstance().est3D())
 	    partie.getClient().getRessources().getMap().setDessineur(new DessineurElementsMap3D<Objet>());
@@ -167,24 +158,13 @@ public class EcranJeu extends ContainerMap<Objet> implements Actualisable, Evene
     @Override
     public boolean fermer() {
 	getFenetre().removeKeyListener(c);
+	partie.getClient().getHorloge().removeHorlogeListener(horloge);
 	return super.fermer() && partie.fermer();
-    }
-
-    @Override
-    public void actualise() {
-	ping.setText("Ping : " + partie.getClient().getPing());
-    }
-
-    @Override
-    public void evenement(EvenementTempsPeriodique source, GestionnaireEvenements p) {
-	partie.getClient().write(new PaquetPing());
-	partie.getClient().write(new Paquet(TypePaquet.TEMPS));
     }
 
     @Override
     public void layout(Container parent) {
 	horloge.setBounds(0, 0, 75, 30);
-	ping.setBounds(0, 30, 75, 30);
 	int h = barre.getPreferredSize().height;
 	barre.setBounds(0, getHeight() - h, getWidth(), h);
 	Dimension d = scores.getPreferredSize();

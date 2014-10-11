@@ -49,7 +49,7 @@ public class CompteARebours extends Horloge {
 
     @Override
     public void iteration() {
-	notifyActualiseListener();
+	super.iteration();
 	if(estFini())
 	    fermer();
     }
