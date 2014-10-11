@@ -31,9 +31,9 @@ public class PartieListenable extends Listenable {
 	removeListener(RemovePersoListener.class, l);
     }
 
-    public void notifyRemovePersoListener(Perso p) {
+    public void notifyRemovePersoListener(int id, Perso p) {
 	for(final RemovePersoListener l : getListeners(RemovePersoListener.class))
-	    l.remove(p);
+	    l.remove(id, p);
     }
 
     public void addChangePersoListener(ChangePersoListener l) {
@@ -57,8 +57,8 @@ public class PartieListenable extends Listenable {
 	    l.finPartie(equipe, gagnant, source);
     }
 
-    public void notifyChangePersoListener(Perso ancien, Perso nouveau) {
+    public void notifyChangePersoListener(int id, Perso ancien, Perso nouveau) {
 	for(final ChangePersoListener l : getListeners(ChangePersoListener.class))
-	    l.change(ancien, nouveau);
+	    l.change(id, ancien, nouveau);
     }
 }

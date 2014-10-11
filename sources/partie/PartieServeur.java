@@ -15,6 +15,8 @@ import reseau.paquets.Paquet;
 import reseau.paquets.TypePaquet;
 import reseau.paquets.jeu.PaquetSpawn;
 import reseau.ressources.RessourcePerso;
+import reseau.ressources.RessourceReseau;
+import reseau.ressources.TypeRessource;
 import reseau.serveur.Serveur;
 import divers.Outil;
 
@@ -35,7 +37,7 @@ public class PartieServeur extends Partie {
     }
 
     public void spawn(RessourcePerso rp) {
-	if(rp != null) {
+	if(estLancee() && rp != null) {
 	    Perso p = rp.getPerso();
 	    p.setVie(p.getVitalite());
 	    int tentatives = 0;
@@ -98,6 +100,8 @@ public class PartieServeur extends Partie {
 	    for(final List<Objet> lo : getMap().getObjets())
 		for(final Objet o : lo)
 		    o.setServeur(serveur);
+	    for(final RessourceReseau<?> rp : jeu.getRessources().get(TypeRessource.PERSO).values())
+		spawn((RessourcePerso) rp);
 	    return true;
 	}
 	return false;

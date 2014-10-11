@@ -46,7 +46,7 @@ public abstract class MondePhysique<E extends Localise3D> extends AbstractMap<E>
     }
 
     @Override
-    public void remove(Perso e) {
+    public void remove(int id, Perso e) {
 	retire((Visible) e);
     }
 

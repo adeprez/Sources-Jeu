@@ -195,8 +195,8 @@ public class Map extends MapIO<Objet> {
     }
 
     @Override
-    public void remove(Perso e) {
-	super.remove(e);
+    public void remove(int id, Perso e) {
+	super.remove(id, e);
 	persos.remove(e);
     }
 

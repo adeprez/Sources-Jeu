@@ -103,7 +103,7 @@ public class PanelChatPrive extends PanelChat implements ListCellRenderer<Perso>
     }
 
     @Override
-    public void remove(Perso perso) {
+    public void remove(int id, Perso perso) {
 	if(perso != getClient().getPerso()) {
 	    modele.removeElement(perso);
 	    for(final Component c : getMessages().getComponents())

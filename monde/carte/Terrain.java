@@ -101,7 +101,7 @@ public class Terrain extends MapDessinable<CaseTerritoire> implements Sauvegarda
     }
 
     @Override
-    public void remove(Perso perso) {
+    public void remove(int id, Perso perso) {
 	removeDessinable(perso);
     }
 

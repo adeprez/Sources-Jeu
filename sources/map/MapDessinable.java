@@ -213,8 +213,8 @@ implements Dessineur, Fermable, StyleListe, ChangePersoListener, AjoutPersoListe
     }
 
     @Override
-    public void change(Perso ancien, Perso nouveau) {
-	remove(ancien);
+    public void change(int id, Perso ancien, Perso nouveau) {
+	remove(id, ancien);
 	ajout(nouveau);
     }
 

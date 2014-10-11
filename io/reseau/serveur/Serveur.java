@@ -86,7 +86,6 @@ public class Serveur extends AbstractServeur<ClientServeur> implements FinCharge
 	Bot b = new Bot(3);
 	int id = getMaxClients() - bots.size();
 	ressources.putRessource(new RessourcePerso(id, b));
-	getPartie().spawn(id);
 	bots.add(b);
     }
 

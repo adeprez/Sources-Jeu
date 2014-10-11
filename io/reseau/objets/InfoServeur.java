@@ -181,7 +181,9 @@ public class InfoServeur implements Sauvegardable, StyleListe, HorlogeListener {
 
     @Override
     public void action(Horloge horloge) {
-	delai = horloge.getTemps();
+	if(etat == ETAT_ATTENTE)
+	    delai = horloge.getTemps();
+	else temps = horloge.getTemps();
     }
 
 }

@@ -125,10 +125,10 @@ public abstract class Partie extends PartieListenable implements Lancable, Ferma
     }
 
     public void remove(RessourcePerso r) {
-	getMap().remove(r.getPerso());
+	getMap().remove(r.getID(), r.getPerso());
 	scorables.remove(r.getID());
 	r.removeChangeRessourceListener(this);
-	notifyRemovePersoListener(r.getPerso());
+	notifyRemovePersoListener(r.getID(), r.getPerso());
     }
 
     public void finPartie(boolean equipe, int gagnant) {
@@ -139,7 +139,7 @@ public abstract class Partie extends PartieListenable implements Lancable, Ferma
     @Override
     public void change(Perso ancien, RessourceReseau<Perso> r) {
 	if(r.getType() == TypeRessource.PERSO) {
-	    notifyChangePersoListener(ancien, r.getRessource());
+	    notifyChangePersoListener(r.getID(), ancien, r.getRessource());
 	    remove(r);
 	    add(r);
 	}
