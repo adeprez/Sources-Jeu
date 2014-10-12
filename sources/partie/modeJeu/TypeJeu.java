@@ -4,8 +4,17 @@ import divers.Outil;
 
 
 public enum TypeJeu {
-    DEATHMATCH, DEATHMATCH_EN_EQUIPE, DERNIER_SURVIVANT;
+    DEATHMATCH, DEATHMATCH_EN_EQUIPE(true), DERNIER_SURVIVANT;
 
+    private boolean equipe;
+
+    private TypeJeu() {
+	this(false);
+    }
+
+    private TypeJeu(boolean equipe) {
+	this.equipe = equipe;
+    }
 
     public String getNom() {
 	return Outil.toString(this);
@@ -43,6 +52,10 @@ public enum TypeJeu {
 
     public static String[] noms() {
 	return Outil.toStringArray(values());
+    }
+
+    public boolean enEquipe() {
+	return equipe;
     }
 
 }

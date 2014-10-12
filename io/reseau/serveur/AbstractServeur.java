@@ -68,6 +68,11 @@ implements Runnable, Lancable, Fermable, DeconnexionListener<AbstractClient>, Jo
 	    c.fermer(cause);
     }
 
+    public void deconnecterClients() {
+	for(final AbstractClient c : getClients())
+	    c.fermer();
+    }
+
     public void addConnexionListener(ConnexionListener<E> l) {
 	addListener(ConnexionListener.class, l);
     }

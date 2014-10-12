@@ -23,11 +23,6 @@ public abstract class JeuSolo extends Jeu {
     }
 
     @Override
-    public boolean enEquipe() {
-	return false;
-    }
-
-    @Override
     public int nextIDEquipe(RessourcePerso r) {
 	return r.getID() + 1;
     }
@@ -38,11 +33,21 @@ public abstract class JeuSolo extends Jeu {
     }
 
     @Override
-    public int getIDGagnant() {
-	for(final Integer i : getRessources().get(TypeRessource.PERSO).keySet())
-	    if(getServeur().getPartie().getScore(i) == getScoreVictoire())
+    public int getIDGagnant(boolean max) {
+	int id = -1, score = Integer.MIN_VALUE;
+	for(final Integer i : getRessources().get(TypeRessource.PERSO).keySet()) {
+	    int s = getServeur().getPartie().getScore(i);
+	    if(max)
+		if(s == score)
+		    id = -1;
+		else if(s > score) {
+		    score = s;
+		    id = i;
+		}
+	    if(s >= getScoreVictoire())
 		return i;
-	return -1;
+	}
+	return id;
     }
 
     public static List<Component> creerComposants(RessourcesReseau r) {

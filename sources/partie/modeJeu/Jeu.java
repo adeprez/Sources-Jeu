@@ -38,8 +38,11 @@ public abstract class Jeu extends Listenable implements Lancable, Fermable, Dest
     public abstract List<Component> getComposants(RessourcesServeur r);
     public abstract int nextIDEquipe(RessourcePerso r);
     public abstract int getValeur(TypeScorable type);
-    public abstract int getIDGagnant();
-    public abstract boolean enEquipe();
+    public abstract int getIDGagnant(boolean max);
+
+    public boolean enEquipe() {
+	return getType().enEquipe();
+    }
 
     public int getScoreVictoire() {
 	return scoreVictoire;

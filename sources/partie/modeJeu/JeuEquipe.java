@@ -31,16 +31,20 @@ public abstract class JeuEquipe extends Jeu {
     }
 
     @Override
-    public int getIDGagnant() {
-	for(final Entry<Integer, Integer> i : getServeur().getPartie().getScoreEquipes().entrySet())
+    public int getIDGagnant(boolean max) {
+	int id = -1, score = Integer.MIN_VALUE;
+	for(final Entry<Integer, Integer> i : getServeur().getPartie().getScoreEquipes().entrySet()) {
+	    if(max)
+		if(i.getValue() == score)
+		    id = -1;
+		else if(i.getValue() > score) {
+		    score = i.getValue();
+		    id = i.getKey();
+		}
 	    if(i.getValue() >= getScoreVictoire())
 		return i.getKey();
-	return -1;
-    }
-
-    @Override
-    public boolean enEquipe() {
-	return true;
+	}
+	return id;
     }
 
     @Override

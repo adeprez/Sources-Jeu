@@ -31,6 +31,7 @@ public abstract class Partie extends PartieListenable implements Lancable, Ferma
     private final HashMap<Integer, List<Scorable>> scorables;
     private final GestionnaireEvenements evenements;
     private final RessourcesReseau ressources;
+    private final TypeJeu type;
     private int lastScoreur;
 
 
@@ -41,6 +42,7 @@ public abstract class Partie extends PartieListenable implements Lancable, Ferma
 	ressources.addRemoveRessourceListener(this);
 	evenements = new GestionnaireEvenements();
 	scorables = new HashMap<Integer, List<Scorable>>();
+	type = ressources.getJeu(0).getInfos().getTypeJeu();
     }
 
     public GestionnaireEvenements getEvenements() {
@@ -86,7 +88,7 @@ public abstract class Partie extends PartieListenable implements Lancable, Ferma
     }
 
     public TypeJeu getTypeJeu() {
-	return ressources.getJeu(0).getInfos().getTypeJeu();
+	return type;
     }
 
     public boolean estLancee() {
@@ -169,7 +171,10 @@ public abstract class Partie extends PartieListenable implements Lancable, Ferma
 
     @Override
     public boolean fermer() {
-	return evenements.fermer() && getMap().fermer();
+	ressources.removeAddRessourceListener(this);
+	ressources.removeRemoveRessourceListener(this);
+	getMap().fermer();
+	return evenements.fermer();
     }
 
 

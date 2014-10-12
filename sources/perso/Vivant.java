@@ -158,9 +158,7 @@ public abstract class Vivant extends Visible {
 	boolean b = super.faireAction();
 	try {
 	    getAnimation().bouge();
-	} catch(Exception err) {
-	    err.printStackTrace();
-	}
+	} catch(Exception err) {}
 	return b;
     }
 

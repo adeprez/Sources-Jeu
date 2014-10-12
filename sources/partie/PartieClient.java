@@ -46,16 +46,6 @@ public class PartieClient extends Partie {
     }
 
     @Override
-    public boolean fermer() {
-	if(super.fermer()) {
-	    client.getRessources().removeAddRessourceListener(this);
-	    client.getRessources().removeRemoveRessourceListener(this);
-	    return true;
-	}
-	return false;
-    }
-
-    @Override
     public boolean estServeur() {
 	return false;
     }

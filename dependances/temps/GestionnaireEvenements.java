@@ -54,13 +54,15 @@ public class GestionnaireEvenements implements Lancable, Fermable, Runnable {
     @Override
     public void run() {
 	while(run) {
-	    while(evt == null)
+	    while(evt == null && run)
 		Outil.wait(10);
-	    int delai = (int) (evt.getElement().getTemps() - getTemps());
-	    if(delai > 0)
-		Outil.wait(delai);
-	    evt.getElement().evenement(evt.getElement(), this);
-	    evt = evt.getSuivant();
+	    if(evt != null) {
+		int delai = (int) (evt.getElement().getTemps() - getTemps());
+		if(delai > 0)
+		    Outil.wait(delai);
+		evt.getElement().evenement(evt.getElement(), this);
+		evt = evt.getSuivant();
+	    }
 	}
     }
 

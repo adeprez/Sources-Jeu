@@ -108,7 +108,12 @@ implements StyleListe, ClientServeurIdentifiable, FiltreEnvoi, ChangeRessourceLi
     }
 
     public boolean faireAction(int id, TypeAction action, boolean debut, IO io) {
-	Perso p = getPerso(id);
+	Perso p;
+	try {
+	    p = getPerso(id);
+	} catch(Exception err) {
+	    return false;
+	}
 	if(!p.estVivant())
 	    return false;
 	p.setAngle(io.next());

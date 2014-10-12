@@ -20,6 +20,7 @@ import divers.Outil;
 
 public class InfoServeur implements Sauvegardable, StyleListe, HorlogeListener {
     public static final int ETAT_OFF = 0, ETAT_ATTENTE = 1, ETAT_JEU = 2, ETAT_FINI = 3;
+    private final int delaiIni, tempsIni;
     private final String adresse;
     private String nomPartie, createur;
     private int maxJoueurs, joueurs, etat, delai, temps, scoreVictoire;
@@ -38,10 +39,12 @@ public class InfoServeur implements Sauvegardable, StyleListe, HorlogeListener {
 	this.temps = temps;
 	this.typeJeu = typeJeu;
 	this.scoreVictoire = scoreVictoire;
+	delaiIni = delai;
+	tempsIni = temps;
     }
 
     public InfoServeur(String createur) throws UnknownHostException {
-	this(InetAddress.getLocalHost().getHostAddress(), "Nouvelle partie", createur, 8, 0, ETAT_OFF, 0, 300, TypeJeu.DEATHMATCH_EN_EQUIPE, 5);
+	this(InetAddress.getLocalHost().getHostAddress(), "Nouvelle partie", createur, 8, 0, ETAT_OFF, 0, 120, TypeJeu.DEATHMATCH_EN_EQUIPE, 5);
     }
 
     public InfoServeur(IO io) {
@@ -142,6 +145,14 @@ public class InfoServeur implements Sauvegardable, StyleListe, HorlogeListener {
 	return joueurs < maxJoueurs;
     }
 
+    public int getDelaiInitial() {
+	return delaiIni;
+    }
+
+    public int getTempsInitial() {
+	return tempsIni;
+    }
+
     @Override
     public IO sauvegarder(IO io) {
 	return io.addShort(adresse)
@@ -174,7 +185,7 @@ public class InfoServeur implements Sauvegardable, StyleListe, HorlogeListener {
 	case ETAT_JEU:
 	    p.add(Outil.getTexte("En jeu", false));
 	    break;
-	default: throw new IllegalAccessError();
+	default: throw new IllegalAccessError("Etat " + etat + " inconnu");
 	}
 	return p;
     }

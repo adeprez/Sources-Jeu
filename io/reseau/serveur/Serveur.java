@@ -165,9 +165,9 @@ public class Serveur extends AbstractServeur<ClientServeur> implements FinCharge
     @Override
     public void finChargement() {
 	if(partie.estLancee())
-	    partie.finPartie();
+	    partie.finPartie(true);
 	else {
-	    cpt.setTemps(getInfosServeur().getTemps());
+	    cpt.setTemps(getInfosServeur().getTempsInitial());
 	    partie.lancer();
 	}
     }

@@ -61,23 +61,25 @@ public class PartieServeur extends Partie {
 	return l.get(Outil.r().nextInt(l.size()));
     }
 
-    public void finPartie() {
-	finPartie(jeu.enEquipe(), jeu.getIDGagnant());
+    public void finPartie(boolean finTemps) {
+	finPartie(jeu.enEquipe(), jeu.getIDGagnant(finTemps));
     }
 
     @Override
     public void finPartie(boolean equipe, int gagnant) {
 	super.finPartie(equipe, gagnant);
-	serveur.getInfosServeur().setEtat(InfoServeur.ETAT_FINI);
-	serveur.envoyerTous(new Paquet(TypePaquet.ETAT_PARTIE, serveur.getInfosServeur().getEtat()).add(equipe)
+	serveur.envoyerTous(new Paquet(TypePaquet.ETAT_PARTIE).addBytePositif(InfoServeur.ETAT_FINI).add(equipe)
 		.addBytePositif(gagnant == -1 ? EGALITE : gagnant));
+	serveur.deconnecterClients();
+	serveur.fermer();
+	serveur.getRessources().removeAll();
     }
 
     @Override
     public void addScorable(int id, Scorable scorable) {
 	super.addScorable(id, scorable);
 	serveur.envoyerTous(new Paquet(TypePaquet.SCORABLE, scorable.sauvegarder(new IO().addBytePositif(id))));
-	int gagnant = jeu.getIDGagnant();
+	int gagnant = jeu.getIDGagnant(false);
 	if(gagnant != -1)
 	    finPartie(jeu.enEquipe(), gagnant);
     }

@@ -36,10 +36,8 @@ public class Fenetre extends JFrame implements EcranChangeable, Fermable {
 
     public static Fenetre newFrame(Ecran e) {
 	Fenetre f = newFrame((Container) e);
-	if(e != null) {
-	    e.setFenetre(f);
-	    f.setTitle(e.getName());
-	}
+	if(e != null)
+	    f.changer(e);
 	f.setVisible(true);
 	return f;
     }

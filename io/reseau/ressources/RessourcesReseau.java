@@ -73,6 +73,14 @@ public class RessourcesReseau extends Listenable implements Sauvegardable, Conta
 	    notifyRemoveRessourceListener(ressource);
     }
 
+    public void removeAll() {
+	for (int i = 0; i < ressources.length; i++)
+	    if(ressources[i] != null) {
+		ressources[i].clear();
+		ressources[i] = null;
+	    }
+    }
+
     public int getNombreRessources() {
 	int n = 0;
 	for(final Map<Integer, RessourceReseau<?>> e : ressources)
