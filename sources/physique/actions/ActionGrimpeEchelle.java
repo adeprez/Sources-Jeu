@@ -32,7 +32,7 @@ public class ActionGrimpeEchelle extends Action<Vivant> {
 	    setVitesseAnim(v.deplacement(0, 3) == null ? 100 : 0);
 	    Collision c = v.deplacement(v.estDroite() ? 1 : -1, 0);
 	    if(c == null || !(c.getCible() instanceof Echelle)) {
-		setSuivante(new ActionMarche(v, v.estDroite()));
+		setSuivante(new ActionMarche(v));
 		stopAction();
 	    }
 	} catch(HorsLimiteException e) {

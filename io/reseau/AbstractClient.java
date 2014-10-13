@@ -15,6 +15,7 @@ import perso.Perso;
 import perso.Vivant;
 import physique.actions.AbstractAction;
 import physique.actions.Action;
+import physique.actions.ActionAccroupi;
 import physique.actions.ActionChangeArme;
 import physique.actions.ActionGrimpeCorde;
 import physique.actions.ActionMarche;
@@ -122,16 +123,21 @@ implements StyleListe, ClientServeurIdentifiable, FiltreEnvoi, ChangeRessourceLi
 	case DROITE:
 	case GAUCHE:
 	    if(debut) {
-		if(faireAction(new ActionMarche(p, action.getOrientation() == Orientation.DROITE))) {
+		if(p.enAction() && p.getAction() instanceof ActionAccroupi)
+		    return ((ActionAccroupi) p.getAction()).commenceMarche(action.getOrientation() == Orientation.DROITE);
+		if(faireAction(new ActionMarche(p))) {
 		    p.setOrientation(action.getOrientation());
 		    return true;
 		}
 		return false;
 	    }
-	    if(p.enAction() && !(p.getAction() instanceof ActionMarche) && p.getAction().getSuivante() instanceof ActionMarche) {
-		p.getAction().setSuivante(null);
-		return true;
-	    }
+	    if(p.enAction())
+		if(p.getAction() instanceof ActionAccroupi)
+		    return ((ActionAccroupi) p.getAction()).stopMarche(action.getOrientation());
+		else if(!(p.getAction() instanceof ActionMarche) && p.getAction().getSuivante() instanceof ActionMarche) {
+		    p.getAction().setSuivante(null);
+		    return true;
+		}
 	    return p.stopAction(null);
 	case SAUT:
 	    return faireAction(new ActionSaut(p));
@@ -140,7 +146,16 @@ implements StyleListe, ClientServeurIdentifiable, FiltreEnvoi, ChangeRessourceLi
 	case CHANGER_ARME:
 	    return faireAction(new ActionChangeArme(p, !estServeur() || io.aByte() ? io.nextPositif() : p.getSpecialitePrecedente()));
 	case ACCROUPI:
-	    return p.setAccroupi(debut, estServeur());
+	    if(debut) {
+		if(p.enAction() && p.getAction() instanceof ActionAccroupi)
+		    return false;
+		ActionAccroupi a = new ActionAccroupi(p);
+		if(p.enAction() && p.getAction() instanceof ActionMarche)
+		    a.setMarche(p.estDroite());
+		return faireAction(a);
+	    }
+	    if(p.enAction() && p.getAction() instanceof ActionAccroupi)
+		return p.stopAction(null);
 	case ATTAQUER:
 	    return debut && faireAction(p.getSpecialite().getArme().getAction(p));
 	case ESCALADER:

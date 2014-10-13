@@ -14,7 +14,7 @@ import exceptions.HorsLimiteException;
 public abstract class Mobile extends Listenable implements Sauvegardable, Localise {
     public static final int DEPLACEMENT_MAX = UNITE.width/10;
     private int gravite, vitesseInstantanee, deplacement, tempsVol;
-    private boolean deplace, ignoreGravite;
+    private boolean ignoreGravite;
     private float forceX, forceY;
     private Serveur serveur;
     private Forme forme;
@@ -79,17 +79,10 @@ public abstract class Mobile extends Listenable implements Sauvegardable, Locali
 	tempsVol = 0;
 	forceX = 0;
 	forceY = 0;
-	deplace = false;
     }
 
     public boolean estPose() {
 	return tempsVol <= 0;
-    }
-
-    public void setMobile(boolean mobile) {
-	if(!deplace && mobile)
-	    vitesseInstantanee = 100;
-	deplace = mobile;
     }
 
     public boolean enMouvement() {
@@ -181,8 +174,7 @@ public abstract class Mobile extends Listenable implements Sauvegardable, Locali
 
     public Collision deplace() throws HorsLimiteException {
 	Direction direction = getDirection();
-	if(!deplace)
-	    vitesseInstantanee = (int) Math.max(0, vitesseInstantanee/1.5 - 1);
+	vitesseInstantanee = (int) Math.max(0, vitesseInstantanee/1.5 - 1);
 	deplacement = direction == Direction.DROITE ? 1 + vitesseInstantanee/100 : -vitesseInstantanee/100 - 1;
 	if(deplacement != 0) try {
 	    Collision c = deplacement(deplacement, 0);

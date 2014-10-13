@@ -20,7 +20,6 @@ import ressources.sprites.animation.AnimationPerso;
 import specialite.Specialite;
 import specialite.TypeSpecialite;
 import statique.Style;
-import exceptions.ExceptionJeu;
 
 public abstract class AbstractPerso extends Vivant {
     private final Specialite[] specialites;
@@ -30,7 +29,6 @@ public abstract class AbstractPerso extends Vivant {
     private final CorpsPerso corps;
     private final int[] xp;
     private int specialite, spePrecedente;
-    private boolean accroupi;
     private ImageIcon icone;
 
 
@@ -125,18 +123,6 @@ public abstract class AbstractPerso extends Vivant {
 
     public Caracteristiques getCaract() {
 	return caract;
-    }
-
-    public boolean setAccroupi(boolean accroupi, boolean serveur) {
-	if(serveur && (!estPose() || this.accroupi == accroupi))
-	    return false;
-	this.accroupi = accroupi;
-	try {
-	    (serveur ? this : getForme()).setHauteur(accroupi ? getHauteur()/2 : getHauteur() * 2);
-	    return true;
-	} catch(ExceptionJeu e) {
-	    return false;
-	}
     }
 
     public CorpsPerso getCorps() {

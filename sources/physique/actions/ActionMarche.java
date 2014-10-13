@@ -8,34 +8,30 @@ import controles.TypeAction;
 
 
 public class ActionMarche extends Action<Vivant> {
-    private boolean droite;
     private int tentatives;
 
 
-    public ActionMarche(Vivant source, boolean droite) {
+    public ActionMarche(Vivant source) {
 	super(source);
-	this.droite = droite;
     }
 
-    public void setDroite(boolean droite) {
-	this.droite = droite;
+    public int getVitesse() {
+	return getSource().getVitesse();
     }
 
     @Override
     public void commence() {
-	getSource().setMobile(true);
     }
 
     @Override
     public void seTermine() {
-	getSource().setMobile(false);
 	getSource().getAnimation().terminer();
     }
 
     @Override
     public void tourAction() {
 	Mobile m = getSource();
-	int v = (int) Math.min(50 + m.getVitesseInstantanee() * 1.2, m.getVitesse());
+	int v = getVitesse();
 	m.setVitesseInstantanee(v);
 	setVitesseAnim(v/4 + 1);
 	if(m.getDernierDeplacement() == 0) {
@@ -49,7 +45,7 @@ public class ActionMarche extends Action<Vivant> {
 
     @Override
     public TypeAction getType() {
-	return droite ? TypeAction.DROITE : TypeAction.GAUCHE;
+	return getSource().estDroite() ? TypeAction.DROITE : TypeAction.GAUCHE;
     }
 
     @Override

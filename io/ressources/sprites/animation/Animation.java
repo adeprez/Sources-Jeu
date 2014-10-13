@@ -73,7 +73,7 @@ public abstract class Animation extends AbstractMembre {
     }
 
     public void bouge() {
-	if(sequence != null)
+	if(sequence != null && vitesse > 0)
 	    synchronized(sequence) {
 		EtapeSequence e1 = getEtape();
 		EtapeSequence e2 = getEtapeSuivante();
@@ -176,5 +176,6 @@ public abstract class Animation extends AbstractMembre {
 	for(final Membre m : getMembres())
 	    m.dessiner(g, zone, droite);
     }
+
 
 }
