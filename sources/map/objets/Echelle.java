@@ -47,7 +47,7 @@ public class Echelle extends Destructible {
 		Extrusion3D.dessine(g1, img, getImageDegats(), f, r, arr);
 		predessiner(g1, r, equipe);
 	    }
-	    Extrusion3D.dessine(g2, getContaineurImage(), getImageDegats(), getForme(), m2, m1);
+	    Extrusion3D.dessineVertical(g2, getContaineurImage(), getImageDegats(), getForme(), m2, m1);
 	    dessiner(g2, m2, equipe);
 	    Composite tmp1 = g2.getComposite(), tmp2 = g3.getComposite();
 	    if(!decoupe) {

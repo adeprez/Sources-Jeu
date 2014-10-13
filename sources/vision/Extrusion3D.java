@@ -21,16 +21,32 @@ public final class Extrusion3D {
     private Extrusion3D() {}
 
     public static void dessine(Graphics2D g, ContaineurImageOp image, BufferedImage dessus, Forme f, Rectangle avant, Rectangle arriere) {
+	dessine(g, image, dessus, f, avant, arriere,
+		verticalGaucheVisible(f, avant, arriere),
+		verticalDroiteVisible(f, avant, arriere),
+		horizontalBasVisible(f, avant, arriere),
+		horizontalHautVisible(f, avant, arriere));
+    }
+
+    public static void dessine(Graphics2D g, ContaineurImageOp image, BufferedImage dessus, Forme f, Rectangle avant, Rectangle arriere,
+	    boolean vGVisible, boolean vDVisible, boolean hBVisible, boolean hHVisible) {
 	Shape tmp = g.getClip();
-	if(verticalGaucheVisible(f, avant, arriere))
+	if(vGVisible)
 	    dessineVertical(g, image, dessus, getZoneVerticalGauche(f, avant, arriere), false, 0, 100);
-	else if(verticalDroiteVisible(f, avant, arriere))
+	else if(vDVisible)
 	    dessineVertical(g, image, dessus, getZoneVerticalDroite(f, avant, arriere), true, 0, 100);
-	if(horizontalBasVisible(f, avant, arriere))
+	if(hBVisible)
 	    dessineHorizontal(g, image, dessus, getHorizontalBas(f, avant, arriere), false, 0, 125);
-	if(horizontalHautVisible(f, avant, arriere))
+	if(hHVisible)
 	    dessineHorizontal(g, image, dessus, getHorizontalHaut(f, avant, arriere), true, 255, 50);
 	g.setClip(tmp);
+    }
+
+    public static void dessineVertical(Graphics2D g, ContaineurImageOp image, BufferedImage dessus, Forme f, Rectangle avant, Rectangle arriere) {
+	dessine(g, image, dessus, f, avant, arriere,
+		verticalGaucheVisible(f, avant, arriere),
+		verticalDroiteVisible(f, avant, arriere),
+		false, false);
     }
 
     public static void dessineHorizontal(Graphics2D g, ContaineurImageOp image, BufferedImage dessus, Polygon zone, boolean haut, int teinte, int opacite) {
