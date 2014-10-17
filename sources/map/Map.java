@@ -236,6 +236,13 @@ public class Map extends MapIO<Objet> {
 	super.ajout(e);
     }
 
+    @Override
+    public Objet symetrieHorizontale(Objet e) {
+	Objet o = e.dupliquer();
+	o.symetrieHorizontale();
+	return o;
+    }
+
     public static boolean sansCollision(List<Objet> l, int y) {
 	return y >= l.size() || l.get(y).estVide();
     }

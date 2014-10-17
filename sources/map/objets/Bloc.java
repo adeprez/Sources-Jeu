@@ -8,8 +8,8 @@ import physique.forme.Forme;
 public class Bloc extends Destructible {
 
 
-    public Bloc(Map map, ContaineurImagesOp images, int fond, Forme forme, int id, int resistance, int degats) {
-	super(map, images, fond, forme, id, resistance, degats);
+    public Bloc(Map map, ContaineurImagesOp images, int fond, Forme forme, int id, int resistance, int vie) {
+	super(map, images, fond, forme, id, resistance, vie);
     }
 
     public Bloc(Map map, ContaineurImagesOp img, IO io) {

@@ -186,8 +186,7 @@ public abstract class Objet extends Visible implements Localise3D {
     public synchronized Collision setPos(int x, int y) throws HorsLimiteException {
 	Collision c = super.setPos(x, y);
 	if(c != null && actifMap)
-	    if(actifMap)
-		setActifMap(false);
+	    setActifMap(false);
 	return c;
     }
 

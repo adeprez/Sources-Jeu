@@ -34,6 +34,7 @@ public abstract class AbstractMap<E extends LocaliseDessinable> extends MapDessi
     public abstract E creeObjetVide();
     public abstract String stringObjet(E e);
     public abstract boolean estVide(List<E> colonne);
+    public abstract E symetrieHorizontale(E e);
 
     public void etendre(int lateral, int bas) {
 	boolean tmp = largeurExtensible;
@@ -55,6 +56,35 @@ public abstract class AbstractMap<E extends LocaliseDessinable> extends MapDessi
 	    err.printStackTrace();
 	}
 	largeurExtensible = tmp;
+    }
+
+    public E getDernierObjet() {
+	for(int x=objets.size() - 1 ; x>=0 && x<objets.size() ; x--)
+	    if(!objets.get(x).isEmpty())
+		return objets.get(x).get(0);
+	return null;
+    }
+
+    public void symetrie(int espaceCentre) {
+	E last = getDernierObjet();
+	agrandir(getLargeurNonVide() + espaceCentre);
+	for(int i=0 ; i<espaceCentre ; i++) try {
+	    E e = creeObjetVide();
+	    e.setPos(convertX(xMap(last) + 1), 0);
+	    last = e;
+	} catch(Exception err) {
+	    System.err.println("Erreur espace centre : " + err.getMessage());
+	}
+	int dx = last.getX() + last.getLargeur();
+	agrandir(checkX(2 * dx));
+	for(int x=objets.size() - 1 ; x>=0 && x<objets.size() ; x--)
+	    for(final E e : objets.get(x)) try {
+		E o = symetrieHorizontale(e);
+		if(o.setPos(2 * dx - e.getX() - e.getLargeur(), e.getY()) != null)
+		    System.err.println("Symetrie: alerte collision de " + e + " -- devenu --> " + o);
+	    } catch(Exception err) {
+		err.printStackTrace();
+	    }
     }
 
     public boolean estLargeurExtensible() {
@@ -130,14 +160,11 @@ public abstract class AbstractMap<E extends LocaliseDessinable> extends MapDessi
     }
 
     public boolean agrandir(int x) {
-	if(!largeurExtensible)
+	if(!largeurExtensible || objets.size()>=x)
 	    return false;
-	boolean g = false;
-	for(int i=objets.size() ; i<=x ; i++) {
+	for(int i=objets.size() ; i<=x ; i++)
 	    objets.add(new ArrayList<E>());
-	    g = true;
-	}
-	return g;
+	return true;
     }
 
     public boolean agrandir(int x, int y) throws HorsLimiteException, AnnulationException {

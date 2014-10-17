@@ -18,10 +18,10 @@ public abstract class Destructible extends Objet {
     private int resistance;
 
 
-    public Destructible(Map map, ContaineurImagesOp images, int fond, Forme forme, int id, int resistance, int degats) {
+    public Destructible(Map map, ContaineurImagesOp images, int fond, Forme forme, int id, int resistance, int vie) {
 	super(map, images, id, fond, forme);
 	this.resistance = resistance == 0 ? VIE_DEFAUT : resistance;
-	setVie(Math.max(1, this.resistance - degats));
+	setVie(vie == 0 ? resistance : vie);
     }
 
     @Override
@@ -62,7 +62,7 @@ public abstract class Destructible extends Objet {
 
     @Override
     public IO sauvegarder(IO io) {
-	return super.sauvegarder(io).addBytePositif(getID()).addBytePositif(resistance).addBytePositif(resistance - getVie());
+	return super.sauvegarder(io).addBytePositif(getID()).addBytePositif(resistance).addBytePositif(resistance);
     }
 
 }

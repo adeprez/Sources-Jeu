@@ -59,11 +59,13 @@ public class TentativeConnexion extends Tache {
 	setAvancement(100);
     }
 
-    public static void testLocal(boolean serveur, int perso) {
+    public static void testLocal(boolean serveur) {
+	int perso = 0;
 	if(serveur && Serveur.getInstance() == null) try {
 	    Serveur.main();
 	} catch(Exception e) {
 	    System.err.println("Impossible de lancer le serveur : " + e.getMessage());
+	    perso++;
 	}
 	try {
 	    Compte compte = new Compte("test");

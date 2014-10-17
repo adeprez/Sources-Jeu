@@ -71,8 +71,7 @@ public class Serveur extends AbstractServeur<ClientServeur> implements FinCharge
 		if(o.aFond() && !ressources.aRessource(TypeRessource.IMAGE_OBJET, o.getFond()))
 		    ressources.putRessource(new RessourceImageObjet(o.getFond(), o.getImageFond()));
 	    }
-	ressources.setJeu(Jeu.getJeu(infos.getTypeJeu(), this, infos.getScoreVictoire()), infos.getTemps());
-	ressources.setMap(map);
+	ressources.configurer(Jeu.getJeu(infos.getTypeJeu(), this, infos.getScoreVictoire()), infos.getTemps(), map, 30, 30);
 	partie = new PartieServeur(this);
 	ajoutBots(3);
     }

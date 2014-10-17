@@ -23,9 +23,9 @@ public class RessourcesServeur extends RessourcesReseau {
 	return serveur;
     }
 
-    public RessourceMap setMap(Map map) {
+    public RessourceMap setMap(Map map, int extensionLaterale, int extensionBas) {
 	this.map = map;
-	map.etendre(100, 25);
+	map.etendre(extensionLaterale, extensionBas);
 	RessourceMap r = new RessourceMap(0, map);
 	putRessource(r);
 	return r;
@@ -34,6 +34,12 @@ public class RessourcesServeur extends RessourcesReseau {
     public void setJeu(Jeu jeu, int temps) {
 	this.jeu = jeu;
 	putRessource(new RessourceJeu(0, new InfoPartie(jeu.getType(), temps)));
+    }
+
+    public void configurer(Jeu jeu, int temps, Map map, int extensionLaterale, int extensionBas) {
+	jeu.prepareMap(map);
+	setJeu(jeu, temps);
+	setMap(map, extensionLaterale, extensionBas);
     }
 
     public Jeu getJeu() {
