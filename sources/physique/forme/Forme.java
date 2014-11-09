@@ -93,10 +93,6 @@ public abstract class Forme implements Sauvegardable, LocaliseEquipe, Forme3D {
 	g.fill(getDecoupe(zone));
     }
 
-    public void symetrieHorizontale() {
-	setOrientation(orientation.symetrieHorizontale());
-    }
-
     public Dimension getDimension() {
 	return new Dimension(getLargeur(), getHauteur());
     }
@@ -230,7 +226,7 @@ public abstract class Forme implements Sauvegardable, LocaliseEquipe, Forme3D {
 	case VIDE: return new FormeVide();
 	case RECTANGLE: return new Rect(io);
 	case TRIANGLE: return new Triangle(io);
-	default: throw new IllegalAccessError();
+	default: throw new IllegalAccessError(type + " n'est pas défini");
 	}
     }
 

@@ -92,11 +92,7 @@ public class Triangle extends Forme {
 
     @Override
     public Triangle creerCopie() {
-	Triangle t = new Triangle(getOrientation(), estDecoupe, new Rectangle(getX(), getY(), getLargeur(), getHauteur()));
-	t.triangle = triangle;
-	t.triangleDessin = triangleDessin;
-	t.zone = zone;
-	return t;
+	return (Triangle) Forme.get(sauvegarder(new IO()));
     }
 
     @Override
