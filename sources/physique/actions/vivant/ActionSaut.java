@@ -1,13 +1,14 @@
-package physique.actions;
+package physique.actions.vivant;
 
 import listeners.ContactListener;
 import perso.Vivant;
+import physique.actions.AbstractAction;
 import ressources.sprites.animation.sequence.Animations;
 import ressources.sprites.animation.sequence.Sequence;
 import controles.TypeAction;
 import exceptions.HorsLimiteException;
 
-public class ActionSaut extends Action<Vivant> implements ContactListener {
+public class ActionSaut extends ActionVivant<Vivant> implements ContactListener {
     private boolean finie, aSaute;
     private Sequence tombe;
     private int inertie;

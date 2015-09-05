@@ -1,4 +1,4 @@
-package physique.actions;
+package physique.actions.vivant;
 
 import perso.Vivant;
 import ressources.sprites.animation.sequence.Animations;

@@ -7,6 +7,7 @@ import java.awt.Component;
 import java.util.List;
 
 import listeners.DestructibleListener;
+import map.Map;
 import partie.PartieServeur;
 import partie.modeJeu.scorable.Kill;
 import partie.modeJeu.scorable.Mort;
@@ -39,6 +40,7 @@ public abstract class Jeu extends Listenable implements Lancable, Fermable, Dest
     public abstract int nextIDEquipe(RessourcePerso r);
     public abstract int getValeur(TypeScorable type);
     public abstract int getIDGagnant(boolean max);
+    public abstract void prepareMap(Map map);
 
     public boolean enEquipe() {
 	return getType().enEquipe();
@@ -54,6 +56,16 @@ public abstract class Jeu extends Listenable implements Lancable, Fermable, Dest
 
     public Serveur getServeur() {
 	return serveur;
+    }
+
+    @Override
+    public boolean lancer() {
+	return true;
+    }
+
+    @Override
+    public boolean fermer() {
+	return true;
     }
 
     @Override

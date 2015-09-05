@@ -2,11 +2,17 @@ package reseau.serveur;
 
 import io.IO;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.List;
 
+import map.elements.Spawn;
+import map.objets.Objet;
 import perso.Perso;
-import physique.actions.ActionChangeArme;
+import physique.actions.vivant.ActionChangeArme;
+import physique.vehicule.Vehicule;
 import reseau.AbstractClient;
 import reseau.paquets.Paquet;
 import reseau.paquets.PaquetMessage;
@@ -18,7 +24,10 @@ import reseau.ressources.RessourceReseau;
 import reseau.ressources.TypeRessource;
 import reseau.serveur.filtreEnvoi.FiltreEnvoiEquipe;
 import reseau.serveur.filtreEnvoi.FiltreEnvoiExclusionID;
+import vision.Camera;
+import base.Fenetre;
 import controles.TypeAction;
+import ecrans.ContainerMap;
 
 public class ClientServeur extends AbstractClient {
     private final Serveur serveur;
@@ -40,8 +49,24 @@ public class ClientServeur extends AbstractClient {
 		}
 	    p.setSpecialite(p.getSpecialitePrincipale());
 	    serveur.getRessources().putRessource(new RessourcePerso(getID(), p), new FiltreEnvoiExclusionID(getID()));
+	    //TODO: remove
+	    afficheFenetre(false);
 	}
 	else serveur.getRessources().putRessource(r);
+    }
+
+    public void afficheFenetre(boolean afficheSpawns) {
+	Fenetre.newFrame(new ContainerMap<Objet>(getRessources().getMap(), new Camera(getPerso())) {
+	    private static final long serialVersionUID = 1L;
+	    @Override
+	    public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		if(afficheSpawns && serveur.getPartie().getSpawns() != null)
+		    for(final List<Spawn> ls : serveur.getPartie().getSpawns().values())
+			for(final Spawn s : ls)
+			    s.dessiner(getCamera(), (Graphics2D) g, (Graphics2D) g, (Graphics2D) g);
+	    }
+	});
     }
 
     public boolean estPret() {
@@ -63,6 +88,23 @@ public class ClientServeur extends AbstractClient {
 	default:
 	    serveur.envoyerTous(new PaquetMessage(type, message, getID()));
 	    break;
+	}
+    }
+
+    @Override
+    public boolean autreAction(int id, Perso p, TypeAction action, boolean debut, IO io) {
+	switch(action) {
+	case ENTRER_VEHICULE:
+	    if(p.dansVehicule())
+		p.getVehicule().retire(p);
+	    else {
+		Vehicule v = p.findVehicule();
+		if(v != null)
+		    v.ajouter(p);
+	    }
+	    return false;
+	default:
+	    return super.autreAction(id, p, action, debut, io);
 	}
     }
 
@@ -109,7 +151,8 @@ public class ClientServeur extends AbstractClient {
 	    write(new Paquet(TypePaquet.NOMBRE_RESSOURCES, getRessources()));
 	    getRessources().ecrire(this);
 	    write(new Paquet(TypePaquet.FIN_CHARGEMENT));
-	    serveur.getPartie().spawn(getID());
+	    serveur.getPartie().ecrire(this);
+	    serveur.getPartie().spawn(getID());//TODO: marche? multiple spawn
 	    break;
 	case ADD_RESSOURCE:
 	    traiter(getRessources().lire(io));
@@ -130,6 +173,9 @@ public class ClientServeur extends AbstractClient {
 	    break;
 	case MESSAGE:
 	    message(io.nextPositif(), io.nextShortString(), io);
+	    break;
+	case VIE:
+	    write(new Paquet(type).addBytePositif(getID()).addShort(getPerso().getVie()));
 	    break;
 	default: return true;
 	}

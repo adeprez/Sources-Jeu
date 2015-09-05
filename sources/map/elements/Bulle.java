@@ -18,10 +18,12 @@ public class Bulle implements Dessinable {
     private static final int ARRONDI = 25;
     private final ArrayList<String> lignes;
     private final int hauteurLigne;
+    private final Color fond;
     private int height, width;
 
 
-    public Bulle(String message) {
+    public Bulle(String message, Color fond) {
+	this.fond = fond;
 	String[] mots = message.split(" ");
 	int largeurMax = 200;
 	lignes = new ArrayList<String>();
@@ -48,6 +50,10 @@ public class Bulle implements Dessinable {
 	}
     }
 
+    public Bulle(String message) {
+	this(message, Color.WHITE);
+    }
+
     @Override
     public void predessiner(Graphics2D g, Rectangle zone, int equipe) {}
 
@@ -58,12 +64,12 @@ public class Bulle implements Dessinable {
     public void surdessiner(Graphics2D g, Rectangle zone, int equipe) {
 	g.setFont(Style.POLICE);
 	g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	g.setColor(Color.WHITE);
+	g.setColor(fond);
 	int y = zone.y - height - zone.height/4;
 	g.fillRoundRect(zone.x - hauteurLigne/3, y - hauteurLigne, width + hauteurLigne, height + hauteurLigne/2, ARRONDI, ARRONDI);
 	g.setColor(Color.BLACK);
 	g.drawRoundRect(zone.x - hauteurLigne/3, y - hauteurLigne, width + hauteurLigne, height + hauteurLigne/2, ARRONDI, ARRONDI);
-	g.setColor(Color.WHITE);
+	g.setColor(fond);
 	Polygon p = new Polygon(new int[] {zone.x + zone.width/4, (int) (zone.x + zone.width/2.7), (int) (zone.x + zone.width/2.3)},
 		new int[] {y + height - hauteurLigne/2, y + height + hauteurLigne - hauteurLigne/2, y + height - hauteurLigne/2}, 3);
 	g.fill(p);

@@ -1,4 +1,4 @@
-package physique.actions;
+package physique.actions.vivant;
 
 import perso.Vivant;
 import physique.Mobile;
@@ -7,7 +7,7 @@ import ressources.sprites.animation.sequence.Sequence;
 import controles.TypeAction;
 
 
-public class ActionMarche extends Action<Vivant> {
+public class ActionMarche extends ActionVivant<Vivant> {
     private int tentatives;
 
 

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import layouts.LayoutLignes;
+import map.Map;
 import perso.Perso;
 import reseau.ressources.RessourcePerso;
 import reseau.ressources.RessourceReseau;
@@ -20,6 +21,10 @@ public abstract class JeuSolo extends Jeu {
 
     public JeuSolo(Serveur serveur, int scoreVictoire) {
 	super(serveur, scoreVictoire);
+    }
+
+    @Override
+    public void prepareMap(Map map) {
     }
 
     @Override

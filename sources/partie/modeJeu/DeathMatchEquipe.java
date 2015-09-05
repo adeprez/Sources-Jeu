@@ -16,16 +16,6 @@ public class DeathMatchEquipe extends JeuEquipe {
     }
 
     @Override
-    public boolean lancer() {
-	return true;
-    }
-
-    @Override
-    public boolean fermer() {
-	return true;
-    }
-
-    @Override
     public int getNombreEquipes() {
 	return 2;
     }

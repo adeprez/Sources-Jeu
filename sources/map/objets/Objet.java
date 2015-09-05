@@ -11,9 +11,12 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Composite;
 import java.awt.Container;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+
+import javax.swing.JPanel;
 
 import listeners.ChangeObjetListener;
 import listeners.RemoveListener;
@@ -32,7 +35,9 @@ import temps.EvenementTempsPeriodique;
 import temps.GestionnaireEvenements;
 import vision.Camera;
 import vision.Extrusion3D;
+import base.Fenetre;
 import divers.Outil;
+import divers.Taille;
 import exceptions.AnnulationException;
 import exceptions.HorsLimiteException;
 import exceptions.ObjetNonExistantException;
@@ -171,6 +176,21 @@ public abstract class Objet extends Visible implements Localise3D {
 
     public BufferedImage getImageDegats() {
 	return degats;
+    }
+
+    public void afficheDebug() {
+	JPanel p = new JPanel() {
+	    private static final long serialVersionUID = 1L;
+	    @Override
+	    public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.setColor(Color.RED);
+		((Graphics2D) g).fill(getFormeCollision().getDecoupe(new Taille(Math.min(getWidth(), getHeight()) - 10).getBounds()));
+		g.setColor(Color.BLACK);
+		((Graphics2D) g).draw(getForme().getDecoupe(new Taille(Math.min(getWidth(), getHeight()) - 10).getBounds()));
+	    }
+	};
+	Fenetre.newFrame(p).setVisible(true);
     }
 
     @Override

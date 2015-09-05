@@ -65,9 +65,17 @@ public abstract class Visible extends PhysiqueDestructible implements LocaliseDe
 	return dessinables;
     }
 
-    public void message(String message) {
-	ajoutDessinable(new DessinableTemporaire(this, new Bulle(message), message.length() * 150 + 1500,
+    public void message(String message, Color fond) {
+	ajoutDessinable(new DessinableTemporaire(this, new Bulle(message, fond), message.length() * 150 + 1500,
 		(DessinableTemporaire d) -> removeDessinable(d)));
+    }
+
+    public void message(String message) {
+	message(message, Color.WHITE);
+    }
+
+    public void messageInfo(String message) {
+	message(message, Color.GRAY);
     }
 
     @Override

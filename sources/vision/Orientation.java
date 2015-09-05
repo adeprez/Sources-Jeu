@@ -23,16 +23,6 @@ public enum Orientation {
 	return this == GAUCHE_BAS || this == DROITE_BAS;
     }
 
-    public Orientation symetrieHorizontale() {
-	switch(this) {
-	case GAUCHE: return GAUCHE_BAS;
-	case DROITE: return DROITE_BAS;
-	case DROITE_BAS: return DROITE;
-	case GAUCHE_BAS: return GAUCHE;
-	default: return null;
-	}
-    }
-
     public Direction toDirection() {
 	switch(this) {
 	case GAUCHE: return Direction.GAUCHE;

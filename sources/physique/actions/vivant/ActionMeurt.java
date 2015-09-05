@@ -1,21 +1,17 @@
-package physique.actions;
+package physique.actions.vivant;
 
 import interfaces.Localise;
 import perso.Vivant;
+import physique.actions.AbstractAction;
 import ressources.sprites.animation.sequence.Animations;
 import ressources.sprites.animation.sequence.Sequence;
 import divers.Outil;
 
-public class ActionMeurt extends AbstractAction<Vivant> {
+public class ActionMeurt extends AbstractActionVivant<Vivant> {
 
 
     public ActionMeurt(Vivant source) {
 	super(source);
-    }
-
-    @Override
-    public boolean estAction() {
-	return false;
     }
 
     @Override

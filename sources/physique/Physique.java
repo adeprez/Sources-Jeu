@@ -17,14 +17,9 @@ public abstract class Physique extends MobileActionable {
     public Physique(Forme forme) {
 	super(forme);
 	collision = forme.dupliquer();
-	forme.purgerDecalage();
     }
 
     public abstract void changeCase(int nXMap, int nYMap) throws HorsLimiteException, AnnulationException;
-
-    public boolean estDroite() {
-	return getForme().getOrientation() == Orientation.DROITE;
-    }
 
     public void setMap(Map map) {
 	this.map = map;
@@ -98,6 +93,21 @@ public abstract class Physique extends MobileActionable {
 	}
     }
 
+    public void setDansMap() {
+	dansMap = true;
+    }
+
+    @Override
+    public boolean faireAction() {
+	return dansMap ? super.faireAction() : true;
+    }
+
+    @Override
+    public void setOrientation(Orientation o) {
+	super.setOrientation(o);
+	collision = getForme().dupliquer();
+    }
+
     @Override
     public void setForme(Forme forme) {
 	super.setForme(forme);
@@ -153,7 +163,7 @@ public abstract class Physique extends MobileActionable {
 			Collision c = getCollision();
 			if(c == null) {
 			    tryChangeCase();
-			    getForme().setPos(collision.getX(), collision.getY());
+			    getForme().setPos(x, y);
 			} else
 			    collision.setPos(getX(), getY());
 			return c;

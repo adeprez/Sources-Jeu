@@ -143,6 +143,18 @@ public class IO implements IOable {
     }
 
     /**
+     * Ajoute le contenu de cet {@link IO}
+     * @param io le contenu a ajouter
+     * @return cet objet
+     */
+    public IO add(IO io) {
+	for(final byte b : io.buffer)
+	    buffer.add(b);
+	builded = false;
+	return this;
+    }
+
+    /**
      * Ajoute une chaine de caracteres courte (1 octet plus la taille de la chaine)
      * @param str la chaine de caracteres a ajouter
      * @return cet objet IO

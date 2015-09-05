@@ -6,5 +6,5 @@ import perso.Perso;
 
 
 public interface AjoutPersoListener extends EventListener {
-	public void ajout(Perso perso);
+    public void ajout(Perso perso);
 }

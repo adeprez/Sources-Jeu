@@ -3,10 +3,10 @@ package specialite.competence;
 import java.awt.image.BufferedImage;
 
 import perso.AbstractPerso;
-import physique.actions.AbstractAction;
+import physique.actions.vivant.AbstractActionVivant;
 import ressources.Images;
 
-public abstract class Competence extends AbstractAction<AbstractPerso> {
+public abstract class Competence extends AbstractActionVivant<AbstractPerso> {
     public static final String PATH = "competences/";
 
 
@@ -22,11 +22,6 @@ public abstract class Competence extends AbstractAction<AbstractPerso> {
 
     public BufferedImage getIcone() {
 	return Images.get(PATH + getNomIcone() + ".png", true);
-    }
-
-    @Override
-    public boolean estAction() {
-	return false;
     }
 
     @Override

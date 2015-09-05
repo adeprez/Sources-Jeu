@@ -124,6 +124,10 @@ public class Membre extends AbstractMembre implements Nomme {
 	g.drawImage(image, t, null);
     }
 
+    public float getAngle() {
+	return angle;
+    }
+
     @Override
     public BufferedImage getImage() {
 	return image;

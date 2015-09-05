@@ -3,6 +3,7 @@ package partie;
 import interfaces.Fermable;
 import interfaces.Lancable;
 import io.IO;
+import io.Out;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +16,8 @@ import partie.modeJeu.TypeJeu;
 import partie.modeJeu.scorable.Scorable;
 import perso.Perso;
 import reseau.ClientServeurIdentifiable;
+import reseau.paquets.Paquet;
+import reseau.paquets.TypePaquet;
 import reseau.ressources.RessourcePerso;
 import reseau.ressources.RessourceReseau;
 import reseau.ressources.RessourcesReseau;
@@ -87,6 +90,12 @@ public abstract class Partie extends PartieListenable implements Lancable, Ferma
 	return scorables;
     }
 
+    public void ecrire(Out out) {
+	for(final Entry<Integer, List<Scorable>> e : getReussites().entrySet())
+	    for(final Scorable s : e.getValue())
+		out.write(new Paquet(TypePaquet.SCORABLE, s.sauvegarder(new IO().addBytePositif(e.getKey()))));
+    }
+
     public TypeJeu getTypeJeu() {
 	return type;
     }
@@ -104,7 +113,7 @@ public abstract class Partie extends PartieListenable implements Lancable, Ferma
     }
 
     public Map getMap() {
-	return ressources.getMap(0).getMap();
+	return ressources.getMap();
     }
 
     public Perso getPerso(int id) {

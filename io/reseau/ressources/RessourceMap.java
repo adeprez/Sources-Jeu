@@ -14,7 +14,7 @@ public class RessourceMap extends RessourceReseau<Map> {
 
     public RessourceMap(RessourcesReseau r, IO io) {
 	super(io);
-	map = new Map(r, r instanceof RessourcesServeur ? ((RessourcesServeur) r).getServeur() : null, io);
+	map = new Map(r, io);
 	map.setLargeurExtensible(false);
     }
 

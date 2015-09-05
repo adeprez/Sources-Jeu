@@ -8,14 +8,13 @@ public class VisionJeu implements LocaliseEquipe {
     private static final int RETARD = 20;
     private final Camera cam;
     private Perso perso;
-    private int x, y;
+    private int x;
 
 
     public VisionJeu(Camera cam, Perso perso)  {
 	this.cam = cam;
 	this.perso = perso;
 	x = perso.getMap().getLargeur() * UNITE.width/2;
-	y = perso.getMap().getAltitudeMax() * UNITE.height;
     }
 
     public void setPerso(Perso perso) {
@@ -33,7 +32,7 @@ public class VisionJeu implements LocaliseEquipe {
 
     @Override
     public int getX() {
-	int diff = perso.getX() - x + (perso.estDroite() ? getLargeur() : -getLargeur());
+	int diff = perso.getX() - x + (perso.estDroite() ? getLargeur() : -getLargeur()) * 5;
 	if(diff != 0)
 	    x += diff/RETARD;
 	return x;
@@ -41,10 +40,7 @@ public class VisionJeu implements LocaliseEquipe {
 
     @Override
     public int getY() {
-	int diff = perso.getY() - y;
-	if(diff != 0)
-	    y += diff/RETARD;
-	return (int) (y + getHauteur() * 1.5);
+	return perso.getY() + UNITE.height;
     }
 
     @Override

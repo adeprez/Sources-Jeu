@@ -12,16 +12,17 @@ import java.net.Socket;
 import javax.swing.JPanel;
 
 import perso.Perso;
-import perso.Vivant;
 import physique.actions.AbstractAction;
-import physique.actions.Action;
-import physique.actions.ActionAccroupi;
-import physique.actions.ActionChangeArme;
-import physique.actions.ActionGrimpeCorde;
-import physique.actions.ActionMarche;
-import physique.actions.ActionRoulade;
-import physique.actions.ActionSaut;
+import physique.actions.vehicule.ActionRoule;
+import physique.actions.vivant.ActionAccroupi;
+import physique.actions.vivant.ActionChangeArme;
+import physique.actions.vivant.ActionGrimpeCorde;
+import physique.actions.vivant.ActionMarche;
+import physique.actions.vivant.ActionRoulade;
+import physique.actions.vivant.ActionSaut;
+import physique.vehicule.Vehicule;
 import reseau.listeners.DeconnexionListener;
+import reseau.paquets.Paquet;
 import reseau.paquets.PaquetMessage;
 import reseau.paquets.TypePaquet;
 import reseau.ressources.RessourcePerso;
@@ -116,9 +117,13 @@ implements StyleListe, ClientServeurIdentifiable, FiltreEnvoi, ChangeRessourceLi
 	    return false;
 	}
 	if(!p.estVivant())
-	    return false;
+	    if(estServeur())
+		return false;
+	    else write(new Paquet(TypePaquet.VIE));
 	p.setAngle(io.next());
 	p.setDroite(io.nextBoolean());
+	if(p.dansVehicule())
+	    return faireActionVehicule(action, p, p.getVehicule(), debut, io);
 	switch(action) {
 	case DROITE:
 	case GAUCHE:
@@ -157,18 +162,46 @@ implements StyleListe, ClientServeurIdentifiable, FiltreEnvoi, ChangeRessourceLi
 	    if(p.enAction() && p.getAction() instanceof ActionAccroupi)
 		return p.stopAction(null);
 	case ATTAQUER:
-	    return debut && faireAction(p.getSpecialite().getArme().getAction(p));
+	    return faireAction(p.getSpecialite().getArme().getAction(p));
 	case ESCALADER:
 	    return faireAction(new ActionGrimpeCorde(p));
 	default:
-	    System.err.println(action + " non implementee (AbstractClient)");
+	    return autreAction(id, p, action, debut, io);
+	}
+    }
+
+    public boolean autreAction(int id, Perso p, TypeAction action, boolean debut, IO io) {
+	System.err.println(action + " non implementee (AbstractClient)");
+	return false;
+    }
+
+    public boolean faireActionVehicule(TypeAction action, Perso p, Vehicule v, boolean debut, IO io) {
+	switch(action) {
+	case ENTRER_VEHICULE:
+	    return v.retire(p);
+	case GAUCHE:
+	case DROITE:
+	    if(debut) {
+		if(faireAction(new ActionRoule(v))) {
+		    v.setOrientation(action.getOrientation());
+		    return true;
+		}
+		return false;
+	    }
+	    if(v.enAction())
+		if(!(v.getAction() instanceof ActionRoule) && v.getAction().getSuivante() instanceof ActionRoule) {
+		    v.getAction().setSuivante(null);
+		    return true;
+		}
+	    return v.stopAction(null);
+	default:
 	    return false;
 	}
     }
 
-    public <K extends Vivant> boolean faireAction(Action<K> action) {
+    public boolean faireAction(AbstractAction<?> action) {
 	AbstractAction<?> a = action.getSource().getAction();
-	if(a != null && !a.peutArret() && (!a.estAction() || ((Action<?>) a).getType() != action.getType())) {
+	if(a != null && !a.peutArret() && a.getClass() != action.getClass()) {
 	    action.getSource().getAction().setSuivante(action);
 	    return true;
 	}

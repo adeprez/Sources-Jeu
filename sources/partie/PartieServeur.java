@@ -21,6 +21,7 @@ import reseau.serveur.Serveur;
 import divers.Outil;
 
 public class PartieServeur extends Partie {
+    private static final int TENTATIVES_SPAWN = 25;
     private final Serveur serveur;
     private final Jeu jeu;
     private Map<Integer, List<Spawn>> spawns;
@@ -39,19 +40,25 @@ public class PartieServeur extends Partie {
     public void spawn(RessourcePerso rp) {
 	if(estLancee() && rp != null) {
 	    Perso p = rp.getPerso();
-	    p.setVie(p.getVitalite());
 	    int tentatives = 0;
-	    while(tentatives < 10) try {
-		p.setPos(getSpawn(p.getEquipe()));
+	    while(tentatives < TENTATIVES_SPAWN && !trySpawn(rp))
+		tentatives++;
+	    if(tentatives == TENTATIVES_SPAWN)
+		System.err.println("Impossible de placer " + p);
+	    p.setVie(p.getVitalite());
+	}
+    }
+
+    public boolean trySpawn(RessourcePerso rp) {
+	try {
+	    Perso p = rp.getPerso();
+	    if(p.setPos(getSpawn(p.getEquipe())) == null) {
 		serveur.envoyerTous(new PaquetSpawn(rp));
 		PaquetSpawn.effet(p);
-		tentatives = 10;
-	    } catch(Exception e) {
-		tentatives++;
-		if(tentatives > 10)
-		    System.err.println("Impossible de placer " + p);
+		return true;
 	    }
-	}
+	} catch(Exception e) {}
+	return false;
     }
 
     public Spawn getSpawn(int equipe) {
@@ -63,6 +70,10 @@ public class PartieServeur extends Partie {
 
     public void finPartie(boolean finTemps) {
 	finPartie(jeu.enEquipe(), jeu.getIDGagnant(finTemps));
+    }
+
+    public Map<Integer, List<Spawn>> getSpawns() {
+	return spawns;
     }
 
     @Override
@@ -99,11 +110,11 @@ public class PartieServeur extends Partie {
 	    serveur.getInfosServeur().setEtat(InfoServeur.ETAT_JEU);
 	    serveur.envoyerTous(new Paquet(TypePaquet.ETAT_PARTIE, serveur.getInfosServeur().getEtat(), jeu.getType().getID()));
 	    serveur.envoyerTous(new Paquet(TypePaquet.TEMPS, new IO().addShort(serveur.getInfosServeur().getTemps())));
+	    for(final RessourceReseau<?> rp : jeu.getRessources().get(TypeRessource.PERSO).values())
+		spawn((RessourcePerso) rp);
 	    for(final List<Objet> lo : getMap().getObjets())
 		for(final Objet o : lo)
 		    o.setServeur(serveur);
-	    for(final RessourceReseau<?> rp : jeu.getRessources().get(TypeRessource.PERSO).values())
-		spawn((RessourcePerso) rp);
 	    return true;
 	}
 	return false;

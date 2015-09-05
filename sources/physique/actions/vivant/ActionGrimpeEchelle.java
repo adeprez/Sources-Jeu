@@ -1,4 +1,4 @@
-package physique.actions;
+package physique.actions.vivant;
 
 import map.objets.Echelle;
 import perso.Vivant;
@@ -8,7 +8,7 @@ import ressources.sprites.animation.sequence.Sequence;
 import controles.TypeAction;
 import exceptions.HorsLimiteException;
 
-public class ActionGrimpeEchelle extends Action<Vivant> {
+public class ActionGrimpeEchelle extends ActionVivant<Vivant> {
 
 
     public ActionGrimpeEchelle(Vivant source) {

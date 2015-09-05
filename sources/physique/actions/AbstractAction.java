@@ -2,10 +2,9 @@ package physique.actions;
 
 import interfaces.Fermable;
 import interfaces.Lancable;
-import perso.Vivant;
-import ressources.sprites.animation.sequence.Sequence;
+import physique.Visible;
 
-public abstract class AbstractAction<E extends Vivant> implements Lancable, Fermable, Actionable {
+public abstract class AbstractAction<E extends Visible> implements Lancable, Fermable, Actionable {
     private final E source;
     private AbstractAction<?> suivante;
     private int tour;
@@ -15,8 +14,6 @@ public abstract class AbstractAction<E extends Vivant> implements Lancable, Ferm
 	this.source = source;
     }
 
-    public abstract boolean estAction();
-    public abstract Sequence getSequence();
     public abstract void tourAction();
     public abstract void commence();
     public abstract void seTermine();
@@ -38,19 +35,10 @@ public abstract class AbstractAction<E extends Vivant> implements Lancable, Ferm
     public void demarre() {
 	tour = 0;
 	commence();
-	changeAnim();
     }
 
     public boolean stopAction() {
-	return source.stopAction(null);
-    }
-
-    public void changeAnim() {
-	source.getAnimation().setSequence(getSequence());
-    }
-
-    public void setVitesseAnim(int vitesse) {
-	source.getAnimation().setVitesse(vitesse);
+	return source.getAction() == this && source.stopAction(null);
     }
 
     public void forceLancement() {

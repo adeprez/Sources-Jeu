@@ -1,5 +1,5 @@
 package interfaces;
 
 public interface Lancable {
-	public boolean lancer();
+    public boolean lancer();
 }

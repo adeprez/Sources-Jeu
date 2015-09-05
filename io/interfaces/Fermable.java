@@ -1,5 +1,5 @@
 package interfaces;
 
 public interface Fermable {
-	public boolean fermer();
+    public boolean fermer();
 }

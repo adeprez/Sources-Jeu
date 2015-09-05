@@ -12,8 +12,7 @@ import java.util.Arrays;
 import javax.swing.ImageIcon;
 
 import listeners.ChangeSpecialiteListener;
-import physique.Direction;
-import physique.actions.ActionMeurt;
+import physique.actions.vivant.ActionMeurt;
 import physique.forme.CorpsPerso;
 import ressources.Images;
 import ressources.sprites.animation.AnimationPerso;
@@ -169,7 +168,7 @@ public abstract class AbstractPerso extends Vivant {
 
     @Override
     public int getVitesse() {
-	return caract.getVitesse() * 25;
+	return caract.getVitesse() * 50;
     }
 
     @Override
@@ -195,6 +194,6 @@ public abstract class AbstractPerso extends Vivant {
 	super.dessiner(g, zone, equipe);
 	if(anim == null)
 	    g.drawImage(Images.get("divers/options.png", true), zone.x, zone.y, zone.width, zone.height, null);
-	else anim.dessiner(g, zone, getDirection() == Direction.DROITE);
+	else anim.dessiner(g, zone, estDroite());
     }
 }

@@ -7,12 +7,13 @@ import vision.Orientation;
 public enum TypeAction {
     GAUCHE(KeyEvent.VK_Q, true),
     DROITE(KeyEvent.VK_D, true),
-    ESCALADER(KeyEvent.VK_Z),
+    ESCALADER(KeyEvent.VK_Z, true),
     ACCROUPI(KeyEvent.VK_S, true),
     SAUT(KeyEvent.VK_SPACE),
     ROULADE(KeyEvent.VK_TAB),
     CHANGER_ARME(KeyEvent.VK_A),
-    ATTAQUER(KeyEvent.VK_E);
+    ATTAQUER(KeyEvent.VK_E),
+    ENTRER_VEHICULE(KeyEvent.VK_ENTER);
 
     private final boolean aFin;
     private final int touche;

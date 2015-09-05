@@ -21,7 +21,7 @@ import physique.Collision;
 import physique.Physique;
 import physique.forme.Forme;
 import physique.forme.Rect;
-import reseau.serveur.Serveur;
+import physique.vehicule.Vehicule;
 import ressources.SpriteObjets;
 import vision.Camera;
 import exceptions.HorsLimiteException;
@@ -33,8 +33,8 @@ public class Map extends MapIO<Objet> {
     private Partie partie;
 
 
-    public Map(int taille, Serveur serveur) {
-	super(SpriteObjets.getInstance(), serveur);
+    public Map(int taille) {
+	super(SpriteObjets.getInstance());
 	persos = new ArrayList<Perso>();
 	try {
 	    for(int i=0 ; i<taille ; i++)
@@ -45,10 +45,13 @@ public class Map extends MapIO<Objet> {
 	ciel = new Ciel(getLargeur());
     }
 
-    public Map(ContaineurImagesOp images, Serveur serveur, IO io) {
-	super(images, serveur, io);
+    public Map(ContaineurImagesOp images, IO io) {
+	super(images, io);
 	persos = new ArrayList<Perso>();
 	ciel = new Ciel(getLargeur());
+	int nVehicules = io.nextPositif();
+	for(int i=0; i<nVehicules ; i++)
+	    Vehicule.ajout(this, io);
     }
 
     public void setPartie(Partie partie) {
@@ -167,6 +170,14 @@ public class Map extends MapIO<Objet> {
 		return o;
 	}
 	return null;
+    }
+
+    public void ajout(Vehicule v) {
+	getVehicules().add(v);
+	v.setMap(this);
+	super.ajout(v);
+	if(estServeur())
+	    v.write();
     }
 
     @Override

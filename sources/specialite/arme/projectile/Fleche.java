@@ -50,7 +50,7 @@ public class Fleche extends Projectile {
 	if(p instanceof Vivant)
 	    impact((Vivant) p);
 	else if(p instanceof Objet) {
-	    ((Objet) p).degats(1, null);;
+	    ((Objet) p).degats(1, null);
 	    ((Objet) p).addRemoveListener(this);
 	}
     }

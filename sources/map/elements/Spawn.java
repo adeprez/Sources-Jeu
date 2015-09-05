@@ -109,9 +109,9 @@ public class Spawn extends Visible {
 	java.util.Map<Integer, List<Spawn>> spawns = new HashMap<Integer, List<Spawn>>();
 	if(!equipes.isEmpty()) {
 	    int espace = (map.getLargeurNonVide() - nombre)/Math.max(1, equipes.size()), minX = map.getDebutMap(), maxX = map.getFinMap();
-	    int x = minX, i = 0;
+	    int x = minX;
 	    for(final int equipe : equipes) {
-		int y = 1, n = nombre;
+		int y = 1, n = nombre, i = 0;
 		while(n > 0 && i < map.getLargeur()) try {
 		    i++;
 		    while(map.estVide(x))
@@ -119,10 +119,11 @@ public class Spawn extends Visible {
 		    try {
 			y = creerSpawn(map, spawns, equipe, x, y) + 2;
 			n--;
-			if(y >= map.getAltitude(x))
+			if(y >= map.getAltitude(x) + 1)
 			    x++;
 		    } catch(AnnulationException e) {
 			y = 1;
+			x++;
 		    }
 		} catch(HorsLimiteException e) {
 		    x = minX;

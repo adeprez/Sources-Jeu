@@ -10,7 +10,7 @@ import util.EnsembleActionables;
 
 
 public abstract class MondePhysique<E extends Localise3D> extends AbstractMap<E> implements Lancable {
-    private static final int DELAI = 25;
+    private static final int DELAI = 22;
     private final EnsembleActionables actions;
 
 

@@ -20,6 +20,10 @@ public final class Images {
 	return RessourcesLoader.getImage(PATH + nom);
     }
 
+    public static BufferedImage get(String nom) {
+	return get(nom, true);
+    }
+
     public static void liberer() {
 	synchronized(images) {
 	    for(BufferedImage img : images.values())

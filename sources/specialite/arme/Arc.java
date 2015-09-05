@@ -5,7 +5,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import perso.Perso;
-import physique.actions.Action;
+import physique.actions.vivant.ActionVivant;
 import ressources.sprites.animation.AnimationPerso;
 import specialite.arme.attaque.ActionTirArc;
 
@@ -26,7 +26,7 @@ public class Arc extends Arme {
 	}
 
 	@Override
-	public Action<?> getAction(Perso perso) {
+	public ActionVivant<?> getAction(Perso perso) {
 		return new ActionTirArc(perso);
 	}
 

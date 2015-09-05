@@ -2,14 +2,14 @@ package specialite.arme.attaque;
 
 import perso.AbstractPerso;
 import perso.Vivant;
-import physique.actions.Action;
+import physique.actions.vivant.ActionVivant;
 import ressources.sprites.animation.AnimationPerso;
 import ressources.sprites.animation.sequence.DetermineurAngle;
 import specialite.arme.projectile.Projectile;
 import specialite.effet.Effet;
 import controles.TypeAction;
 
-public abstract class ActionTir extends Action<AbstractPerso> implements DetermineurAngle, Effet<Vivant> {
+public abstract class ActionTir extends ActionVivant<AbstractPerso> implements DetermineurAngle, Effet<Vivant> {
     private final int tourTir, finAction, degats;
     private boolean aTire, finie;
     private float angle, angleTete;

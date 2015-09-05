@@ -4,13 +4,13 @@ import map.objets.Objet;
 import perso.AbstractPerso;
 import perso.Perso;
 import perso.Vivant;
-import physique.actions.Action;
+import physique.actions.vivant.ActionVivant;
 import physique.forme.Rect;
 import specialite.effet.Effet;
 import vision.Orientation;
 import controles.TypeAction;
 
-public abstract class ActionAttaqueCac extends Action<AbstractPerso> implements Effet<Vivant> {
+public abstract class ActionAttaqueCac extends ActionVivant<AbstractPerso> implements Effet<Vivant> {
     private final int debutDegats, finDegats;
     private boolean finie, aTouche;
     private Effet<Vivant> effet;

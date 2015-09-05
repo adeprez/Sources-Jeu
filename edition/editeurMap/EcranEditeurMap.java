@@ -36,7 +36,7 @@ public class EcranEditeurMap extends Ecran implements SelectionObjetListener {
 
 
     public EcranEditeurMap(int taille, Component haut) {
-	this(new Map(taille, null), haut);
+	this(new Map(taille), haut);
     }
 
     public EcranEditeurMap(Map map, Component... haut) {

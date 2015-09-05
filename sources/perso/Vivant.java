@@ -16,8 +16,9 @@ import map.objets.Objet;
 import physique.Collision;
 import physique.Physique;
 import physique.Visible;
-import physique.actions.ActionGrimpeEchelle;
+import physique.actions.vivant.ActionGrimpeEchelle;
 import physique.forme.Forme;
+import physique.vehicule.Vehicule;
 import reseau.paquets.Paquet;
 import reseau.paquets.TypePaquet;
 import reseau.serveur.Serveur;
@@ -30,6 +31,7 @@ public abstract class Vivant extends Visible {
     private static final Color COULEUR_OMBRE = new Color(0, 0, 0, 75);
     private ChangeCaseListener pos;
     private int angle, id, lastY;
+    private Vehicule vehicule;
     private boolean t1;
 
 
@@ -39,6 +41,33 @@ public abstract class Vivant extends Visible {
 
     public abstract int getLargeurVie(Graphics g, Rectangle zone);
     public abstract Animation getAnimation();
+
+    public boolean setVehicule(Vehicule vehicule) {
+	if(this.vehicule == null || this.vehicule.fermer()) {
+	    this.vehicule = vehicule;
+	    return true;
+	}
+	return false;
+    }
+
+    public Vehicule getVehicule() {
+	return vehicule;
+    }
+
+    public Vehicule findVehicule() {
+	for(final Vehicule v : getMap().getVehicules())
+	    if(v.peutEntrer(this))
+		return v;
+	return null;
+    }
+
+    public boolean dansVehicule() {
+	return vehicule != null;
+    }
+
+    public boolean sortVehicule() {
+	return setVehicule(null);
+    }
 
     public void setServeur(Serveur serveur, int id) {
 	setServeur(serveur);
@@ -157,6 +186,8 @@ public abstract class Vivant extends Visible {
     public boolean faireAction() {
 	boolean b = super.faireAction();
 	try {
+	    if(vehicule != null)
+		vehicule.faireAction(this);
 	    getAnimation().bouge();
 	} catch(Exception err) {}
 	return b;
@@ -189,6 +220,8 @@ public abstract class Vivant extends Visible {
     public void dessiner(Camera c, Graphics2D gPredessin, Graphics2D gDessin, Graphics2D gSurdessin) {
 	dessineOmbre(gDessin, c);
 	super.dessiner(c, gPredessin, gDessin, gSurdessin);
+	if(vehicule != null && vehicule.get(Vehicule.CONDUCTEUR) == this)
+	    vehicule.dessiner(c, gPredessin, gDessin, gSurdessin);
     }
 
 

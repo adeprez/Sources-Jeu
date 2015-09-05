@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 import partie.PartieClient;
 import partie.modeJeu.scorable.Scorable;
 import perso.Perso;
+import physique.vehicule.Vehicule;
 import reseau.AbstractClient;
 import reseau.listeners.MessageListener;
 import reseau.objets.InfoServeur;
@@ -77,7 +78,7 @@ public class Client extends AbstractClient {
     public boolean faireAction(int id, TypeAction action, boolean debut, IO io) {
 	Perso p = getPerso(id);
 	try {
-	    PaquetSpawn.setPos(io, p);
+	    PaquetSpawn.setPos(io, p.dansVehicule() ? p.getVehicule() : p);
 	} catch(HorsLimiteException e) {
 	    e.printStackTrace();
 	}
@@ -146,6 +147,15 @@ public class Client extends AbstractClient {
 	case ETAT_PARTIE:
 	    if(io.nextPositif() == InfoServeur.ETAT_FINI)
 		getPartie().finPartie(io);
+	    break;
+	case SPAWN_VEHICULE:
+	    Vehicule.ajout(getRessources().getMap(), io);
+	    break;
+	case ENTRE_VEHICULE:
+	    getRessources().getMap().getVehicules().get(io.nextPositif()).set(io.nextPositif(), getPerso(io.nextPositif()));
+	    break;
+	case SORT_VEHICULE:
+	    getRessources().getMap().getVehicules().get(io.nextPositif()).retire(io.nextPositif());
 	    break;
 	default: return true;
 	}

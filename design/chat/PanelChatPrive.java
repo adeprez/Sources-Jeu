@@ -48,11 +48,13 @@ public class PanelChatPrive extends PanelChat implements ListCellRenderer<Perso>
     }
 
     public void update() {
-	String nom = ((Nomme) modele.getSelectedItem()).getNom();
-	count.remove(nom);
-	for(final Component c : getMessages().getComponents())
-	    c.setVisible(nom.equals(c.getName()));
-	setTitre();
+	if(modele.getSelectedItem() != null) {
+	    String nom = ((Nomme) modele.getSelectedItem()).getNom();
+	    count.remove(nom);
+	    for(final Component c : getMessages().getComponents())
+		c.setVisible(nom.equals(c.getName()));
+	    setTitre();
+	}
     }
 
     @Override

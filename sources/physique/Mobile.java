@@ -216,11 +216,15 @@ public abstract class Mobile extends Listenable implements Sauvegardable, Locali
 	return c;
     }
 
+    public int getGraviteMax() {
+	return 50;
+    }
+
     public Collision gravite() throws HorsLimiteException {
 	if(ignoreGravite)
 	    return null;
 	int masse = getMasse();
-	gravite = (int) Math.min(gravite + Math.max(1, Math.log10(masse)), 50);
+	gravite = (int) Math.min(gravite + Math.max(1, Math.log10(masse)), getGraviteMax());
 	Collision c = mouvement(0, -gravite);
 	if(c == null)
 	    tempsVol++;
@@ -270,7 +274,7 @@ public abstract class Mobile extends Listenable implements Sauvegardable, Locali
     }
 
     public Collision setPos(Localise l) throws HorsLimiteException {
-	return setPos(l.getX(), l.getY());
+	return setPos(l.getX() + (l.getLargeur() - getLargeur())/2, l.getY());
     }
 
     public Collision setCoordMap(int x, int y) throws HorsLimiteException {
@@ -291,6 +295,14 @@ public abstract class Mobile extends Listenable implements Sauvegardable, Locali
 
     public void setDroite(boolean droite) {
 	setOrientation(droite ? Orientation.DROITE : Orientation.GAUCHE);
+    }
+
+    public boolean estDroite() {
+	return forme.getOrientation() == Orientation.DROITE;
+    }
+
+    public void symetrieHorizontale() {
+	setDroite(!estDroite());
     }
 
     public float getForceX() {

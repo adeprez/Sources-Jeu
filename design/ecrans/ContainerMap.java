@@ -15,6 +15,7 @@ import statique.Style;
 import vision.Camera;
 import vision.ReticuleSelection;
 import base.Ecran;
+import divers.Outil;
 import exceptions.ExceptionJeu;
 import exceptions.HorsLimiteException;
 
@@ -111,8 +112,10 @@ public class ContainerMap<E extends LocaliseDessinable> extends Ecran {
 	    } catch(Exception err) {
 		err.printStackTrace();
 	    }
-	    if(!stop)
+	    if(!stop) {
+		Outil.wait(1);
 		repaint();
+	    }
 	}
     }
 

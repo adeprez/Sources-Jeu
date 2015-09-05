@@ -15,7 +15,7 @@ public class PaquetAction extends Paquet {
 	addBytePositif(action.getID());
 	if(action.aFin())
 	    add(appuie);
-	PaquetSpawn.ecrire(this, source);
+	PaquetSpawn.ecrire(this, source.dansVehicule() ? source.getVehicule() : source);
 	addByte(source.getAngle());
 	add(source.estDroite());
     }

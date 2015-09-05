@@ -6,12 +6,14 @@ import interfaces.Sauvegardable;
 import io.IO;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JComboBox;
 
 import physique.Mobile;
 import physique.MondePhysique;
+import physique.vehicule.Vehicule;
 import reseau.serveur.Serveur;
 import ressources.compte.Compte;
 import carte.element.Lieu;
@@ -27,18 +29,19 @@ public abstract class MapIO<E extends Localise3D & Sauvegardable> extends MondeP
     public static final int CODE_COLONNE = 255;
     public static final String PATH = "/map";
     private final ContaineurImagesOp images;
-    private final Serveur serveur;
+    private final List<Vehicule> vehicules;
+    private Serveur serveur;
     private boolean chargee;
 
 
-    public MapIO(ContaineurImagesOp images, Serveur serveur) {
+    public MapIO(ContaineurImagesOp images) {
 	this.images = images;
-	this.serveur = serveur;
+	vehicules = new ArrayList<Vehicule>();
 	setLargeurExtensible(true);
     }
 
-    public MapIO(ContaineurImagesOp images, Serveur serveur, IO io) {
-	this(images, serveur);
+    public MapIO(ContaineurImagesOp images, IO io) {
+	this(images);
 	int taille = io.nextShortInt();
 	agrandir(taille);
 	int id = CODE_COLONNE, x = 0;
@@ -62,8 +65,20 @@ public abstract class MapIO<E extends Localise3D & Sauvegardable> extends MondeP
 
     public abstract E lire(int id, IO io);
 
+    public void setServeur(Serveur serveur) {
+	this.serveur = serveur;
+    }
+
+    public List<Vehicule> getVehicules() {
+	return vehicules;
+    }
+
     public Serveur getServeur() {
 	return serveur;
+    }
+
+    public boolean estServeur() {
+	return serveur != null;
     }
 
     public void setServeur(Mobile m) {
@@ -91,6 +106,9 @@ public abstract class MapIO<E extends Localise3D & Sauvegardable> extends MondeP
 		e.sauvegarder(io);
 	    io.addBytePositif(CODE_COLONNE);
 	}
+	io.addBytePositif(vehicules.size());
+	for(final Vehicule v : vehicules)
+	    v.sauvegarder(io);
 	return io;
     }
 

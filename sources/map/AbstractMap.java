@@ -160,7 +160,7 @@ public abstract class AbstractMap<E extends LocaliseDessinable> extends MapDessi
     }
 
     public boolean agrandir(int x) {
-	if(!largeurExtensible || objets.size()>=x)
+	if(!largeurExtensible || objets.size() >= x + 1)
 	    return false;
 	for(int i=objets.size() ; i<=x ; i++)
 	    objets.add(new ArrayList<E>());

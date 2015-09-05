@@ -6,7 +6,7 @@ import interfaces.Lancable;
 import java.awt.image.BufferedImage;
 
 import perso.Perso;
-import physique.actions.Action;
+import physique.actions.vivant.ActionVivant;
 import ressources.Images;
 import ressources.sprites.animation.Membre;
 
@@ -22,7 +22,7 @@ public abstract class Arme extends Membre implements Lancable, Fermable {
 		return Images.get(PATH + nom + ".png", true);
 	}
 
-	public abstract Action<?> getAction(Perso perso);
+	public abstract ActionVivant<?> getAction(Perso perso);
 	public abstract int getDegats();
 
 	@Override

@@ -1,14 +1,15 @@
-package physique.actions;
+package physique.actions.vivant;
 
 import map.objets.Corde;
 import map.objets.Objet;
 import perso.Vivant;
+import physique.actions.AbstractAction;
 import ressources.sprites.animation.sequence.Animations;
 import ressources.sprites.animation.sequence.Sequence;
 import controles.TypeAction;
 import exceptions.HorsLimiteException;
 
-public class ActionGrimpeCorde extends Action<Vivant> {
+public class ActionGrimpeCorde extends ActionVivant<Vivant> {
 
 
     public ActionGrimpeCorde(Vivant source) {

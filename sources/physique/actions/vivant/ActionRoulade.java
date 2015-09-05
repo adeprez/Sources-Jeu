@@ -1,4 +1,4 @@
-package physique.actions;
+package physique.actions.vivant;
 
 import perso.Vivant;
 import ressources.sprites.animation.sequence.Animations;
@@ -6,7 +6,7 @@ import ressources.sprites.animation.sequence.Sequence;
 import controles.TypeAction;
 import exceptions.HorsLimiteException;
 
-public class ActionRoulade extends Action<Vivant> {
+public class ActionRoulade extends ActionVivant<Vivant> {
     private boolean finie;
 
 

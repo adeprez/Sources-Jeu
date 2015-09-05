@@ -10,9 +10,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import map.Map;
+
 import org.junit.Test;
 
 import physique.forme.FormeVide;
+import physique.vehicule.Moto;
+import physique.vehicule.Vehicule;
 import reseau.client.Client;
 import reseau.paquets.jeu.PaquetSpawn;
 import reseau.paquets.session.PaquetPing;
@@ -94,6 +98,19 @@ public class TestIO {
 	PaquetSpawn.setPos(io, l2);
 	assertEquals(l.getX(), l2.getX());
 	assertEquals(l.getY(), l2.getY());
+    }
+
+    @Test
+    public void testMap() {
+	Map m = new Map(10);
+	m.ajout(new Moto(true));
+	Map m2 = new Map(null, m.sauvegarder(new IO()));
+	assertEquals(m.getLargeurNonVide(), m2.getLargeurNonVide());
+	Vehicule v = m.getVehicules().get(0), v2 = m2.getVehicules().get(0);
+	assertEquals(v.getNom(), v2.getNom());
+	assertEquals(v.getXCentre(), v2.getXCentre());
+	assertEquals(v.getYCentre(), v2.getYCentre());
+	assertEquals(v.getVie(), v2.getVie());
     }
 
     @Test

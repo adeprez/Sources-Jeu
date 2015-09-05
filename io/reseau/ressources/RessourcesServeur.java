@@ -37,6 +37,7 @@ public class RessourcesServeur extends RessourcesReseau {
     }
 
     public void configurer(Jeu jeu, int temps, Map map, int extensionLaterale, int extensionBas) {
+	map.setServeur(serveur);
 	jeu.prepareMap(map);
 	setJeu(jeu, temps);
 	setMap(map, extensionLaterale, extensionBas);

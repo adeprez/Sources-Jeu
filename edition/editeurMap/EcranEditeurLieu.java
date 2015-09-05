@@ -41,7 +41,7 @@ public class EcranEditeurLieu extends Ecran implements AjoutListener<Objet>, Rem
 	this.compte = compte;
 	if(lieu.aMap(compte.path()))
 	    map = lieu.chargeMap(compte.path());
-	else map = new Map(lieu.getTaille(), null);
+	else map = new Map(lieu.getTaille());
 	map.setMaxObjets(lieu.getType().getNombreBlocs());
 	map.addAjoutListener(this);
 	map.addRemoveListener(this);

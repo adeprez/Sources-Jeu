@@ -106,6 +106,7 @@ public abstract class Projectile extends PhysiqueDestructible implements Localis
     @Override
     public boolean lancer() {
 	if(super.lancer()) {
+	    setDansMap();
 	    addForceX(ActionTir.getX((float) (angle + Math.PI/2), estDroite() ? vitesse : -vitesse));
 	    addForceY(ActionTir.getY((float) (angle + Math.PI/2), vitesse));
 	    return true;

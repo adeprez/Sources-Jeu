@@ -30,6 +30,27 @@ public abstract class JeuEquipe extends Jeu {
 	return e == null ? 0 : e.size();
     }
 
+    public int getGouffreSymetrie() {
+	return 0;
+    }
+
+    @Override
+    public boolean lancer() {
+	//TODO: remove
+	/*
+	getServeur().getPartie().addEvenement(new Evenement(3333, (source, periodique) -> {
+	    for(final RessourceReseau<?> rp : getRessources().get(TypeRessource.PERSO).values()) try {
+		Perso p = (Perso) rp.getRessource();
+		Moto m = new Moto(p.estDroite());
+		m.setEquipe(p.getEquipe());
+		m.setMap(p.getMap());
+		if(m.setPos(p.getX(), p.getY() + Localise.UNITE.height) == null)
+		    p.getMap().ajout(m);
+	    } catch(Exception e) {}
+	}));*/
+	return true;
+    }
+
     @Override
     public int getIDGagnant(boolean max) {
 	int id = -1, score = Integer.MIN_VALUE;
@@ -68,6 +89,12 @@ public abstract class JeuEquipe extends Jeu {
     @Override
     public List<Component> getComposants(RessourcesServeur r) {
 	return creerComposants(r);
+    }
+
+    @Override
+    public void prepareMap(map.Map map) {
+	if(getNombreEquipes() == 2)
+	    map.symetrie(getGouffreSymetrie());
     }
 
     public static List<Component> creerComposants(RessourcesReseau r) {

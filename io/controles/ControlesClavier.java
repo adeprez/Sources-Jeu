@@ -51,7 +51,8 @@ public class ControlesClavier extends Listenable implements KeyListener, Sauvega
 			fleches ? KeyEvent.VK_UP : KeyEvent.VK_Z,
 				fleches ? KeyEvent.VK_DOWN : KeyEvent.VK_S,
 					KeyEvent.VK_SPACE,
-					fleches ? KeyEvent.VK_PAUSE :KeyEvent.VK_A);
+					fleches ? KeyEvent.VK_PAUSE :KeyEvent.VK_A,
+						KeyEvent.VK_ENTER);
     }
 
     public ControlesClavier() {

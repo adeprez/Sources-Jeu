@@ -44,7 +44,7 @@ public class InfoServeur implements Sauvegardable, StyleListe, HorlogeListener {
     }
 
     public InfoServeur(String createur) throws UnknownHostException {
-	this(InetAddress.getLocalHost().getHostAddress(), "Nouvelle partie", createur, 8, 0, ETAT_OFF, 0, 120, TypeJeu.DEATHMATCH_EN_EQUIPE, 5);
+	this(InetAddress.getLocalHost().getHostAddress(), "Nouvelle partie", createur, 8, 0, ETAT_OFF, 0, 1200, TypeJeu.DEATHMATCH_EN_EQUIPE, 5);
     }
 
     public InfoServeur(IO io) {

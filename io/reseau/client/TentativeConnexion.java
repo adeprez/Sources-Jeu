@@ -1,6 +1,7 @@
 package reseau.client;
 
 import java.awt.image.BufferedImage;
+import java.net.BindException;
 
 import jeu.EcranJeu;
 import partie.PartieClient;
@@ -63,8 +64,11 @@ public class TentativeConnexion extends Tache {
 	int perso = 0;
 	if(serveur && Serveur.getInstance() == null) try {
 	    Serveur.main();
+	} catch(BindException e) {
+	    System.err.println("Serveur déjà en ligne");
 	} catch(Exception e) {
 	    System.err.println("Impossible de lancer le serveur : " + e.getMessage());
+	    e.printStackTrace();
 	    perso++;
 	}
 	try {

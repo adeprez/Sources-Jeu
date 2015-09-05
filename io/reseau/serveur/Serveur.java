@@ -71,9 +71,9 @@ public class Serveur extends AbstractServeur<ClientServeur> implements FinCharge
 		if(o.aFond() && !ressources.aRessource(TypeRessource.IMAGE_OBJET, o.getFond()))
 		    ressources.putRessource(new RessourceImageObjet(o.getFond(), o.getImageFond()));
 	    }
-	ressources.configurer(Jeu.getJeu(infos.getTypeJeu(), this, infos.getScoreVictoire()), infos.getTemps(), map, 30, 30);
+	ressources.configurer(Jeu.getJeu(infos.getTypeJeu(), this, infos.getScoreVictoire()), infos.getTemps(), map, 10, 10);
 	partie = new PartieServeur(this);
-	ajoutBots(3);
+	//ajoutBots(3); TODO: restore
     }
 
     public void ajoutBots(int nombre) {
@@ -163,12 +163,14 @@ public class Serveur extends AbstractServeur<ClientServeur> implements FinCharge
 
     @Override
     public void finChargement() {
-	if(partie.estLancee())
-	    partie.finPartie(true);
-	else {
-	    cpt.setTemps(getInfosServeur().getTempsInitial());
-	    partie.lancer();
-	}
+	if(partie != null)
+	    if(partie.estLancee())
+		partie.finPartie(true);
+	    else {
+		cpt.setTemps(getInfosServeur().getTempsInitial());
+		partie.lancer();
+		ressources.getJeu().lancer();
+	    }
     }
 
     public static void main(String... args) throws IOException {
