@@ -1,4 +1,4 @@
-package ressources.sprites.animation;
+package ressources.sprites.animation.perso;
 
 import interfaces.Localise;
 
@@ -6,6 +6,8 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import ressources.sprites.SpritePerso;
+import ressources.sprites.animation.Animation;
+import ressources.sprites.animation.Membre;
 import divers.Couple;
 import divers.Outil;
 

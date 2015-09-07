@@ -49,8 +49,6 @@ public class ClientServeur extends AbstractClient {
 		}
 	    p.setSpecialite(p.getSpecialitePrincipale());
 	    serveur.getRessources().putRessource(new RessourcePerso(getID(), p), new FiltreEnvoiExclusionID(getID()));
-	    //TODO: remove
-	    afficheFenetre(false);
 	}
 	else serveur.getRessources().putRessource(r);
     }
@@ -152,7 +150,7 @@ public class ClientServeur extends AbstractClient {
 	    getRessources().ecrire(this);
 	    write(new Paquet(TypePaquet.FIN_CHARGEMENT));
 	    serveur.getPartie().ecrire(this);
-	    serveur.getPartie().spawn(getID());//TODO: marche? multiple spawn
+	    serveur.getPartie().spawn(getID());
 	    break;
 	case ADD_RESSOURCE:
 	    traiter(getRessources().lire(io));

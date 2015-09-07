@@ -1,6 +1,6 @@
 package specialite.attaches;
 
-import ressources.sprites.animation.AnimationPerso;
+import ressources.sprites.animation.perso.AnimationPerso;
 import specialite.arme.Arme;
 
 public class Bouclier extends MembreAttachable {

@@ -3,6 +3,7 @@ package physique.actions.vehicule;
 import physique.Mobile;
 import physique.actions.AbstractAction;
 import physique.vehicule.Vehicule;
+import physique.vehicule.VehiculeVolant;
 
 
 public class ActionRoule extends ActionVehicule<Vehicule> {
@@ -28,11 +29,12 @@ public class ActionRoule extends ActionVehicule<Vehicule> {
     @Override
     public void tourAction() {
 	Mobile m = getSource();
-	vitesse = Math.min(getVitesse(), vitesse + 10);
+	vitesse = Math.min(getVitesse(), vitesse + 5);
 	m.setVitesseInstantanee(vitesse);
 	if(m.getDernierDeplacement() == 0) {
 	    tentatives++;
-	    if(tentatives >= 10)
+	    vitesse /= 2;
+	    if(tentatives >= 5)
 		stopAction();
 	} else tentatives = 0;
     }
@@ -44,7 +46,7 @@ public class ActionRoule extends ActionVehicule<Vehicule> {
 
     @Override
     public boolean peutFaire(AbstractAction<?> courante) {
-	return getSource().getTempsVol() < 5;
+	return getSource().getTempsVol() < 5 || getSource() instanceof VehiculeVolant;
     }
 
 }

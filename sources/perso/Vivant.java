@@ -124,6 +124,15 @@ public abstract class Vivant extends Visible {
 	} catch(HorsLimiteException e) {}
     }
 
+    public boolean peutEscalader() {
+	return true;
+    }
+
+    @Override
+    public int getGraviteMax() {
+	return 25;
+    }
+
     @Override
     public boolean doitTesterCollisionPersos() {
 	return true;
@@ -196,7 +205,7 @@ public abstract class Vivant extends Visible {
     @Override
     public Collision deplace() throws HorsLimiteException {
 	Collision c = super.deplace();
-	if(c != null && c.getCible() instanceof Echelle) {
+	if(peutEscalader() && c != null && c.getCible() instanceof Echelle) {
 	    setVitesseInstantanee(0);
 	    setAction(new ActionGrimpeEchelle(this));
 	}
@@ -220,8 +229,6 @@ public abstract class Vivant extends Visible {
     public void dessiner(Camera c, Graphics2D gPredessin, Graphics2D gDessin, Graphics2D gSurdessin) {
 	dessineOmbre(gDessin, c);
 	super.dessiner(c, gPredessin, gDessin, gSurdessin);
-	if(vehicule != null && vehicule.get(Vehicule.CONDUCTEUR) == this)
-	    vehicule.dessiner(c, gPredessin, gDessin, gSurdessin);
     }
 
 

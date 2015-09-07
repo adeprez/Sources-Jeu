@@ -3,7 +3,7 @@ package specialite.arme.attaque;
 import perso.AbstractPerso;
 import perso.Vivant;
 import physique.actions.vivant.ActionVivant;
-import ressources.sprites.animation.AnimationPerso;
+import ressources.sprites.animation.perso.AnimationPerso;
 import ressources.sprites.animation.sequence.DetermineurAngle;
 import specialite.arme.projectile.Projectile;
 import specialite.effet.Effet;

@@ -73,7 +73,7 @@ public class Serveur extends AbstractServeur<ClientServeur> implements FinCharge
 	    }
 	ressources.configurer(Jeu.getJeu(infos.getTypeJeu(), this, infos.getScoreVictoire()), infos.getTemps(), map, 10, 10);
 	partie = new PartieServeur(this);
-	//ajoutBots(3); TODO: restore
+	//ajoutBots(3);//TODO: configure
     }
 
     public void ajoutBots(int nombre) {

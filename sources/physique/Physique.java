@@ -23,6 +23,7 @@ public abstract class Physique extends MobileActionable {
 
     public void setMap(Map map) {
 	this.map = map;
+	setServeur(map.getServeur());
     }
 
     public Collision setXMap(int x) throws HorsLimiteException {

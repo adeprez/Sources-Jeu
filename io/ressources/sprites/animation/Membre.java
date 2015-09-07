@@ -128,6 +128,12 @@ public class Membre extends AbstractMembre implements Nomme {
 	return angle;
     }
 
+    public void rotate(AffineTransform t, int dx, int dy, Rectangle r, boolean droite) {
+	float angle = getAngle(droite);
+	if(angle != 0)
+	    t.rotate(angle, dx, dy);
+    }
+
     @Override
     public BufferedImage getImage() {
 	return image;
@@ -173,9 +179,7 @@ public class Membre extends AbstractMembre implements Nomme {
 	}
 	int l = getLargeur(zone), h = getHauteur(zone), dx = val(getPrctX(), droite ? l : -l), dy = val(getPrctY(), h);
 	AffineTransform t = AffineTransform.getTranslateInstance(getX(zone, droite) - dx, getY(zone) - dy);
-	float angle = getAngle(droite);
-	if(angle != 0)
-	    t.rotate(angle, dx, dy);
+	rotate(t, dx, dy, zone, droite);
 	t.scale((double) (droite ? l : -l)/image.getWidth(), (double) h/image.getHeight());
 	dessineImage(g, t);
     }

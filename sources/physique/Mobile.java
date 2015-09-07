@@ -156,8 +156,11 @@ public abstract class Mobile extends Listenable implements Sauvegardable, Locali
 		return null;
 	    }
 	}
+	else deplacementFluide();
 	return c;
     }
+
+    public void deplacementFluide() {}
 
     public int escalader(int x, int y, int hauteur) {
 	for(int alt=1 ; alt<=hauteur ; alt++)
@@ -172,9 +175,13 @@ public abstract class Mobile extends Listenable implements Sauvegardable, Locali
 	return Math.abs(dx) * getHauteur()/50 + Math.abs(dx);
     }
 
+    public void reductionVitesseInstantannee() {
+	vitesseInstantanee = (int) Math.max(0, vitesseInstantanee/1.5 - 1);
+    }
+
     public Collision deplace() throws HorsLimiteException {
 	Direction direction = getDirection();
-	vitesseInstantanee = (int) Math.max(0, vitesseInstantanee/1.5 - 1);
+	reductionVitesseInstantannee();
 	deplacement = direction == Direction.DROITE ? 1 + vitesseInstantanee/100 : -vitesseInstantanee/100 - 1;
 	if(deplacement != 0) try {
 	    Collision c = deplacement(deplacement, 0);

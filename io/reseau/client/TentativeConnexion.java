@@ -61,7 +61,7 @@ public class TentativeConnexion extends Tache {
     }
 
     public static void testLocal(boolean serveur) {
-	int perso = 0;
+	int perso = Outil.r().nextBoolean() ? 0 : 1;
 	if(serveur && Serveur.getInstance() == null) try {
 	    Serveur.main();
 	} catch(BindException e) {

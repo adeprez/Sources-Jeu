@@ -2,7 +2,6 @@ package specialite.arme.projectile;
 
 import interfaces.IOable;
 import interfaces.LocaliseDessinable;
-import io.IO;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -155,7 +154,7 @@ public abstract class Projectile extends PhysiqueDestructible implements Localis
 
     @Override
     public IOable getPaquetVie() {
-	return new IO();
+	return null;
     }
 
 }

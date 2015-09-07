@@ -32,7 +32,7 @@ public class VisionJeu implements LocaliseEquipe {
 
     @Override
     public int getX() {
-	int diff = perso.getX() - x + (perso.estDroite() ? getLargeur() : -getLargeur()) * 5;
+	int diff = perso.getX() - x + (perso.estDroite() ? getLargeur() : -getLargeur())/2;
 	if(diff != 0)
 	    x += diff/RETARD;
 	return x;

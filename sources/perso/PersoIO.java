@@ -8,7 +8,7 @@ import ressources.Fichiers;
 import ressources.RessourcesLoader;
 import ressources.compte.Compte;
 import ressources.sprites.SpritePerso;
-import ressources.sprites.animation.AnimationPerso;
+import ressources.sprites.animation.perso.AnimationPerso;
 import specialite.TypeSpecialite;
 import vision.Orientation;
 import divers.Outil;

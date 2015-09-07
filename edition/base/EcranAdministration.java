@@ -16,15 +16,13 @@ import objets.EcranSpriteObjets;
 import ressources.Images;
 import ressources.compte.Compte;
 import ressources.sprites.SpritePerso;
-import ressources.sprites.animation.AnimationPerso;
+import ressources.sprites.animation.perso.AnimationPerso;
 import serveur.EcranAdministrationServeur;
 import sprites.EcranSprite;
 import statique.Style;
 import territoire.EcranAdministrationMondes;
 import animation.EcranAnimation;
-
 import composants.styles.Bouton;
-
 import controles.EcranControles;
 import divers.Outil;
 import ecrans.connexion.EcranChoixCompte;

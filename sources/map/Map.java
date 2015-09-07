@@ -166,7 +166,7 @@ public class Map extends MapIO<Objet> {
 	List<Objet> l = getColonne(xMap);
 	for(int i=Math.min(yMap, l.size() - 1) ; i>=0 ; i--) {
 	    Objet o = l.get(i);
-	    if(!o.estVide())
+	    if(o.doitTesterCollisionPersos())
 		return o;
 	}
 	return null;
@@ -178,6 +178,11 @@ public class Map extends MapIO<Objet> {
 	super.ajout(v);
 	if(estServeur())
 	    v.write();
+    }
+
+    public void retire(Vehicule v) {
+	getVehicules().remove(v);
+	super.retire(v);
     }
 
     @Override

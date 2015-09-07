@@ -3,6 +3,7 @@ package specialite.arme.projectile;
 import java.awt.image.BufferedImage;
 
 import map.objets.Objet;
+import perso.Perso;
 import perso.Vivant;
 import physique.Physique;
 import physique.PhysiqueDestructible;
@@ -40,8 +41,10 @@ public class Fleche extends Projectile {
 
     public void impact(Vivant v) {
 	getMap().removeDessinable(this);
-	Couple<Membre,Integer> c = v.getAnimation().getMembre(v, this);
-	addTo(c.get1(), 80, c.get2(), (float) (estDroite() == v.estDroite() ? getAngle() : -getAngle() + Math.PI));
+	if(v instanceof Perso) {
+	    Couple<Membre,Integer> c = v.getAnimation().getMembre(v, this);
+	    addTo(c.get1(), 80, c.get2(), (float) (estDroite() == v.estDroite() ? getAngle() : -getAngle() + Math.PI));
+	}
 	effet.faireEffet(v);
     }
 
@@ -58,6 +61,21 @@ public class Fleche extends Projectile {
     @Override
     public boolean doitTesterCollisionPersos() {
 	return true;
+    }
+
+    @Override
+    public int getMasse() {
+	return 1;
+    }
+
+    @Override
+    public double getCoefReductionForceX() {
+	return 1.035;
+    }
+
+    @Override
+    public double getCoefReductionForceY() {
+	return 1.03;
     }
 
 

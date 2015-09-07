@@ -125,6 +125,13 @@ public class Client extends AbstractClient {
 	case VIE:
 	    getPerso(io.nextPositif()).setVie(io.nextShortInt());
 	    break;
+	case VIE_VEHICULE:
+	    try {
+		getRessources().getMap().getVehicules().get(io.nextPositif()).setVie(io.nextShortInt());
+	    } catch(Exception err) {
+		err.printStackTrace();
+	    }
+	    break;
 	case VIE_OBJET:
 	    try {
 		getRessources().getMap().getObjet(io.nextPositif(), io.nextPositif()).setVie(io.nextPositif());
@@ -159,6 +166,11 @@ public class Client extends AbstractClient {
 	    break;
 	default: return true;
 	}
+	return false;
+    }
+
+    @Override
+    public boolean autreAction(int id, Perso p, TypeAction action, boolean debut, IO io) {
 	return false;
     }
 

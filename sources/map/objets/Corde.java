@@ -77,6 +77,11 @@ public class Corde extends Objet {
     }
 
     @Override
+    public boolean doitTesterCollisionPersos() {
+	return false;
+    }
+
+    @Override
     public void construireInterface(Container c, boolean editable) {
     }
 

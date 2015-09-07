@@ -6,6 +6,7 @@ import listeners.DestructibleListener;
 import partie.modeJeu.Jeu;
 import perso.Vivant;
 import physique.forme.Forme;
+import physique.vehicule.Vehicule;
 import divers.Outil;
 import exceptions.HorsLimiteException;
 
@@ -105,10 +106,14 @@ public abstract class PhysiqueDestructible extends Physique implements LocaliseE
 	Collision c = super.getCollision();
 	if(c != null)
 	    return c;
-	if(doitTesterCollisionPersos())
+	if(doitTesterCollisionPersos()) {
 	    for(final Vivant p : getMap().getEnnemis(getEquipe(), false))
 		if((c = getCollision(p)) != null)
 		    return c;
+	    for(final Vehicule v : getMap().getVehicules())
+		if((c = getCollision(v)) != null)
+		    return c;
+	}
 	return null;
     }
 

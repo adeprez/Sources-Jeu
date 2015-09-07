@@ -1,33 +1,24 @@
 package physique.vehicule;
 
 import io.IO;
-
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-
 import perso.Vivant;
 import physique.forme.Rect;
-import ressources.Images;
+import ressources.sprites.animation.Animation;
+import ressources.sprites.animation.perso.AnimationPerso;
+import ressources.sprites.vehicule.AnimationMoto;
 import vision.Orientation;
 import exceptions.HorsLimiteException;
 
 public class Moto extends Vehicule {
-    private final BufferedImage roue, moto;
-    private float angleRoues;
+    private int angle, deplacement;
 
 
     public Moto(boolean droite) {
-	super(0, new Rect((int) (UNITE.width * 1.5), UNITE.height, droite ? Orientation.DROITE : Orientation.GAUCHE));
-	roue = Images.get("armes/bouclier.png");
-	moto = Images.get("armes/carquois.png", true);
+	super(0, new Rect((int) (UNITE.width * 1.5), UNITE.height, droite ? Orientation.DROITE : Orientation.GAUCHE), new AnimationMoto());
     }
 
     public Moto(IO io) {
-	super(0, io);
-	roue = Images.get("armes/bouclier.png", true);
-	moto = Images.get("armes/epee.png", true);
+	super(0, io, new AnimationMoto());
     }
 
     @Override
@@ -40,9 +31,21 @@ public class Moto extends Vehicule {
 	if(super.faireAction()) {
 	    Vivant v = get(CONDUCTEUR);
 	    if(v != null) try {
-		if(v.setPos(this) != null && v.estServeur())
+		if(v.estServeur() && v.setPos(this) != null)
 		    retire(v);
-		angleRoues += getVitesseInstantanee()/1000f;
+		Animation a = v.getAnimation();
+		if(a instanceof AnimationPerso) {
+		    ((AnimationPerso) a).getCorpsPerso().setAngle(-angle/5f);
+		    a.setDecalageY(angle * -40);
+		    a.setDecalageX(angle * -15);
+		}
+		getAnimation().setDecalageX(angle);
+		getAnimation().setDecalageY(angle * -10);
+		if(getVitesseInstantanee() > 0) {
+		    AnimationMoto anim = (AnimationMoto) getAnimation();
+		    anim.incrAngleRoues(getVitesseInstantanee()/3000f);
+		    anim.getCorps().setAngle(angle/-5f);
+		}
 	    } catch (HorsLimiteException e) {
 		if(estServeur())
 		    retire(v);
@@ -54,7 +57,7 @@ public class Moto extends Vehicule {
 
     @Override
     public int getVitalite() {
-	return 10;
+	return 50;
     }
 
     @Override
@@ -63,8 +66,8 @@ public class Moto extends Vehicule {
     }
 
     @Override
-    public void setPosition(Vivant source) throws HorsLimiteException {
-	source.setPos(source);
+    public IO savePos(IO io) {
+	return io.addShort(getX() + UNITE.width/2).addShort(getY());
     }
 
     @Override
@@ -73,22 +76,19 @@ public class Moto extends Vehicule {
     }
 
     @Override
-    public void dessiner(Graphics2D g, Rectangle zone, int equipe) {
-	super.dessiner(g, zone, equipe);
-	int taille = zone.width/3;
-	AffineTransform t = AffineTransform.getTranslateInstance(zone.x, zone.y + zone.height - taille);
-	double scale = (double) taille/roue.getWidth();
-	t.scale(scale, scale);
-	if(angleRoues != 0)
-	    t.rotate(estDroite() ? angleRoues : -angleRoues, roue.getWidth()/2, roue.getHeight()/2);
-	g.drawImage(roue, t, null);
-	t = AffineTransform.getTranslateInstance(zone.x + zone.width - taille, zone.y + zone.height - taille);
-	t.scale(scale, scale);
-	if(angleRoues != 0)
-	    t.rotate(estDroite() ? angleRoues : -angleRoues, roue.getWidth()/2, roue.getHeight()/2);
-	g.drawImage(roue, t, null);
-	g.drawImage(moto, zone.x + (estDroite() ? 0 : zone.width),
-		zone.y + zone.height/10, estDroite() ? zone.width : -zone.width, (int) (zone.height/1.5), null);
+    public void deplacementFluide() {
+	super.deplacementFluide();
+	deplacement++;
+	if(angle > 0 && deplacement > 10)
+	    angle--;
+    }
+
+    @Override
+    public void escalade(int hauteur) {
+	super.escalade(hauteur);
+	deplacement = 0;
+	if(angle < hauteur)
+	    angle = Math.min(3, angle + 1);
     }
 
 }

@@ -1,7 +1,7 @@
 package perso;
 
 import io.IO;
-import ressources.sprites.animation.AnimationPerso;
+import ressources.sprites.animation.perso.AnimationPerso;
 import vision.RevelateurObjets;
 
 public class Perso extends PersoIO {

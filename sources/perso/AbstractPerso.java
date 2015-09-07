@@ -15,7 +15,7 @@ import listeners.ChangeSpecialiteListener;
 import physique.actions.vivant.ActionMeurt;
 import physique.forme.CorpsPerso;
 import ressources.Images;
-import ressources.sprites.animation.AnimationPerso;
+import ressources.sprites.animation.perso.AnimationPerso;
 import specialite.Specialite;
 import specialite.TypeSpecialite;
 import statique.Style;

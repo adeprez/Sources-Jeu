@@ -3,7 +3,7 @@ package perso;
 import java.util.Arrays;
 
 import ressources.Images;
-import ressources.sprites.animation.AnimationPerso;
+import ressources.sprites.animation.perso.AnimationPerso;
 import specialite.Specialite;
 import specialite.TypeSpecialite;
 import divers.Outil;
